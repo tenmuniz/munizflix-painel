@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07060d">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel MunizFlix</title>
+<link rel="icon" href="mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+<style>
+:root{--bg:#07060d;--bg2:#0d0b18;--card:#14111f;--card2:#1b1729;--line:rgba(139,92,246,.18);--tx:#f3f0fa;--tx2:#c9c2df;--mut:#8b84a6;
+ --grad:linear-gradient(135deg,#7c3aed,#c026d3);--ok:#4ade80;--warn:#fbbf24;--bad:#f43f5e;--acc:#a855f7}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:radial-gradient(90% 50% at 0% 0%,rgba(124,58,237,.14),transparent 60%),radial-gradient(70% 40% at 100% 100%,rgba(192,38,211,.1),transparent 60%),var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.hide{display:none!important}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px 90px}
+/* topo */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(7,6,13,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px;letter-spacing:-.02em}
+.brand img{width:36px;height:36px;border-radius:10px}
+.brand i{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand small{font-size:11px;font-weight:700;color:var(--mut);letter-spacing:.12em;margin-left:2px}
+.top .sp{flex:1}
+.tabs{display:flex;gap:6px;padding:14px 0 6px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:none;padding:10px 16px;border-radius:12px;font-weight:700;color:var(--mut);background:var(--card);border:1px solid var(--line)}
+.tabs button.on{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 8px 22px -10px rgba(192,38,211,.9)}
+h2{font-size:20px;font-weight:900;margin:18px 0 12px;display:flex;align-items:center;gap:10px}
+h2 .n{font-size:13px;color:var(--mut);font-weight:700}
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 15px;border-radius:11px;font-weight:700;font-size:14px;background:var(--card2);border:1px solid var(--line);white-space:nowrap}
+.btn:hover{border-color:rgba(168,85,247,.5)}
+.btn.pri{background:var(--grad);border-color:transparent;color:#fff}
+.btn.ok{background:rgba(74,222,128,.12);color:var(--ok);border-color:rgba(74,222,128,.3)}
+.btn.bad{background:rgba(244,63,94,.1);color:#fb7185;border-color:rgba(244,63,94,.3)}
+.btn.sm{height:32px;padding:0 11px;font-size:12.5px;border-radius:9px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+/* cartões de números */
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.kpi b{display:block;font-size:26px;font-weight:900;letter-spacing:-.02em}
+.kpi small{color:var(--mut);font-size:12.5px;font-weight:600}
+.kpi.hl{background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(192,38,211,.18));border-color:rgba(192,38,211,.4)}
+/* clientes */
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.bar input{flex:1;min-width:180px}
+.field,.bar input,select,textarea{height:42px;border-radius:11px;border:1px solid var(--line);background:var(--card);padding:0 12px;outline:none;width:100%}
+textarea{height:auto;min-height:70px;padding:10px 12px;resize:vertical}
+.field:focus,.bar input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+.cl{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.cl.off{opacity:.62}
+.clh{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.clh .nm{flex:1;min-width:180px}
+.clh .nm b{font-size:17px;font-weight:800}
+.clh .nm small{display:block;color:var(--mut);font-size:13px;margin-top:3px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--tx2)}
+.tag.ok{color:var(--ok);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.08)}
+.tag.warn{color:var(--warn);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
+.tag.bad{color:#fb7185;border-color:rgba(244,63,94,.35);background:rgba(244,63,94,.08)}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.codes{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px;margin-top:14px}
+.cd{position:relative;border-radius:14px;padding:13px;background:var(--bg2);border:1px solid var(--line)}
+.cd .cc{display:flex;align-items:center;gap:10px}
+.cd .code{font-size:22px;font-weight:900;letter-spacing:.06em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cd .lb{color:var(--tx2);font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;background:#4b4566;flex:none}
+.dot.on{background:var(--ok);box-shadow:0 0 0 4px rgba(74,222,128,.15)}
+.dev{margin-top:8px;font-size:12.5px;color:var(--mut);line-height:1.55}
+.dev b{color:var(--tx2);font-weight:700}
+.watch{margin-top:8px;padding:8px 10px;border-radius:10px;background:linear-gradient(90deg,rgba(124,58,237,.22),rgba(192,38,211,.08));font-size:13px;font-weight:600}
+.watch span{color:var(--mut);font-weight:600;font-size:12px}
+.cd .acts{margin-top:10px}
+.empty{color:var(--mut);text-align:center;padding:40px 10px;border:1px dashed var(--line);border-radius:16px}
+/* ao vivo */
+.live{display:grid;gap:10px}
+.lv{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.lv .k{font-size:22px}
+.lv .t{flex:1;min-width:0}
+.lv .t b{display:block;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv .t small{color:var(--mut);font-size:12.5px}
+/* ajustes */
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.box h3{font-size:15px;font-weight:800;margin-bottom:4px}
+.box p.h{color:var(--mut);font-size:12.5px;margin-bottom:12px;line-height:1.5}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:700;color:var(--tx2)}
+.plan{display:grid;grid-template-columns:1fr 90px 120px auto;gap:8px;align-items:end;margin-bottom:8px}
+/* modal */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(3,2,8,.72);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px}
+.md{width:100%;max-width:460px;max-height:92vh;overflow:auto;background:var(--bg2);border:1px solid rgba(168,85,247,.35);border-radius:20px;padding:20px;box-shadow:0 30px 80px -20px rgba(124,58,237,.6)}
+.md h3{font-size:18px;font-weight:900;margin-bottom:14px}
+.md .f{margin-bottom:10px}
+.md .row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lg{width:100%;max-width:380px;text-align:center}
+.lg img{width:96px;height:96px;border-radius:24px;box-shadow:0 0 50px rgba(192,38,211,.45)}
+.lg h1{font-size:28px;font-weight:900;margin:16px 0 4px}
+.lg h1 i{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lg p{color:var(--mut);margin-bottom:20px}
+.lg .field{margin-bottom:10px;height:48px}
+.lg .btn{width:100%;height:48px;margin-top:4px}
+.lg .lnk{margin-top:14px;color:var(--tx2);font-size:13.5px;text-decoration:underline}
+.msg{margin-top:12px;font-size:13.5px;color:#fb7185;min-height:18px}
+.msg.ok{color:var(--ok)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;background:#2a2340;border:1px solid rgba(168,85,247,.4);padding:12px 18px;border-radius:12px;font-weight:700;font-size:14px;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}.plan{grid-template-columns:1fr 70px 100px}.plan .btn{grid-column:1/-1}.kpi b{font-size:22px}}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="vLogin" class="login hide">
+ <div class="lg">
+  <img src="mark.png" alt="">
+  <h1>Muniz<i>Flix</i></h1>
+  <p id="lgSub">Painel do administrador</p>
+  <input id="lgEmail" class="field" type="email" placeholder="E-mail" autocomplete="username">
+  <input id="lgPass" class="field" type="password" placeholder="Senha" autocomplete="current-password">
+  <button id="lgGo" class="btn pri">Entrar</button>
+  <button id="lgSwap" class="lnk">Primeiro acesso? Criar meu login</button>
+  <div id="lgMsg" class="msg"></div>
+ </div>
+</div>
+
+<!-- Sem permissão -->
+<div id="vNoAdmin" class="login hide">
+ <div class="lg">
+  <img src="mark.png" alt="">
+  <h1>Quase lá</h1>
+  <p>Seu login foi criado, mas ainda não é administrador. Peça para liberarem este ID:</p>
+  <p><b id="naId" style="color:var(--tx);word-break:break-all"></b></p>
+  <button class="btn" onclick="location.reload()">Já liberou? Atualizar</button>
+  <button class="lnk" onclick="sair()">Sair</button>
+ </div>
+</div>
+
+<!-- App -->
+<div id="vApp" class="hide">
+ <div class="top">
+  <div class="brand"><img src="mark.png" alt=""><span>Muniz<i>Flix</i><small>PAINEL</small></span></div>
+  <div class="sp"></div>
+  <button class="btn sm" onclick="carregar(true)">↻ Atualizar</button>
+ </div>
+ <div class="wrap">
+  <div class="tabs" id="tabs">
+   <button data-t="geral" class="on">Visão geral</button>
+   <button data-t="clientes">Clientes</button>
+   <button data-t="aovivo">Assistindo agora</button>
+   <button data-t="ajustes">Ajustes</button>
+  </div>
+  <section id="t-geral"></section>
+  <section id="t-clientes" class="hide"></section>
+  <section id="t-aovivo" class="hide"></section>
+  <section id="t-ajustes" class="hide"></section>
+ </div>
+</div>
+
+<div id="modal"></div>
+
+<script>
+'use strict'
+const SB_URL='https://dnrwutpvpdnatbqasskc.supabase.co'
+const SB_KEY='sb_publishable_pvZJgJK3G5C7eJcKRdCCNQ_iBVhgbRc'
+const APK='https://github.com/tenmuniz/munizflix-app/releases/latest/download/MunizFlix.apk'
+const ONLINE_MIN=7 // aparelho conta como online se falou com o painel nos últimos 7 minutos
+const sb=supabase.createClient(SB_URL,SB_KEY)
+const $=id=>document.getElementById(id)
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
+const brl=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})
+const dt=d=>d?new Date(d).toLocaleDateString('pt-BR'):'—'
+const dth=d=>d?new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—'
+const hm=d=>d?new Date(d).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):''
+function ago(d){if(!d)return 'nunca';const s=(Date.now()-new Date(d))/1000
+ if(s<60)return 'agora';if(s<3600)return 'há '+Math.floor(s/60)+' min';if(s<86400)return 'há '+Math.floor(s/3600)+' h';return 'há '+Math.floor(s/86400)+' dias'}
+const days=d=>Math.ceil((new Date(d)-Date.now())/864e5)
+// online: falou com o painel há pouco, ou está assistindo (no player o app pode ficar sem checar por um tempo)
+const online=c=>!!(c.last_seen&&(Date.now()-new Date(c.last_seen))<ONLINE_MIN*60000)||!!(c.watching&&c.watching_since&&(Date.now()-new Date(c.watching_since))<4*3600e3)
+const KIND={live:'📺',movie:'🎬',series:'🎞️'}
+let toastT
+function toast(t){clearTimeout(toastT);document.querySelectorAll('.toast').forEach(e=>e.remove());const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);toastT=setTimeout(()=>e.remove(),2600)}
+function erro(e){console.error(e);toast('Erro: '+(e?.message||e))}
+
+/* ---------- Login ---------- */
+let modoCriar=false
+$('lgSwap').onclick=()=>{modoCriar=!modoCriar;$('lgGo').textContent=modoCriar?'Criar meu login':'Entrar';$('lgSwap').textContent=modoCriar?'Já tenho login: entrar':'Primeiro acesso? Criar meu login';$('lgSub').textContent=modoCriar?'Crie seu e-mail e senha do painel':'Painel do administrador';$('lgMsg').textContent=''}
+$('lgPass').onkeydown=e=>{if(e.key==='Enter')$('lgGo').click()}
+$('lgGo').onclick=async()=>{
+ const email=$('lgEmail').value.trim(),password=$('lgPass').value,m=$('lgMsg');m.className='msg';m.textContent=''
+ if(!email||password.length<8){m.textContent='Informe o e-mail e uma senha com pelo menos 8 caracteres.';return}
+ $('lgGo').disabled=true
+ try{
+  if(modoCriar){const{data,error}=await sb.auth.signUp({email,password});if(error)throw error
+   if(!data.session){m.className='msg ok';m.textContent='Login criado! Agora peça a liberação e depois entre com seu e-mail e senha.';modoCriar=true;$('lgSwap').click();return}}
+  else{const{error}=await sb.auth.signInWithPassword({email,password});if(error)throw error}
+  await iniciar()
+ }catch(e){m.textContent=/Invalid login/i.test(e.message)?'E-mail ou senha incorretos.':/not confirmed/i.test(e.message)?'Login ainda não liberado.':e.message}
+ finally{$('lgGo').disabled=false}}
+async function sair(){await sb.auth.signOut();location.reload()}
+
+/* ---------- Dados ---------- */
+let D={plans:[],clients:[],codes:[],cfg:null},tab='geral',busca=''
+async function carregar(manual){
+ try{
+  const [p,c,k,g]=await Promise.all([
+   sb.from('plans').select('*').order('screens'),
+   sb.from('clients').select('*').order('name'),
+   sb.from('codes').select('code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,created_at').order('created_at'),
+   tab==='ajustes'||!D.cfg?sb.from('app_config').select('*').eq('id',1).single():Promise.resolve({data:D.cfg})])
+  for(const r of [p,c,k,g])if(r.error)throw r.error
+  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data}
+  render();if(manual)toast('Atualizado')
+ }catch(e){erro(e)}}
+const plano=id=>D.plans.find(p=>p.id===id)
+const codigosDe=id=>D.codes.filter(c=>c.client_id===id)
+
+/* ---------- Telas ---------- */
+function render(){({geral:rGeral,clientes:rClientes,aovivo:rAoVivo,ajustes:rAjustes})[tab]()}
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t
+ document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b))
+ document.querySelectorAll('section').forEach(s=>s.classList.toggle('hide',s.id!=='t-'+tab))
+ if(tab==='ajustes')carregar();else render()}
+
+function status(cl){const d=days(cl.expires_at)
+ if(!cl.active)return['bad','Desligado']
+ if(d<0)return['bad','Vencido']
+ if(d<=3)return['warn',d===0?'Vence hoje':'Vence em '+d+(d===1?' dia':' dias')]
+ return['ok','Ativo']}
+
+function rGeral(){
+ const ativos=D.clients.filter(c=>c.active&&days(c.expires_at)>=0),on=D.codes.filter(online)
+ const vencendo=D.clients.filter(c=>c.active&&days(c.expires_at)>=0&&days(c.expires_at)<=7),vencidos=D.clients.filter(c=>c.active&&days(c.expires_at)<0)
+ const receita=ativos.reduce((s,c)=>s+Number(c.price||0),0)
+ $('t-geral').innerHTML=`<div class="kpis">
+  <div class="kpi hl"><b>${on.length}</b><small>Aparelhos online agora</small></div>
+  <div class="kpi"><b>${ativos.length}</b><small>Clientes ativos</small></div>
+  <div class="kpi"><b>${D.codes.filter(c=>c.device_tag).length}<span style="font-size:15px;color:var(--mut)"> / ${D.codes.length}</span></b><small>Códigos em uso</small></div>
+  <div class="kpi"><b>${brl(receita)}</b><small>Receita por mês</small></div>
+  <div class="kpi"><b style="color:${vencendo.length?'var(--warn)':''}">${vencendo.length}</b><small>Vencem em 7 dias</small></div>
+  <div class="kpi"><b style="color:${vencidos.length?'#fb7185':''}">${vencidos.length}</b><small>Vencidos</small></div></div>
+ <h2>Assistindo agora</h2>${listaAoVivo(4)}
+ <h2>Vencem em breve</h2>${vencendo.concat(vencidos).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)).map(c=>{const[s,t]=status(c)
+  return `<div class="lv"><div class="k">📅</div><div class="t"><b>${esc(c.name)}</b><small>${dt(c.expires_at)} · ${brl(c.price)}</small></div><span class="tag ${s}">${t}</span><button class="btn sm ok" onclick="renovar('${c.id}')">+30 dias</button></div>`}).join('')||'<div class="empty">Ninguém vencendo nos próximos 7 dias 🎉</div>'}`}
+
+function listaAoVivo(max){
+ const on=D.codes.filter(online).sort((a,b)=>(b.watching?1:0)-(a.watching?1:0))
+ if(!on.length)return '<div class="empty">Nenhum aparelho online agora.</div>'
+ return '<div class="live">'+on.slice(0,max||999).map(c=>{const cl=D.clients.find(x=>x.id===c.client_id)
+  return `<div class="lv"><div class="k">${c.watching?KIND[c.watching_kind]||'▶️':'💤'}</div><div class="t"><b>${c.watching?esc(c.watching):'No menu do app'}</b>
+  <small>${esc(cl?.name||'?')} · ${esc(c.label||c.code)} · ${esc(c.device_model||'')}${c.watching_since?' · desde '+hm(c.watching_since):''}</small></div><span class="dot on"></span></div>`}).join('')+'</div>'}
+
+function rAoVivo(){$('t-aovivo').innerHTML=`<h2>Assistindo agora <span class="n">atualiza sozinho a cada 20 s</span></h2>${listaAoVivo()}`}
+
+function rClientes(){
+ const q=busca.toLowerCase(),lst=D.clients.filter(c=>!q||c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)||codigosDe(c.id).some(k=>k.code.toLowerCase().includes(q)))
+ $('t-clientes').innerHTML=`<h2>Clientes <span class="n">${D.clients.length}</span></h2>
+ <div class="bar"><input id="busca" placeholder="Buscar por nome, telefone ou código" value="${esc(busca)}"><button class="btn pri" onclick="formCliente()">+ Novo cliente</button></div>
+ ${lst.map(cardCliente).join('')||'<div class="empty">Nenhum cliente ainda. Toque em <b>+ Novo cliente</b>.</div>'}`
+ const b=$('busca');b.oninput=()=>{busca=b.value;const p=b.selectionStart;rClientes();const n=$('busca');n.focus();n.setSelectionRange(p,p)}}
+
+function cardCliente(c){
+ const p=plano(c.plan_id),ks=codigosDe(c.id),lim=p?p.screens:1,[s,t]=status(c)
+ return `<div class="cl${c.active?'':' off'}"><div class="clh">
+  <div class="nm"><b>${esc(c.name)}</b><small>${c.phone?'📱 '+esc(c.phone)+' · ':''}Vence ${dt(c.expires_at)}${c.notes?' · '+esc(c.notes):''}</small>
+   <div class="tags"><span class="tag ${s}">${t}</span><span class="tag">${esc(p?.name||'Sem plano')}</span><span class="tag">${brl(c.price)}/mês</span></div></div>
+  <div class="acts">
+   <button class="btn sm ok" onclick="renovar('${c.id}')">+30 dias</button>
+   <button class="btn sm ${c.active?'bad':'ok'}" onclick="ligar('${c.id}',${!c.active})">${c.active?'Desligar':'Ligar'}</button>
+   <button class="btn sm" onclick="formCliente('${c.id}')">Editar</button></div></div>
+  <div class="codes">${ks.map(cardCodigo).join('')}
+   ${ks.length<lim?`<button class="cd" style="display:grid;place-items:center;min-height:90px;color:var(--tx2);font-weight:800;border-style:dashed" onclick="novoCodigo('${c.id}')">+ Gerar código (${ks.length}/${lim})</button>`:''}</div></div>`}
+
+function cardCodigo(k){
+ const on=online(k)
+ return `<div class="cd"><div class="cc"><span class="dot${on?' on':''}"></span><span class="code">${k.code}</span><span class="lb">${esc(k.label||'')}</span>
+  ${k.active?'':'<span class="tag bad">Desligado</span>'}</div>
+  <div class="dev">${k.device_tag?`📺 <b>${esc(k.device_tag)}</b> · ${esc(k.device_model||'')}<br>Ativado ${dth(k.activated_at)} · visto ${ago(k.last_seen)}${k.app_version?' · v'+esc(k.app_version):''}`:'⏳ Aguardando ativação no aparelho'}</div>
+  ${on&&k.watching?`<div class="watch">${KIND[k.watching_kind]||'▶️'} ${esc(k.watching)} <span>· desde ${hm(k.watching_since)}</span></div>`:''}
+  <div class="acts">
+   <button class="btn sm" onclick="enviar('${k.code}')">📤 Enviar</button>
+   <button class="btn sm" onclick="copiar('${k.code}')">Copiar</button>
+   ${k.device_tag?`<button class="btn sm" onclick="liberar('${k.code}')">Trocar aparelho</button>`:''}
+   <button class="btn sm ${k.active?'bad':'ok'}" onclick="ligarCodigo('${k.code}',${!k.active})">${k.active?'Desligar':'Ligar'}</button>
+   <button class="btn sm bad" onclick="excluirCodigo('${k.code}')">Excluir</button></div></div>`}
+
+function rAjustes(){
+ const g=D.cfg||{servers:[],username:'',password:'',extra:[],contact:''},x=(g.extra||[])[0]||{}
+ $('t-ajustes').innerHTML=`<h2>Ajustes</h2>
+ <div class="box"><h3>Planos e preços</h3><p class="h">O número de telas define quantos códigos (aparelhos) cada cliente pode ter.</p>
+  ${D.plans.map(p=>`<div class="plan"><label class="f">Nome<input class="field" id="pn${p.id}" value="${esc(p.name)}"></label>
+   <label class="f">Telas<input class="field" id="ps${p.id}" type="number" min="1" max="10" value="${p.screens}"></label>
+   <label class="f">Preço (R$)<input class="field" id="pp${p.id}" type="number" min="0" step="0.01" value="${p.price}"></label>
+   <button class="btn" onclick="salvarPlano(${p.id})">Salvar</button></div>`).join('')}
+  <button class="btn sm" style="margin-top:6px" onclick="novoPlano()">+ Novo plano</button></div>
+ <div class="box"><h3>Contato na tela de bloqueio</h3><p class="h">Aparece no app quando o acesso estiver desligado ou vencido. Ex.: "WhatsApp (91) 99999-0000". Deixe vazio para não mostrar.</p>
+  <input class="field" id="cfContato" value="${esc(g.contact)}" placeholder="Ex.: Fale com o Muniz: (91) 99999-0000">
+  <div style="margin-top:10px"><button class="btn pri" onclick="salvarContato()">Salvar contato</button></div></div>
+ <div class="box"><h3>Servidor de IPTV</h3><p class="h">Os aparelhos liberados recebem estes dados ao abrir o app. Mudou de lista? Troque aqui e todos passam a usar a nova, sem precisar de APK novo.</p>
+  <div class="grid2">
+   <label class="f">Endereço(s) — um por linha<textarea id="cfSrv">${esc((g.servers||[]).join('\n'))}</textarea></label>
+   <div><label class="f">Usuário<input class="field" id="cfUser" value="${esc(g.username)}"></label>
+    <label class="f" style="margin-top:8px">Senha<input class="field" id="cfPass" type="password" value="${esc(g.password)}"></label></div></div>
+  <p class="h" style="margin:14px 0 8px">Servidor extra (conteúdo somado ao principal) — opcional</p>
+  <div class="grid2"><label class="f">Endereço<input class="field" id="cfXu" value="${esc(x.url||'')}"></label>
+   <label class="f">Usuário<input class="field" id="cfXl" value="${esc(x.user||'')}"></label>
+   <label class="f">Senha<input class="field" id="cfXp" type="password" value="${esc(x.pass||'')}"></label></div>
+  <div style="margin-top:12px"><button class="btn pri" onclick="salvarServidor()">Salvar servidor</button></div></div>
+ <div class="box"><h3>Sessão</h3><p class="h">Link do app para instalar: <a href="${APK}" style="color:var(--acc)">${APK}</a></p><button class="btn bad" onclick="sair()">Sair do painel</button></div>`}
+
+/* ---------- Ações ---------- */
+function modal(html){$('modal').innerHTML=`<div class="ov" onclick="if(event.target===this)fechar()"><div class="md">${html}</div></div>`}
+function fechar(){$('modal').innerHTML=''}
+const isoDia=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
+
+function formCliente(id){
+ const c=id?D.clients.find(x=>x.id===id):{name:'',phone:'',notes:'',plan_id:D.plans[0]?.id,price:D.plans[0]?.price||0,expires_at:new Date(Date.now()+30*864e5)}
+ modal(`<h3>${id?'Editar cliente':'Novo cliente'}</h3>
+  <label class="f">Nome (pessoa ou casa)<input class="field" id="fN" value="${esc(c.name)}" placeholder="Ex.: Casa dos pais"></label>
+  <label class="f">WhatsApp<input class="field" id="fT" value="${esc(c.phone||'')}" placeholder="Ex.: 91999990000" inputmode="tel"></label>
+  <div class="grid2"><label class="f">Plano<select id="fP">${D.plans.map(p=>`<option value="${p.id}"${p.id===c.plan_id?' selected':''}>${esc(p.name)} (${p.screens} tela${p.screens>1?'s':''})</option>`).join('')}</select></label>
+   <label class="f">Mensalidade (R$)<input class="field" id="fV" type="number" min="0" step="0.01" value="${c.price}"></label></div>
+  <label class="f">Vencimento<input class="field" id="fE" type="date" value="${isoDia(c.expires_at)}"></label>
+  <label class="f">Observação<input class="field" id="fO" value="${esc(c.notes||'')}"></label>
+  <div class="row">${id?`<button class="btn bad" style="margin-right:auto" onclick="excluirCliente('${id}')">Excluir</button>`:''}<button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" id="fS">Salvar</button></div>`)
+ $('fP').onchange=()=>{const p=plano(Number($('fP').value));if(p)$('fV').value=p.price}
+ $('fS').onclick=async()=>{
+  const name=$('fN').value.trim();if(!name){toast('Informe o nome');return}
+  const v=$('fE').value;if(!v){toast('Informe o vencimento');return}
+  const row={name,phone:$('fT').value.replace(/\D/g,'')||null,notes:$('fO').value.trim()||null,plan_id:Number($('fP').value)||null,price:Number($('fV').value)||0,expires_at:new Date(v+'T23:59:59').toISOString()}
+  $('fS').disabled=true
+  const r=id?await sb.from('clients').update(row).eq('id',id):await sb.from('clients').insert(row).select().single()
+  if(r.error){$('fS').disabled=false;return erro(r.error)}
+  fechar();await carregar()
+  if(!id){toast('Cliente criado. Gerando o primeiro código…');novoCodigo(r.data.id)}else toast('Salvo')}}
+
+async function excluirCliente(id){const c=D.clients.find(x=>x.id===id)
+ if(!confirm(`Excluir "${c.name}" e todos os códigos dele? Os aparelhos param de funcionar. Não dá para desfazer.`))return
+ const r=await sb.from('clients').delete().eq('id',id);if(r.error)return erro(r.error);fechar();toast('Cliente excluído');carregar()}
+
+async function novoCodigo(cid){
+ const label=prompt('Nome do aparelho (opcional). Ex.: TV da sala','')
+ if(label===null)return
+ const r=await sb.rpc('admin_new_code',{p_client:cid,p_label:label});if(r.error)return erro(r.error)
+ await carregar();toast('Código '+r.data+' criado');enviar(r.data)}
+
+async function renovar(id){const c=D.clients.find(x=>x.id===id)
+ const base=Math.max(Date.now(),new Date(c.expires_at).getTime()),n=new Date(base+30*864e5);n.setHours(23,59,59,0)
+ if(!confirm(`Renovar "${c.name}" até ${n.toLocaleDateString('pt-BR')}?`))return
+ const r=await sb.from('clients').update({expires_at:n.toISOString(),active:true}).eq('id',id);if(r.error)return erro(r.error);toast('Renovado até '+n.toLocaleDateString('pt-BR'));carregar()}
+
+async function ligar(id,on){const c=D.clients.find(x=>x.id===id)
+ if(!on&&!confirm(`Desligar "${c.name}"? Todos os aparelhos dele param de funcionar.`))return
+ const r=await sb.from('clients').update({active:on}).eq('id',id);if(r.error)return erro(r.error);toast(on?'Ligado':'Desligado');carregar()}
+
+async function ligarCodigo(code,on){
+ if(!on&&!confirm(`Desligar o código ${code}? Esse aparelho para de funcionar.`))return
+ const r=await sb.from('codes').update({active:on}).eq('code',code);if(r.error)return erro(r.error);toast(on?'Código ligado':'Código desligado');carregar()}
+
+async function liberar(code){
+ if(!confirm(`Soltar o aparelho do código ${code}? O aparelho atual para de funcionar e o código poderá ser usado em outra TV.`))return
+ const r=await sb.from('codes').update({device_id:null,device_tag:null,device_model:null,activated_at:null,last_seen:null,watching:null,watching_kind:null,watching_since:null,app_version:null}).eq('code',code)
+ if(r.error)return erro(r.error);toast('Código livre para outro aparelho');carregar()}
+
+async function excluirCodigo(code){
+ if(!confirm(`Excluir o código ${code}? O aparelho para de funcionar. Não dá para desfazer.`))return
+ const r=await sb.from('codes').delete().eq('code',code);if(r.error)return erro(r.error);toast('Código excluído');carregar()}
+
+function copiar(code){navigator.clipboard?.writeText(code).then(()=>toast('Código '+code+' copiado'),()=>toast(code))}
+
+function enviar(code){const k=D.codes.find(x=>x.code===code),c=D.clients.find(x=>x.id===k?.client_id)
+ const txt=`Olá${c?' '+c.name:''}! Seu acesso ao *MunizFlix* está pronto 🎬\n\n1) Baixe o app: ${APK}\n2) Instale e abra\n3) Digite o código: *${code}*\n\nO código funciona em 1 aparelho.`
+ modal(`<h3>Enviar código ${code}</h3><textarea class="field" id="eT" style="min-height:170px">${esc(txt)}</textarea>
+  <div class="row"><button class="btn" onclick="fechar()">Fechar</button><button class="btn" onclick="navigator.clipboard.writeText($('eT').value).then(()=>toast('Mensagem copiada'))">Copiar</button>
+  <button class="btn pri" onclick="window.open('https://wa.me/${c?.phone?(c.phone.length<=11?'55':'')+c.phone:''}?text='+encodeURIComponent($('eT').value),'_blank')">WhatsApp</button></div>`)}
+
+async function salvarPlano(id){
+ const row={name:$('pn'+id).value.trim(),screens:Number($('ps'+id).value),price:Number($('pp'+id).value)||0}
+ if(!row.name||!(row.screens>=1&&row.screens<=10)){toast('Confira nome e telas (1 a 10)');return}
+ const r=await sb.from('plans').update(row).eq('id',id);if(r.error)return erro(r.error);toast('Plano salvo');carregar()}
+async function novoPlano(){const r=await sb.from('plans').insert({name:'Novo plano',screens:1,price:0});if(r.error)return erro(r.error);carregar()}
+async function salvarContato(){const r=await sb.from('app_config').update({contact:$('cfContato').value.trim(),updated_at:new Date().toISOString()}).eq('id',1);if(r.error)return erro(r.error);toast('Contato salvo');carregar()}
+async function salvarServidor(){
+ const servers=$('cfSrv').value.split('\n').map(s=>s.trim().replace(/\/+$/,'')).filter(Boolean)
+ if(!servers.length||!servers.every(s=>/^https?:\/\/\S+$/.test(s))){toast('Endereço inválido (use http://...)');return}
+ const user=$('cfUser').value.trim(),pass=$('cfPass').value
+ if(!user||!pass){toast('Informe usuário e senha');return}
+ const xu=$('cfXu').value.trim().replace(/\/+$/,''),extra=xu?[{url:xu,user:$('cfXl').value.trim(),pass:$('cfXp').value}]:[]
+ if(!confirm('Salvar o servidor? Todos os aparelhos passam a usar estes dados na próxima vez que abrirem o app.'))return
+ const r=await sb.from('app_config').update({servers,username:user,password:pass,extra,updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error);toast('Servidor salvo');carregar()}
+
+/* ---------- Início ---------- */
+let timer
+async function iniciar(){
+ const{data:{session}}=await sb.auth.getSession()
+ ;['vLogin','vNoAdmin','vApp'].forEach(v=>$(v).classList.add('hide'))
+ if(!session){$('vLogin').classList.remove('hide');return}
+ const{data:adm}=await sb.from('admins').select('user_id').eq('user_id',session.user.id).maybeSingle()
+ if(!adm){$('naId').textContent=session.user.id;$('vNoAdmin').classList.remove('hide');return}
+ $('vApp').classList.remove('hide');await carregar()
+ clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&!$('modal').innerHTML&&tab!=='ajustes')carregar()},20000)}
+iniciar()
+</script>
+</body>
+</html>
