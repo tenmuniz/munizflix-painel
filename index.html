@@ -173,6 +173,7 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:
 'use strict'
 const SB_URL='https://dnrwutpvpdnatbqasskc.supabase.co'
 const SB_KEY='sb_publishable_pvZJgJK3G5C7eJcKRdCCNQ_iBVhgbRc'
+const CTRL=new URL('controle/',location.href).href.split('?')[0]
 const APK='https://github.com/tenmuniz/munizflix-app/releases/latest/download/MunizFlix.apk'
 const ONLINE_MIN=7 // aparelho conta como online se falou com o painel nos últimos 7 minutos
 const sb=supabase.createClient(SB_URL,SB_KEY)
@@ -210,16 +211,17 @@ $('lgGo').onclick=async()=>{
 async function sair(){await sb.auth.signOut();location.reload()}
 
 /* ---------- Dados ---------- */
-let D={plans:[],clients:[],codes:[],cfg:null},tab='geral',busca=''
+let D={plans:[],clients:[],codes:[],cfg:null,remotes:[]},tab='geral',busca=''
 async function carregar(manual){
  try{
-  const [p,c,k,g]=await Promise.all([
+  const [p,c,k,g,rm]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
    sb.from('codes').select('code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,created_at').order('created_at'),
-   tab==='ajustes'||!D.cfg?sb.from('app_config').select('*').eq('id',1).single():Promise.resolve({data:D.cfg})])
+   tab==='ajustes'||!D.cfg?sb.from('app_config').select('*').eq('id',1).single():Promise.resolve({data:D.cfg}),
+   sb.from('remotes').select('id,code,name,last_seen,approved_at').eq('status','ok').order('approved_at')])
   for(const r of [p,c,k,g])if(r.error)throw r.error
-  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data}
+  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data}
   render();if(manual)toast('Atualizado')
  }catch(e){erro(e)}}
 const plano=id=>D.plans.find(p=>p.id===id)
@@ -287,7 +289,9 @@ function cardCodigo(k){
   ${k.active?'':'<span class="tag bad">Desligado</span>'}</div>
   <div class="dev">${k.device_tag?`📺 <b>${esc(k.device_tag)}</b> · ${esc(k.device_model||'')}<br>Ativado ${dth(k.activated_at)} · visto ${ago(k.last_seen)}${k.app_version?' · v'+esc(k.app_version):''}`:'⏳ Aguardando ativação no aparelho'}</div>
   ${on&&k.watching?`<div class="watch">${KIND[k.watching_kind]||'▶️'} ${esc(k.watching)} <span>· desde ${hm(k.watching_since)}</span></div>`:''}
+  ${D.remotes.filter(r=>r.code===k.code).map(r=>`<div class="dev">📱 Controle: <b>${esc(r.name)}</b> · usado ${ago(r.last_seen||r.approved_at)} <button class="btn sm bad" style="padding:2px 8px;margin-left:4px" onclick="tirarCelular('${r.id}')">Tirar</button></div>`).join('')}
   <div class="acts">
+   ${k.device_tag&&k.active?`<button class="btn sm pri" onclick="location.href='controle/?tv=${k.code}'">📱 Controlar</button>`:''}
    <button class="btn sm" onclick="enviar('${k.code}')">📤 Enviar</button>
    <button class="btn sm" onclick="copiar('${k.code}')">Copiar</button>
    ${k.device_tag?`<button class="btn sm" onclick="liberar('${k.code}')">Trocar aparelho</button>`:''}
@@ -367,6 +371,10 @@ async function ligarCodigo(code,on){
  if(!on&&!confirm(`Desligar o código ${code}? Esse aparelho para de funcionar.`))return
  const r=await sb.from('codes').update({active:on}).eq('code',code);if(r.error)return erro(r.error);toast(on?'Código ligado':'Código desligado');carregar()}
 
+async function tirarCelular(id){const r0=D.remotes.find(x=>x.id===id)
+ if(!confirm(`Tirar o controle de "${r0?.name||'celular'}"? Esse celular não consegue mais escolher o que passa nessa TV.`))return
+ const r=await sb.rpc('admin_remote_revoke',{p_id:id});if(r.error)return erro(r.error);toast('Celular removido');carregar()}
+
 async function liberar(code){
  if(!confirm(`Soltar o aparelho do código ${code}? O aparelho atual para de funcionar e o código poderá ser usado em outra TV.`))return
  const r=await sb.from('codes').update({device_id:null,device_tag:null,device_model:null,activated_at:null,last_seen:null,watching:null,watching_kind:null,watching_since:null,app_version:null}).eq('code',code)
@@ -379,7 +387,9 @@ async function excluirCodigo(code){
 function copiar(code){navigator.clipboard?.writeText(code).then(()=>toast('Código '+code+' copiado'),()=>toast(code))}
 
 function enviar(code){const k=D.codes.find(x=>x.code===code),c=D.clients.find(x=>x.id===k?.client_id)
- const txt=`Olá${c?' '+c.name:''}! Seu acesso ao *MunizFlix* está pronto 🎬\n\n1) Baixe o app: ${APK}\n2) Instale e abra\n3) Digite o código: *${code}*\n\nO código funciona em 1 aparelho.`
+ const txt=`Olá${c?' '+c.name:''}! Seu acesso ao *MunizFlix* está pronto 🎬\n\n1) Baixe o app: ${APK}\n2) Instale e abra\n3) Digite o código: *${code}*\n\nO código funciona em 1 aparelho.
+
+📱 Quer escolher filmes e canais pelo celular? Abra ${CTRL} e use o mesmo código.`
  modal(`<h3>Enviar código ${code}</h3><textarea class="field" id="eT" style="min-height:170px">${esc(txt)}</textarea>
   <div class="row"><button class="btn" onclick="fechar()">Fechar</button><button class="btn" onclick="navigator.clipboard.writeText($('eT').value).then(()=>toast('Mensagem copiada'))">Copiar</button>
   <button class="btn pri" onclick="window.open('https://wa.me/${c?.phone?(c.phone.length<=11?'55':'')+c.phone:''}?text='+encodeURIComponent($('eT').value),'_blank')">WhatsApp</button></div>`)}
