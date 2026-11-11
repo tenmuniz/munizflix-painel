@@ -55,7 +55,7 @@ h2 .lnk{margin-left:auto;font-size:12.5px;color:#c4b5fd;font-weight:700}
 
 /* ---------- blocos ---------- */
 .panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:16px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 15px;border-radius:11px;font-weight:700;font-size:14px;background:var(--card2);border:1px solid var(--line);white-space:nowrap;text-decoration:none}
 .btn:hover{border-color:rgba(168,85,247,.5)}
 .btn.pri{background:var(--grad);border-color:transparent;color:#fff}
@@ -89,6 +89,8 @@ h2 .lnk{margin-left:auto;font-size:12.5px;color:#c4b5fd;font-weight:700}
 .sum div{display:flex;flex-direction:column}
 .sum b{font-size:19px;font-weight:900}
 .sum small{color:var(--mut);font-size:12px;font-weight:600}
+em.agora{color:var(--ok);font-style:normal;font-weight:800}
+.panel .note{margin:10px 0 0;color:var(--mut);font-size:12px}
 
 /* listas */
 .list{display:flex;flex-direction:column;gap:8px}
@@ -102,9 +104,10 @@ h2 .lnk{margin-left:auto;font-size:12.5px;color:#c4b5fd;font-weight:700}
 .meter{height:4px;border-radius:4px;background:rgba(255,255,255,.06);margin-top:6px;overflow:hidden}
 .meter i{display:block;height:100%;border-radius:4px;background:#a855f7}
 .empty{color:var(--mut);text-align:center;padding:30px 10px;border:1px dashed var(--line);border-radius:14px;font-size:14px}
-.dot{width:9px;height:9px;border-radius:50%;background:#4b4566;flex:none}
-.dot.on{background:var(--ok);box-shadow:0 0 0 4px rgba(74,222,128,.15)}
-.dot.play{background:#e879f9;box-shadow:0 0 0 4px rgba(232,121,249,.18)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--bad);box-shadow:0 0 0 4px rgba(244,63,94,.14);flex:none}
+.dot.on,.dot.play{background:var(--ok);box-shadow:0 0 0 4px rgba(74,222,128,.16)}
+.dot.play{animation:pulso 1.8s ease-in-out infinite}
+@keyframes pulso{50%{box-shadow:0 0 0 7px rgba(74,222,128,.05)}}
 .tag{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--tx2);white-space:nowrap}
 .tag.ok{color:var(--ok);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.08)}
 .tag.warn{color:var(--warn);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
@@ -261,7 +264,8 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:
 .lnkbox{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line2);border-radius:11px;padding:6px 6px 6px 12px;margin-bottom:8px}
 .lnkbox code{flex:1;min-width:0;font-size:12px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}
+.cols.c16{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+@media (max-width:1100px){.cols,.cols.c16{grid-template-columns:minmax(0,1fr)}.kpis{grid-template-columns:repeat(3,1fr)}
  .chd{display:none}
  .cmain{display:flex;flex-wrap:wrap;column-gap:18px;row-gap:8px;align-items:center}
  .cmain>.cnm{flex:1 1 100%}
@@ -355,6 +359,8 @@ const days=d=>Math.ceil((new Date(d)-Date.now())/864e5)
 const tm=m=>{m=Math.round(m||0);if(m<60)return m+' min';const h=Math.floor(m/60),r=m%60;return h+'h'+(r?' '+String(r).padStart(2,'0'):'')}
 const hrs=m=>{const h=(m||0)/60;return h<10?h.toLocaleString('pt-BR',{maximumFractionDigits:1}):Math.round(h).toLocaleString('pt-BR')}
 // TV desligada no botão não avisa que parou: sem sinal recente = offline, e o "assistindo" dela não vale mais
+// início real do que está passando: a sessão aberta no histórico (sobrevive a pausa/atualização)
+const desde=c=>{const r=(D.st?.codes?.[c.code]?.recent||[]).find(x=>x.on&&x.t===c.watching);return r?r.at:c.watching_since}
 const online=c=>!!(c.last_seen&&(Date.now()-new Date(c.last_seen))<ONLINE_MIN*60000)
 const KIND={live:'📺',movie:'🎬',series:'🎞️'}
 const KNAME={live:'Canal',movie:'Filme',series:'Série'}
@@ -428,8 +434,10 @@ function status(cl){const d=days(cl.expires_at)
 function ultimosDias(n){const l=[],d=new Date();d.setHours(12,0,0,0);for(let i=n-1;i>=0;i--){const x=new Date(d);x.setDate(d.getDate()-i);l.push(x)}return l}
 const diaKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')
 const WD=['dom','seg','ter','qua','qui','sex','sáb']
+// dias com registro (o histórico começou em D.st.since): não conta dias "vazios" de antes disso
+function diasDesde(max){const s=D.st.since;if(!s)return max;const a=new Date(s+'T12:00:00'),b=new Date();b.setHours(12,0,0,0);return Math.max(1,Math.min(max,Math.round((b-a)/864e5)+1))}
 function grafico(map){
- const ds=ultimosDias(14),vals=ds.map(d=>(map[diaKey(d)]||0)/60),mx=Math.max(1,...vals)
+ const ds=ultimosDias(Math.max(7,diasDesde(14))),vals=ds.map(d=>(map[diaKey(d)]||0)/60),mx=Math.max(1,...vals)
  const step=mx<=2?.5:mx<=5?1:mx<=12?2:mx<=30?5:10,top=Math.ceil(mx/step)*step
  const W=640,H=200,L=34,B=24,T=8,cw=(W-L)/ds.length,bw=Math.min(26,cw*.62),ys=v=>T+(H-T-B)*(1-v/top)
  let g=''
@@ -437,7 +445,7 @@ function grafico(map){
  ds.forEach((d,i)=>{const v=vals[i],x=L+i*cw+(cw-bw)/2,y=ys(v),h=Math.max(0,H-B-y),last=i===ds.length-1
   const r=Math.min(4,h/2),path=h<=0?'':`M${x},${H-B} V${y+r} Q${x},${y} ${x+r},${y} H${x+bw-r} Q${x+bw},${y} ${x+bw},${y+r} V${H-B} Z`
   g+=`<g data-i="${i}"><rect class="hit" x="${L+i*cw}" y="${T}" width="${cw}" height="${H-T}"/>${path?`<path class="bar${last?' today':''}" d="${path}"/>`:''}</g>`
-  if(i%2===ds.length%2||last)g+=`<text class="ax" x="${L+i*cw+cw/2}" y="${H-6}" text-anchor="middle">${last?'hoje':d.getDate()+'/'+(d.getMonth()+1)}</text>`})
+  if(ds.length<=7||i%2===ds.length%2||last)g+=`<text class="ax" x="${L+i*cw+cw/2}" y="${H-6}" text-anchor="middle">${last?'hoje':d.getDate()+'/'+(d.getMonth()+1)}</text>`})
  setTimeout(()=>{const el=document.querySelector('#chartH');if(!el)return;const tip=el.querySelector('.tip')
   el.querySelectorAll('g[data-i]').forEach(gr=>{gr.onmouseenter=gr.ontouchstart=()=>{const i=+gr.dataset.i,d=ds[i],r=gr.querySelector('rect').getBoundingClientRect(),b=el.getBoundingClientRect()
     tip.innerHTML=`${tm(vals[i]*60)}<small>${WD[d.getDay()]}, ${d.toLocaleDateString('pt-BR')}</small>`;tip.style.left=(r.left-b.left+r.width/2)+'px';tip.style.top=(Math.max(ys(vals[i]),T)/H*el.querySelector('svg').getBoundingClientRect().height-6)+'px';tip.classList.remove('hide')}
@@ -459,10 +467,11 @@ function rGeral(){
   <div class="kpi"><small><span class="ic">👥</span>Clientes ativos</small><b>${ativos.length}</b><em>${D.codes.filter(c=>c.device_tag).length} de ${D.codes.length} códigos em uso</em></div>
   <div class="kpi"><small><span class="ic">💰</span>Receita por mês</small><b>${brl(receita)}</b><em>só clientes ativos</em></div>
   <div class="kpi"><small><span class="ic">📅</span>Vencimentos</small><b style="color:${vencendo.length+vencidos.length?'var(--warn)':''}">${vencendo.length}</b><em>${vencidos.length?`<span style="color:#fb7185">${vencidos.length} vencido${vencidos.length>1?'s':''}</span> · `:''}nos próximos 7 dias</em></div></div>
- <div class="cols" style="grid-template-columns:1.6fr 1fr">
-  <div class="panel"><h2>Horas assistidas por dia <span class="n">todas as telas · 14 dias</span></h2>
-   <div class="sum"><div><b>${hrs(sem)} h</b><small>7 dias</small></div><div><b>${hrs(mes)} h</b><small>30 dias</small></div><div><b>${sem?tm(sem/7):'—'}</b><small>média por dia</small></div></div>
-   ${grafico(D.st.days||{})}</div>
+ <div class="cols c16">
+  <div class="panel"><h2>Tempo assistido por dia <span class="n">todas as telas</span></h2>
+   <div class="sum"><div><b>${tm(hoje)}</b><small>hoje</small></div><div><b>${tm(sem)}</b><small>7 dias</small></div><div><b>${tm(mes)}</b><small>30 dias</small></div><div><b>${sem?tm(sem/diasDesde(7)):'—'}</b><small>média por dia</small></div></div>
+   ${grafico(D.st.days||{})}
+   ${D.st.since&&diasDesde(30)<30?`<p class="note">O histórico começou em ${new Date(D.st.since+'T12:00:00').toLocaleDateString('pt-BR')}. Sessões com menos de 1 minuto (zapping) não contam.</p>`:''}</div>
   <div class="panel"><h2>Mais assistidos <span class="n">30 dias</span></h2>
    ${top.length?'<div class="list">'+top.map((t,i)=>`<div class="row" style="padding:9px 11px"><span class="rank">${i+1}</span><div class="t"><b>${esc(t.t)}</b><small>${KNAME[t.k]||''}${t.n>1?' · em '+t.n+' telas':''}</small><div class="meter"><i style="width:${Math.round(t.m/mxTop*100)}%"></i></div></div><span class="v">${tm(t.m)}</span></div>`).join('')+'</div>'
    :'<div class="empty">O histórico começa a contar a partir de agora. Assim que as TVs assistirem algo, aparece aqui.</div>'}</div></div>
@@ -480,7 +489,7 @@ function listaAoVivo(max){
  if(!on.length)return '<div class="empty">Nenhuma tela online agora.</div>'
  return '<div class="list">'+on.slice(0,max||999).map(c=>{const cl=clienteDe(c)
   return `<div class="row"><div class="k">${c.watching?KIND[c.watching_kind]||'▶️':'💤'}</div><div class="t"><b>${c.watching?esc(c.watching):'No menu do app'}</b>
-  <small>${esc(c.label||c.code)} · ${esc(cl?.name||'?')}${c.watching_since?' · há '+tm((Date.now()-new Date(c.watching_since))/60000):''}</small></div>
+  <small>${esc(c.label||c.code)} · ${esc(cl?.name||'?')}${desde(c)?' · há '+tm((Date.now()-new Date(desde(c)))/60000):''}</small></div>
   ${c.device_tag&&c.active?`<a class="btn sm" href="controle/?tv=${c.code}">📱</a>`:''}<span class="dot ${c.watching?'play':'on'}"></span></div>`}).join('')+'</div>'}
 
 function rAoVivo(){$('page').innerHTML=head('Assistindo agora','Telas online e o que está passando. Atualiza sozinho a cada 20 segundos.')+`<div class="panel">${listaAoVivo()}</div>`}
@@ -493,11 +502,11 @@ function cardTela(k){
  return `<div class="dv${k.active?'':' off'}">
   <div class="dvh"><span class="dot${on?(k.watching?' play':' on'):''}"></span><div class="nm"><b>${esc(k.label||'Tela sem nome')}</b><small>${esc(cl?.name||'?')} · <span class="code">${k.code}</span></small></div>
    ${k.active?'':'<span class="tag bad">Desligado</span>'}</div>
-  ${on&&k.watching?`<div class="now">${KIND[k.watching_kind]||'▶️'}<span>${esc(k.watching)}</span><small>há ${tm((Date.now()-new Date(k.watching_since))/60000)}</small></div>`
+  ${on&&k.watching?`<div class="now">${KIND[k.watching_kind]||'▶️'}<span>${esc(k.watching)}</span><small>há ${tm((Date.now()-new Date(desde(k)))/60000)}</small></div>`
    :`<div class="idle">${on?'💤 Online, no menu do app':'Offline · visto '+ago(k.last_seen)}</div>`}
   <div class="st3"><div><b>${tm(s.today)}</b><small>Hoje</small></div><div><b>${tm(s.week)}</b><small>7 dias</small></div><div><b>${tm(s.month)}</b><small>30 dias</small></div></div>
   ${spark(s.days)}
-  ${s.recent?.length?`<div class="hist">${s.recent.slice(0,3).map(r=>`<div>${KIND[r.k]||'▶️'}<span>${esc(r.t)}</span><small>${dth(r.at)} · ${tm(r.m)}</small></div>`).join('')}</div>`:''}
+  ${s.recent?.length?`<div class="hist">${s.recent.slice(0,3).map(r=>`<div>${KIND[r.k]||'▶️'}<span>${esc(r.t)}</span><small>${dth(r.at)} · ${tm(r.m)}${r.on?' · <em class="agora">agora</em>':''}</small></div>`).join('')}</div>`:''}
   <div class="meta">📺 ${k.device_tag?`<b>${esc(k.device_model||k.device_tag)}</b>${k.app_version?' · v'+esc(k.app_version):''}`:'Aguardando ativação'}${rem.length?'<br>📱 Controle: '+rem.map(r=>'<b>'+esc(r.name)+'</b>').join(', '):''}</div>
   <div class="acts">
    ${k.device_tag&&k.active?`<a class="btn sm pri" href="controle/?tv=${k.code}">📱 Controlar</a>`:''}
@@ -521,7 +530,7 @@ function historico(code){const k=D.codes.find(x=>x.code===code),s=stOf(code),cl=
   <div class="st3" style="margin-bottom:12px"><div><b>${tm(s.today)}</b><small>Hoje</small></div><div><b>${tm(s.week)}</b><small>7 dias</small></div><div><b>${tm(s.month)}</b><small>30 dias</small></div></div>
   ${spark(s.days)}
   <h2 style="margin-top:16px">Últimas coisas assistidas</h2>
-  ${s.recent?.length?'<div class="list">'+s.recent.map(r=>`<div class="row" style="padding:9px 11px"><div class="k">${KIND[r.k]||'▶️'}</div><div class="t"><b>${esc(r.t)}</b><small>${dth(r.at)}</small></div><span class="v">${tm(r.m)}</span></div>`).join('')+'</div>':'<div class="empty">Ainda sem histórico nesta tela.</div>'}
+  ${s.recent?.length?'<div class="list">'+s.recent.map(r=>`<div class="row" style="padding:9px 11px"><div class="k">${KIND[r.k]||'▶️'}</div><div class="t"><b>${esc(r.t)}</b><small>${dth(r.at)}${r.on?' · <em class="agora">assistindo agora</em>':''}</small></div><span class="v">${tm(r.m)}</span></div>`).join('')+'</div>':'<div class="empty">Ainda sem histórico nesta tela.</div>'}
   <div class="mrow">${k?.device_tag&&k.active?`<a class="btn pri" href="controle/?tv=${code}">📱 Controlar</a>`:''}<button class="btn" onclick="fechar()">Fechar</button></div>`,true)}
 
 /* ---------- Clientes ---------- */
@@ -571,7 +580,7 @@ function cardCodigo(k){
  return `<div class="cd"><div class="cc"><span class="dot${on?(k.watching?' play':' on'):''}"></span><span class="code">${k.code}</span><span class="lb">${esc(k.label||'')}</span>
   ${k.active?'':'<span class="tag bad">Desligado</span>'}</div>
   <div class="meta">${k.device_tag?`📺 <b>${esc(k.device_tag)}</b> · ${esc(k.device_model||'')}<br>Ativado ${dth(k.activated_at)} · visto ${ago(k.last_seen)}${k.app_version?' · v'+esc(k.app_version):''}`:'⏳ Aguardando ativação no aparelho'}</div>
-  ${on&&k.watching?`<div class="now">${KIND[k.watching_kind]||'▶️'}<span>${esc(k.watching)}</span><small>desde ${hm(k.watching_since)}</small></div>`:''}
+  ${on&&k.watching?`<div class="now">${KIND[k.watching_kind]||'▶️'}<span>${esc(k.watching)}</span><small>desde ${hm(desde(k))}</small></div>`:''}
   ${k.device_tag?`<div class="chips"><span class="chip">Hoje ${tm(s.today)}</span><span class="chip">7 dias ${tm(s.week)}</span><span class="chip">30 dias ${tm(s.month)}</span></div>`:''}
   ${D.remotes.filter(r=>r.code===k.code).map(r=>`<div class="meta">📱 Controle: <b>${esc(r.name)}</b> · usado ${ago(r.last_seen||r.approved_at)} <button class="btn sm bad" style="height:24px;padding:0 8px;margin-left:4px" onclick="tirarCelular('${r.id}')">Tirar</button></div>`).join('')}
   <div class="acts">
