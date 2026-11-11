@@ -269,7 +269,8 @@ const SB_URL='https://dnrwutpvpdnatbqasskc.supabase.co'
 const SB_KEY='sb_publishable_pvZJgJK3G5C7eJcKRdCCNQ_iBVhgbRc'
 const CTRL=new URL('controle/',location.href).href.split('?')[0]
 const APK='https://github.com/tenmuniz/munizflix-app/releases/latest/download/MunizFlix.apk'
-const ONLINE_MIN=7 // aparelho conta como online se falou com o painel nos últimos 7 minutos
+// online = falou com o servidor há pouco (o app checa a cada 5 min; com vídeo tocando, avisa a cada 3 min)
+const ONLINE_MIN=12
 const sb=supabase.createClient(SB_URL,SB_KEY)
 const $=id=>document.getElementById(id)
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
@@ -283,8 +284,8 @@ const days=d=>Math.ceil((new Date(d)-Date.now())/864e5)
 /** minutos -> "45 min" / "2h 05" */
 const tm=m=>{m=Math.round(m||0);if(m<60)return m+' min';const h=Math.floor(m/60),r=m%60;return h+'h'+(r?' '+String(r).padStart(2,'0'):'')}
 const hrs=m=>{const h=(m||0)/60;return h<10?h.toLocaleString('pt-BR',{maximumFractionDigits:1}):Math.round(h).toLocaleString('pt-BR')}
-// online: falou com o painel há pouco, ou está assistindo (no player o app avisa a cada 3 min)
-const online=c=>!!(c.last_seen&&(Date.now()-new Date(c.last_seen))<ONLINE_MIN*60000)||!!(c.watching&&c.watching_since&&(Date.now()-new Date(c.watching_since))<4*3600e3)
+// TV desligada no botão não avisa que parou: sem sinal recente = offline, e o "assistindo" dela não vale mais
+const online=c=>!!(c.last_seen&&(Date.now()-new Date(c.last_seen))<ONLINE_MIN*60000)
 const KIND={live:'📺',movie:'🎬',series:'🎞️'}
 const KNAME={live:'Canal',movie:'Filme',series:'Série'}
 let toastT
@@ -319,6 +320,8 @@ let tab=(()=>{const h=location.hash.slice(1);return PAGES.some(p=>p[0]===h)?h:'g
 
 async function carregar(manual){
  try{
+  // antes de ler: fecha o que ficou "assistindo" em TVs que sumiram
+  await sb.rpc('admin_refresh').then(()=>{},()=>{})
   const [p,c,k,g,rm,st]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
