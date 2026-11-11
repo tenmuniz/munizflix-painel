@@ -197,7 +197,77 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:
 .msg.ok{color:var(--ok)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;background:#2a2340;border:1px solid rgba(168,85,247,.4);padding:12px 18px;border-radius:12px;font-weight:700;font-size:14px;box-shadow:0 14px 40px rgba(0,0,0,.5)}
 
-@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}}
+/* clientes: filtros com contagem */
+.cfil{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.cfil button{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.cfil button b{font-size:22px;font-weight:900}
+.cfil button span{font-size:12.5px;color:var(--mut);font-weight:700}
+.cfil button.on{border-color:rgba(192,38,211,.55);background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(192,38,211,.1))}
+.cfil .f-breve b{color:var(--warn)}.cfil .f-venc b{color:#fb7185}.cfil .f-ok b{color:var(--ok)}.cfil .f-off b{color:var(--mut)}
+/* clientes: tabela */
+.ctab{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.chd,.cmain{display:grid;grid-template-columns:minmax(200px,2.2fr) 1.1fr 1.1fr 1.2fr .9fr .8fr auto;gap:12px;align-items:center;padding:0 16px}
+.chd{height:40px;font-size:11.5px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line2);background:rgba(255,255,255,.02)}
+.crow{border-bottom:1px solid var(--line2)}
+.crow:last-child{border-bottom:0}
+.crow.off{opacity:.6}
+.cmain{min-height:66px;cursor:pointer;padding-top:10px;padding-bottom:10px}
+.cmain:hover{background:rgba(255,255,255,.025)}
+.crow.op{background:rgba(124,58,237,.06)}
+.cnm{display:flex;align-items:center;gap:11px;min-width:0}
+.cnm>div{min-width:0}
+.cnm b{display:block;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cnm small{display:block;color:var(--mut);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av{width:38px;height:38px;border-radius:12px;flex:none;display:grid;place-items:center;font-weight:900;font-size:13.5px;background:hsl(var(--h) 45% 26%);color:#fff;border:1px solid hsl(var(--h) 50% 40% / .5)}
+.cpl b{display:block;font-size:13.5px;font-weight:700;white-space:nowrap}
+.cpl small{display:block;color:var(--mut);font-size:12px;white-space:nowrap}
+.ctv{display:flex;align-items:center;gap:5px}
+.ctv small{color:var(--mut);font-size:12px;font-weight:700;margin-left:3px}
+.cact{display:flex;align-items:center;gap:6px}
+.chev{width:32px;height:32px;border-radius:9px;background:var(--card2);border:1px solid var(--line);color:var(--tx2)}
+.cdet{padding:4px 16px 16px;display:flex;flex-direction:column;gap:12px}
+.cdet .cds{margin-top:0}
+/* ajustes */
+.aj{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.aj .box{margin:0}
+.aj .wide{grid-column:1/-1}
+.bxh{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.bxh p.h{margin:2px 0 0}
+.bxi{width:38px;height:38px;border-radius:11px;flex:none;display:grid;place-items:center;font-size:18px;background:rgba(168,85,247,.16)}
+.bxf{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:14px}
+.bxf .h{margin-right:auto;color:var(--mut);font-size:12px}
+.plans{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.pc{background:var(--bg2);border:1px solid var(--line2);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.pc.add{align-items:center;justify-content:center;color:var(--tx2);font-weight:800;font-size:22px;border:1px dashed var(--line);min-height:150px;gap:4px}
+.pc.add span{font-size:13px}
+.pch{display:flex;align-items:center;gap:8px}
+.pnm{flex:1;min-width:0;background:none;border:0;border-bottom:1px dashed transparent;font-weight:800;font-size:15.5px;outline:none;padding:2px 0}
+.pnm:hover,.pnm:focus{border-bottom-color:var(--acc)}
+.pcf{display:grid;grid-template-columns:70px 1fr;gap:8px}
+.money{position:relative;display:block}
+.money i{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-style:normal;color:var(--mut);font-size:13px;font-weight:700}
+.money input{padding-left:34px}
+.lockpv{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:18px;border-radius:14px;margin-bottom:12px;background:radial-gradient(80% 90% at 50% 0%,rgba(124,58,237,.25),transparent),#0a0814;border:1px solid var(--line2)}
+.lockpv img{width:46px;height:46px;border-radius:12px}
+.lockpv b{font-size:15px}
+.lockpv span{color:var(--tx2);font-size:13px;min-height:18px}
+.srv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.srv h4{font-size:13px;font-weight:800;margin-bottom:8px;color:var(--tx2)}
+.srv h4 small{font-weight:600;color:var(--mut)}
+.pw{position:relative;display:block}
+.pw input{padding-right:40px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:8px;opacity:.7}
+.eye:hover{opacity:1;background:rgba(255,255,255,.06)}
+.lnkbox{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line2);border-radius:11px;padding:6px 6px 6px 12px;margin-bottom:8px}
+.lnkbox code{flex:1;min-width:0;font-size:12px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}
+ .chd{display:none}
+ .cmain{display:flex;flex-wrap:wrap;column-gap:18px;row-gap:8px;align-items:center}
+ .cmain>.cnm{flex:1 1 100%}
+ .cmain>.cact{margin-left:auto}
+}
+@media (max-width:900px){.aj,.srv{grid-template-columns:1fr}.cfil{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:900px){
  .side{inset:auto 0 0 0;width:auto;height:calc(64px + env(safe-area-inset-bottom));flex-direction:row;padding:6px 6px env(safe-area-inset-bottom);border-right:0;border-top:1px solid var(--line)}
  .side .brand,.side .foot{display:none}
@@ -455,24 +525,46 @@ function historico(code){const k=D.codes.find(x=>x.code===code),s=stOf(code),cl=
   <div class="mrow">${k?.device_tag&&k.active?`<a class="btn pri" href="controle/?tv=${code}">📱 Controlar</a>`:''}<button class="btn" onclick="fechar()">Fechar</button></div>`,true)}
 
 /* ---------- Clientes ---------- */
+let cFiltro='todos',cOrdem='venc',aberto=''
+const sit=c=>{const d=days(c.expires_at);return !c.active?'off':d<0?'venc':d<=7?'breve':'ok'}
+const ini=s=>s.replace(/\(.*?\)/g,'').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()
+const hueOf=s=>{let h=0;for(const ch of s)h=(h*31+ch.charCodeAt(0))%360;return h}
 function rClientes(){
- const q=busca.toLowerCase(),lst=D.clients.filter(c=>!q||c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)||codigosDe(c.id).some(k=>k.code.toLowerCase().includes(q)||(k.label||'').toLowerCase().includes(q)))
- $('page').innerHTML=head('Clientes',`${D.clients.length} clientes · ${D.codes.length} códigos`,'<button class="btn pri" onclick="formCliente()">+ Novo cliente</button>')+`
- <div class="bar"><input id="busca" placeholder="Buscar por nome, telefone, código ou tela" value="${esc(busca)}"></div>
- ${lst.map(cardCliente).join('')||'<div class="empty">Nenhum cliente encontrado. Toque em <b>+ Novo cliente</b>.</div>'}`
+ const q=busca.toLowerCase()
+ const cont={todos:D.clients.length,ok:0,breve:0,venc:0,off:0};D.clients.forEach(c=>cont[sit(c)]++)
+ let lst=D.clients.filter(c=>(cFiltro==='todos'||sit(c)===cFiltro)&&(!q||c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)||codigosDe(c.id).some(k=>k.code.toLowerCase().includes(q)||(k.label||'').toLowerCase().includes(q))))
+ const sem=c=>codigosDe(c.id).reduce((a,k)=>a+stOf(k.code).week,0)
+ lst=lst.sort(cOrdem==='nome'?(a,b)=>a.name.localeCompare(b.name):cOrdem==='uso'?(a,b)=>sem(b)-sem(a):(a,b)=>new Date(a.expires_at)-new Date(b.expires_at))
+ const F=[['todos','Todos'],['ok','Em dia'],['breve','Vencem em 7 dias'],['venc','Vencidos'],['off','Desligados']]
+ const receita=D.clients.filter(c=>sit(c)==='ok'||sit(c)==='breve').reduce((s,c)=>s+Number(c.price||0),0)
+ $('page').innerHTML=head('Clientes',`${D.clients.length} clientes · ${D.codes.filter(k=>k.device_tag).length} telas ativadas · ${brl(receita)} por mês`,'<button class="btn pri" onclick="formCliente()">+ Novo cliente</button>')+`
+ <div class="cfil">${F.map(([v,t])=>`<button class="${cFiltro===v?'on':''} f-${v}" onclick="cFiltro='${v}';rClientes()"><b>${cont[v]}</b><span>${t}</span></button>`).join('')}</div>
+ <div class="bar"><input id="busca" placeholder="Buscar por nome, telefone, código ou tela" value="${esc(busca)}">
+  <div class="seg">${[['venc','Vencimento'],['nome','Nome'],['uso','Mais assistem']].map(([v,t])=>`<button class="${cOrdem===v?'on':''}" onclick="cOrdem='${v}';rClientes()">${t}</button>`).join('')}</div></div>
+ ${lst.length?`<div class="ctab"><div class="chd"><span>Cliente</span><span>Situação</span><span>Plano</span><span>Vencimento</span><span>Telas</span><span>7 dias</span><span></span></div>${lst.map(linhaCliente).join('')}</div>`
+  :'<div class="empty">Nenhum cliente neste filtro.</div>'}`
  const b=$('busca');b.oninput=()=>{busca=b.value;const p=b.selectionStart;rClientes();const n=$('busca');n.focus();n.setSelectionRange(p,p)}}
 
-function cardCliente(c){
- const p=plano(c.plan_id),ks=codigosDe(c.id),lim=p?p.screens:1,[s,t]=status(c),sem=ks.reduce((a,k)=>a+stOf(k.code).week,0)
- return `<div class="cl${c.active?'':' off'}"><div class="clh">
-  <div class="nm"><b>${esc(c.name)}</b><small>${c.phone?'📱 '+esc(c.phone)+' · ':''}Vence ${dt(c.expires_at)}${c.notes?' · '+esc(c.notes):''}</small>
-   <div class="tags"><span class="tag ${s}">${t}</span><span class="tag">${esc(p?.name||'Sem plano')}</span><span class="tag">${brl(c.price)}/mês</span>${sem?`<span class="tag">⏱️ ${tm(sem)} em 7 dias</span>`:''}</div></div>
-  <div class="acts">
-   <button class="btn sm ok" onclick="renovar('${c.id}')">+30 dias</button>
-   <button class="btn sm ${c.active?'bad':'ok'}" onclick="ligar('${c.id}',${!c.active})">${c.active?'Desligar':'Ligar'}</button>
-   <button class="btn sm" onclick="formCliente('${c.id}')">Editar</button></div></div>
-  <div class="cds">${ks.map(cardCodigo).join('')}
-   ${ks.length<lim?`<button class="cd add" onclick="novoCodigo('${c.id}')">+ Gerar código (${ks.length}/${lim})</button>`:''}</div></div>`}
+function linhaCliente(c){
+ const p=plano(c.plan_id),ks=codigosDe(c.id),lim=p?p.screens:1,[s,t]=status(c),d=days(c.expires_at),sem=ks.reduce((a,k)=>a+stOf(k.code).week,0),op=aberto===c.id
+ const tel=c.phone?(c.phone.length<=11?'55':'')+c.phone:''
+ return `<div class="crow${op?' op':''}${c.active?'':' off'}">
+  <div class="cmain" onclick="aberto=aberto==='${c.id}'?'':'${c.id}';rClientes()">
+   <div class="cnm"><span class="av" style="--h:${hueOf(c.name)}">${esc(ini(c.name))}</span><div><b>${esc(c.name)}</b><small>${c.phone?esc(c.phone):'sem telefone'}${c.notes?' · '+esc(c.notes):''}</small></div></div>
+   <div><span class="tag ${s}">${t}</span></div>
+   <div class="cpl"><b>${esc(p?.name||'Sem plano')}</b><small>${brl(c.price)}/mês</small></div>
+   <div class="cpl"><b>${dt(c.expires_at)}</b><small style="color:${d<0?'#fb7185':d<=7?'var(--warn)':''}">${d<0?'venceu há '+(-d)+' dia'+(d===-1?'':'s'):d===0?'vence hoje':'em '+d+' dia'+(d===1?'':'s')}</small></div>
+   <div class="ctv">${ks.map(k=>`<span class="dot${online(k)?(k.watching?' play':' on'):''}" title="${esc(k.label||k.code)}"></span>`).join('')}<small>${ks.filter(k=>k.device_tag).length}/${lim}</small></div>
+   <div class="cpl"><b>${sem?tm(sem):'—'}</b></div>
+   <div class="cact" onclick="event.stopPropagation()"><button class="btn sm ok" onclick="renovar('${c.id}')">+30 dias</button><button class="chev" onclick="aberto=aberto==='${c.id}'?'':'${c.id}';rClientes()">${op?'▴':'▾'}</button></div>
+  </div>
+  ${op?`<div class="cdet">
+   <div class="acts">
+    <button class="btn sm" onclick="formCliente('${c.id}')">✏️ Editar</button>
+    ${tel?`<a class="btn sm" target="_blank" href="https://wa.me/${tel}">💬 WhatsApp</a>`:''}
+    ${ks.length<lim?`<button class="btn sm" onclick="novoCodigo('${c.id}')">＋ Gerar código (${ks.length}/${lim})</button>`:''}
+    <button class="btn sm ${c.active?'bad':'ok'}" style="margin-left:auto" onclick="ligar('${c.id}',${!c.active})">${c.active?'Desligar cliente':'Ligar cliente'}</button></div>
+   <div class="cds">${ks.map(cardCodigo).join('')||'<div class="empty">Nenhum código ainda.</div>'}</div></div>`:''}</div>`}
 
 function cardCodigo(k){
  const on=online(k),s=stOf(k.code)
@@ -494,27 +586,41 @@ function cardCodigo(k){
 /* ---------- Ajustes ---------- */
 function rAjustes(){
  const g=D.cfg||{servers:[],username:'',password:'',extra:[],contact:''},x=(g.extra||[])[0]||{}
- $('page').innerHTML=head('Ajustes','Planos, contato da tela de bloqueio e servidor de IPTV.')+`
- <div class="box"><h3>Planos e preços</h3><p class="h">O número de telas define quantos códigos (aparelhos) cada cliente pode ter.</p>
-  ${D.plans.map(p=>`<div class="plan"><label class="f">Nome<input class="field" id="pn${p.id}" value="${esc(p.name)}"></label>
-   <label class="f">Telas<input class="field" id="ps${p.id}" type="number" min="1" max="10" value="${p.screens}"></label>
-   <label class="f">Preço (R$)<input class="field" id="pp${p.id}" type="number" min="0" step="0.01" value="${p.price}"></label>
-   <button class="btn" onclick="salvarPlano(${p.id})">Salvar</button></div>`).join('')}
-  <button class="btn sm" style="margin-top:6px" onclick="novoPlano()">+ Novo plano</button></div>
- <div class="box"><h3>Contato na tela de bloqueio</h3><p class="h">Aparece no app quando o acesso estiver desligado ou vencido. Ex.: "WhatsApp (91) 99999-0000". Deixe vazio para não mostrar.</p>
-  <input class="field" id="cfContato" value="${esc(g.contact)}" placeholder="Ex.: Fale com o Muniz: (91) 99999-0000">
-  <div style="margin-top:10px"><button class="btn pri" onclick="salvarContato()">Salvar contato</button></div></div>
- <div class="box"><h3>Servidor de IPTV</h3><p class="h">Os aparelhos liberados recebem estes dados ao abrir o app. Mudou de lista? Troque aqui e todos passam a usar a nova, sem precisar de APK novo.</p>
-  <div class="grid2">
-   <label class="f">Endereço(s) — um por linha<textarea id="cfSrv">${esc((g.servers||[]).join('\n'))}</textarea></label>
-   <div><label class="f">Usuário<input class="field" id="cfUser" value="${esc(g.username)}"></label>
-    <label class="f" style="margin-top:8px">Senha<input class="field" id="cfPass" type="password" value="${esc(g.password)}"></label></div></div>
-  <p class="h" style="margin:14px 0 8px">Servidor extra (conteúdo somado ao principal) — opcional</p>
-  <div class="grid2"><label class="f">Endereço<input class="field" id="cfXu" value="${esc(x.url||'')}"></label>
-   <label class="f">Usuário<input class="field" id="cfXl" value="${esc(x.user||'')}"></label>
-   <label class="f">Senha<input class="field" id="cfXp" type="password" value="${esc(x.pass||'')}"></label></div>
-  <div style="margin-top:12px"><button class="btn pri" onclick="salvarServidor()">Salvar servidor</button></div></div>
- <div class="box"><h3>Sessão</h3><p class="h">Link do app para instalar: <a href="${APK}" style="color:var(--acc)">${APK}</a></p><button class="btn bad" onclick="sair()">Sair do painel</button></div>`}
+ const nPl=id=>D.clients.filter(c=>c.plan_id===id).length
+ const olho=id=>`<button class="eye" type="button" onclick="const i=$('${id}');i.type=i.type==='password'?'text':'password'" aria-label="Mostrar senha">👁</button>`
+ $('page').innerHTML=head('Ajustes','Planos, tela de bloqueio, servidor de IPTV e instalação do app.')+`
+ <div class="aj">
+  <section class="box wide"><div class="bxh"><span class="bxi">💳</span><div><h3>Planos e preços</h3><p class="h">O número de telas define quantos códigos (aparelhos) cada cliente pode ter.</p></div></div>
+   <div class="plans">${D.plans.map(p=>`<div class="pc"><div class="pch"><input class="pnm" id="pn${p.id}" value="${esc(p.name)}" aria-label="Nome do plano"><span class="tag">${nPl(p.id)} cliente${nPl(p.id)===1?'':'s'}</span></div>
+     <div class="pcf"><label class="f">Telas<input class="field" id="ps${p.id}" type="number" min="1" max="10" value="${p.screens}"></label>
+      <label class="f">Preço por mês<span class="money"><i>R$</i><input class="field" id="pp${p.id}" type="number" min="0" step="0.01" value="${p.price}"></span></label></div>
+     <button class="btn sm" onclick="salvarPlano(${p.id})">Salvar plano</button></div>`).join('')}
+    <button class="pc add" onclick="novoPlano()">＋<span>Novo plano</span></button></div></section>
+
+  <section class="box"><div class="bxh"><span class="bxi">🔒</span><div><h3>Tela de bloqueio</h3><p class="h">Aparece na TV quando o acesso está desligado ou vencido. Deixe vazio para não mostrar contato.</p></div></div>
+   <div class="lockpv"><img src="mark.png" alt=""><b>Acesso vencido</b><span id="pvC">${esc(g.contact||'Fale com o administrador')}</span></div>
+   <label class="f">Contato<input class="field" id="cfContato" value="${esc(g.contact)}" placeholder="Ex.: WhatsApp do Muniz: (91) 99999-0000" oninput="$('pvC').textContent=this.value||'Fale com o administrador'"></label>
+   <div class="bxf"><button class="btn pri" onclick="salvarContato()">Salvar contato</button></div></section>
+
+  <section class="box wide"><div class="bxh"><span class="bxi">📡</span><div><h3>Servidor de IPTV</h3><p class="h">As TVs liberadas recebem estes dados ao abrir o app. Mudou de lista? Troque aqui e todas passam a usar a nova, sem APK novo.</p></div></div>
+   <div class="srv"><div><h4>Principal</h4>
+     <label class="f">Endereço(s) — um por linha<textarea id="cfSrv" rows="3">${esc((g.servers||[]).join('\n'))}</textarea></label>
+     <div class="grid2" style="margin-top:8px"><label class="f">Usuário<input class="field" id="cfUser" value="${esc(g.username)}"></label>
+      <label class="f">Senha<span class="pw"><input class="field" id="cfPass" type="password" value="${esc(g.password)}">${olho('cfPass')}</span></label></div></div>
+    <div><h4>Extra <small>opcional · conteúdo somado ao principal</small></h4>
+     <label class="f">Endereço<input class="field" id="cfXu" value="${esc(x.url||'')}" placeholder="http://..."></label>
+     <div class="grid2" style="margin-top:8px"><label class="f">Usuário<input class="field" id="cfXl" value="${esc(x.user||'')}"></label>
+      <label class="f">Senha<span class="pw"><input class="field" id="cfXp" type="password" value="${esc(x.pass||'')}">${olho('cfXp')}</span></label></div></div></div>
+   <div class="bxf"><span class="h">${g.updated_at?'Última alteração: '+dth(g.updated_at):''}</span><button class="btn pri" onclick="salvarServidor()">Salvar servidor</button></div></section>
+
+  <section class="box"><div class="bxh"><span class="bxi">📲</span><div><h3>Instalar o app</h3><p class="h">Link do APK mais novo, sempre atualizado. Mande para o cliente ou baixe na TV.</p></div></div>
+   <div class="lnkbox"><code>${APK}</code><button class="btn sm" onclick="navigator.clipboard.writeText('${APK}').then(()=>toast('Link copiado'))">Copiar</button></div>
+   <div class="lnkbox"><code>${CTRL}</code><button class="btn sm" onclick="navigator.clipboard.writeText('${CTRL}').then(()=>toast('Link copiado'))">Copiar</button></div>
+   <p class="h" style="margin-top:6px">O segundo é o controle pelo celular.</p></section>
+
+  <section class="box"><div class="bxh"><span class="bxi">👤</span><div><h3>Sessão</h3><p class="h">Você está no painel do administrador.</p></div></div>
+   <div class="bxf" style="justify-content:flex-start"><button class="btn bad" onclick="sair()">Sair do painel</button></div></section>
+ </div>`}
 
 /* ---------- Ações ---------- */
 function modal(html,wide){$('modal').innerHTML=`<div class="ov" onclick="if(event.target===this)fechar()"><div class="md${wide?' wide':''}">${html}</div></div>`}
