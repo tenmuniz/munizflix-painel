@@ -13,95 +13,176 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Painel MF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 <style>
-:root{--bg:#07060d;--bg2:#0d0b18;--card:#14111f;--card2:#1b1729;--line:rgba(139,92,246,.18);--tx:#f3f0fa;--tx2:#c9c2df;--mut:#8b84a6;
- --grad:linear-gradient(135deg,#7c3aed,#c026d3);--ok:#4ade80;--warn:#fbbf24;--bad:#f43f5e;--acc:#a855f7}
+:root{--bg:#07060d;--bg2:#0d0b18;--card:#13101e;--card2:#1b1729;--line:rgba(139,92,246,.16);--line2:rgba(255,255,255,.06);--tx:#f3f0fa;--tx2:#c9c2df;--mut:#8b84a6;
+ --grad:linear-gradient(135deg,#7c3aed,#c026d3);--ok:#4ade80;--warn:#fbbf24;--bad:#f43f5e;--acc:#a855f7;--side:236px}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
-body{min-height:100vh;background:radial-gradient(90% 50% at 0% 0%,rgba(124,58,237,.14),transparent 60%),radial-gradient(70% 40% at 100% 100%,rgba(192,38,211,.1),transparent 60%),var(--bg)}
+body{min-height:100vh;background:radial-gradient(90% 50% at 0% 0%,rgba(124,58,237,.12),transparent 60%),radial-gradient(70% 40% at 100% 100%,rgba(192,38,211,.08),transparent 60%),var(--bg)}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none}
+a{color:inherit}
 .hide{display:none!important}
-.wrap{max-width:1100px;margin:0 auto;padding:0 16px 90px}
-/* topo */
-.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(7,6,13,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px;letter-spacing:-.02em}
+
+/* ---------- estrutura: menu lateral (computador) / barra de baixo (celular) ---------- */
+.side{position:fixed;inset:0 auto 0 0;width:var(--side);background:rgba(10,8,19,.92);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px 12px;z-index:30}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px;letter-spacing:-.02em;padding:0 6px 18px}
 .brand img{width:36px;height:36px;border-radius:10px}
 .brand i{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.brand small{font-size:11px;font-weight:700;color:var(--mut);letter-spacing:.12em;margin-left:2px}
-.top .sp{flex:1}
-.tabs{display:flex;gap:6px;padding:14px 0 6px;overflow-x:auto;scrollbar-width:none}
-.tabs button{flex:none;padding:10px 16px;border-radius:12px;font-weight:700;color:var(--mut);background:var(--card);border:1px solid var(--line)}
-.tabs button.on{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 8px 22px -10px rgba(192,38,211,.9)}
-h2{font-size:20px;font-weight:900;margin:18px 0 12px;display:flex;align-items:center;gap:10px}
-h2 .n{font-size:13px;color:var(--mut);font-weight:700}
-/* botões */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 15px;border-radius:11px;font-weight:700;font-size:14px;background:var(--card2);border:1px solid var(--line);white-space:nowrap}
+.brand small{display:block;font-size:10px;font-weight:800;color:var(--mut);letter-spacing:.16em}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav button{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;font-weight:700;color:var(--mut);text-align:left;font-size:14.5px}
+.nav button svg{width:19px;height:19px;flex:none}
+.nav button:hover{color:var(--tx);background:rgba(255,255,255,.04)}
+.nav button.on{color:#fff;background:linear-gradient(90deg,rgba(124,58,237,.32),rgba(192,38,211,.12));box-shadow:inset 3px 0 0 #c026d3}
+.nav button .cnt{margin-left:auto;font-size:11.5px;font-weight:800;background:rgba(255,255,255,.07);color:var(--tx2);padding:2px 8px;border-radius:999px}
+.nav button .cnt.live{background:rgba(74,222,128,.14);color:var(--ok)}
+.side .foot{margin-top:auto;display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--line2)}
+.side .foot small{color:var(--mut);font-size:11.5px;padding:0 6px}
+.main{margin-left:var(--side);min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 28px 60px}
+.mtop{display:none}
+.pagehd{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.pagehd h1{font-size:25px;font-weight:900;letter-spacing:-.02em}
+.pagehd p{color:var(--mut);font-size:13.5px;margin-top:3px}
+.pagehd .sp{flex:1}
+.upd{color:var(--mut);font-size:12px;font-weight:600}
+h2{font-size:15.5px;font-weight:800;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+h2 .n{font-size:12.5px;color:var(--mut);font-weight:700}
+h2 .lnk{margin-left:auto;font-size:12.5px;color:#c4b5fd;font-weight:700}
+
+/* ---------- blocos ---------- */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 15px;border-radius:11px;font-weight:700;font-size:14px;background:var(--card2);border:1px solid var(--line);white-space:nowrap;text-decoration:none}
 .btn:hover{border-color:rgba(168,85,247,.5)}
 .btn.pri{background:var(--grad);border-color:transparent;color:#fff}
 .btn.ok{background:rgba(74,222,128,.12);color:var(--ok);border-color:rgba(74,222,128,.3)}
 .btn.bad{background:rgba(244,63,94,.1);color:#fb7185;border-color:rgba(244,63,94,.3)}
 .btn.sm{height:32px;padding:0 11px;font-size:12.5px;border-radius:9px}
+.btn.ghost{background:none}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-/* cartões de números */
-.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:8px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-.kpi b{display:block;font-size:26px;font-weight:900;letter-spacing:-.02em}
-.kpi small{color:var(--mut);font-size:12.5px;font-weight:600}
-.kpi.hl{background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(192,38,211,.18));border-color:rgba(192,38,211,.4)}
-/* clientes */
-.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
-.bar input{flex:1;min-width:180px}
-.field,.bar input,select,textarea{height:42px;border-radius:11px;border:1px solid var(--line);background:var(--card);padding:0 12px;outline:none;width:100%}
-textarea{height:auto;min-height:70px;padding:10px 12px;resize:vertical}
-.field:focus,.bar input:focus,select:focus,textarea:focus{border-color:var(--acc)}
-.cl{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
-.cl.off{opacity:.62}
-.clh{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.clh .nm{flex:1;min-width:180px}
-.clh .nm b{font-size:17px;font-weight:800}
-.clh .nm small{display:block;color:var(--mut);font-size:13px;margin-top:3px}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.tag{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--tx2)}
+
+/* números do topo */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;position:relative;overflow:hidden}
+.kpi small{display:flex;align-items:center;gap:7px;color:var(--mut);font-size:12.5px;font-weight:700}
+.kpi b{display:block;font-size:28px;font-weight:900;letter-spacing:-.02em;margin-top:8px;font-variant-numeric:tabular-nums}
+.kpi em{display:block;font-style:normal;color:var(--mut);font-size:12px;font-weight:600;margin-top:2px}
+.kpi.hl{background:linear-gradient(135deg,rgba(124,58,237,.28),rgba(192,38,211,.14));border-color:rgba(192,38,211,.38)}
+.kpi .ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:rgba(168,85,247,.16);font-size:14px}
+
+/* gráfico de barras */
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .gl{stroke:rgba(255,255,255,.06);stroke-width:1}
+.chart .ax{fill:var(--mut);font-size:11px;font-weight:600}
+.chart .bar{fill:#a855f7}
+.chart .bar.today{fill:#e879f9}
+.chart .hit{fill:transparent;cursor:default}
+.chart .hit:hover+.bar,.chart g:hover .bar{fill:#c084fc}
+.tip{position:absolute;pointer-events:none;background:#231d36;border:1px solid rgba(168,85,247,.45);border-radius:10px;padding:7px 10px;font-size:12.5px;font-weight:700;white-space:nowrap;transform:translate(-50%,-100%);box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:5}
+.tip small{display:block;color:var(--mut);font-weight:600;font-size:11.5px}
+.sum{display:flex;gap:22px;flex-wrap:wrap;margin:-2px 0 12px}
+.sum div{display:flex;flex-direction:column}
+.sum b{font-size:19px;font-weight:900}
+.sum small{color:var(--mut);font-size:12px;font-weight:600}
+
+/* listas */
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:12px;align-items:center;background:var(--bg2);border:1px solid var(--line2);border-radius:13px;padding:11px 13px}
+.row .k{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(168,85,247,.14);font-size:17px;flex:none}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.row .t small{color:var(--mut);font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .v{font-weight:800;font-size:13.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rank{width:22px;color:var(--mut);font-weight:800;font-size:13px;text-align:center;flex:none}
+.meter{height:4px;border-radius:4px;background:rgba(255,255,255,.06);margin-top:6px;overflow:hidden}
+.meter i{display:block;height:100%;border-radius:4px;background:#a855f7}
+.empty{color:var(--mut);text-align:center;padding:30px 10px;border:1px dashed var(--line);border-radius:14px;font-size:14px}
+.dot{width:9px;height:9px;border-radius:50%;background:#4b4566;flex:none}
+.dot.on{background:var(--ok);box-shadow:0 0 0 4px rgba(74,222,128,.15)}
+.dot.play{background:#e879f9;box-shadow:0 0 0 4px rgba(232,121,249,.18)}
+.tag{font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--tx2);white-space:nowrap}
 .tag.ok{color:var(--ok);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.08)}
 .tag.warn{color:var(--warn);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
 .tag.bad{color:#fb7185;border-color:rgba(244,63,94,.35);background:rgba(244,63,94,.08)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+
+/* filtros */
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.bar input{flex:1;min-width:200px}
+.seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:3px;gap:2px}
+.seg button{padding:7px 12px;border-radius:8px;font-weight:700;font-size:13px;color:var(--mut)}
+.seg button.on{background:rgba(168,85,247,.22);color:#fff}
+.field,.bar input,select,textarea{height:42px;border-radius:11px;border:1px solid var(--line);background:var(--card);padding:0 12px;outline:none;width:100%}
+textarea{height:auto;min-height:70px;padding:10px 12px;resize:vertical}
+.field:focus,.bar input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+
+/* telas (aparelhos) */
+.devs{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.dv{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.dv.off{opacity:.6}
+.dvh{display:flex;align-items:center;gap:10px;min-width:0}
+.dvh .nm{flex:1;min-width:0}
+.dvh .nm b{display:block;font-weight:800;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dvh .nm small{display:block;color:var(--mut);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.code{font-weight:900;letter-spacing:.06em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.now{padding:9px 11px;border-radius:11px;background:linear-gradient(90deg,rgba(124,58,237,.24),rgba(192,38,211,.08));font-size:13.5px;font-weight:700;display:flex;gap:8px;align-items:center}
+.now span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.now small{color:var(--tx2);font-weight:600;font-size:12px;flex:none}
+.idle{color:var(--mut);font-size:13px;padding:9px 11px;border-radius:11px;background:var(--bg2)}
+.st3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st3 div{background:var(--bg2);border-radius:11px;padding:9px 10px}
+.st3 b{display:block;font-size:16px;font-weight:900;font-variant-numeric:tabular-nums}
+.st3 small{color:var(--mut);font-size:11.5px;font-weight:700}
+.spark{display:flex;align-items:flex-end;gap:2px;height:34px}
+.spark i{flex:1;background:#a855f7;border-radius:3px 3px 0 0;min-height:2px;opacity:.9}
+.spark i.z{background:rgba(255,255,255,.07)}
+.spark i.today{background:#e879f9}
+.hist{display:flex;flex-direction:column;gap:5px}
+.hist div{display:flex;gap:8px;font-size:12.5px;align-items:baseline}
+.hist div span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tx2);font-weight:600}
+.hist div small{color:var(--mut);white-space:nowrap;font-variant-numeric:tabular-nums}
+.meta{color:var(--mut);font-size:12px;line-height:1.55}
+.meta b{color:var(--tx2);font-weight:700}
 .acts{display:flex;gap:6px;flex-wrap:wrap}
-.codes{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px;margin-top:14px}
-.cd{position:relative;border-radius:14px;padding:13px;background:var(--bg2);border:1px solid var(--line)}
+.more{position:relative}
+
+/* clientes */
+.cl{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.cl.off{opacity:.62}
+.clh{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.clh .nm{flex:1;min-width:200px}
+.clh .nm b{font-size:17px;font-weight:800}
+.clh .nm small{display:block;color:var(--mut);font-size:13px;margin-top:3px}
+.clh .tags{margin-top:8px}
+.cds{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-top:14px}
+.cd{border-radius:14px;padding:13px;background:var(--bg2);border:1px solid var(--line2);display:flex;flex-direction:column;gap:9px}
 .cd .cc{display:flex;align-items:center;gap:10px}
-.cd .code{font-size:22px;font-weight:900;letter-spacing:.06em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.cd .lb{color:var(--tx2);font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dot{width:9px;height:9px;border-radius:50%;background:#4b4566;flex:none}
-.dot.on{background:var(--ok);box-shadow:0 0 0 4px rgba(74,222,128,.15)}
-.dev{margin-top:8px;font-size:12.5px;color:var(--mut);line-height:1.55}
-.dev b{color:var(--tx2);font-weight:700}
-.watch{margin-top:8px;padding:8px 10px;border-radius:10px;background:linear-gradient(90deg,rgba(124,58,237,.22),rgba(192,38,211,.08));font-size:13px;font-weight:600}
-.watch span{color:var(--mut);font-weight:600;font-size:12px}
-.cd .acts{margin-top:10px}
-.empty{color:var(--mut);text-align:center;padding:40px 10px;border:1px dashed var(--line);border-radius:16px}
-/* ao vivo */
-.live{display:grid;gap:10px}
-.lv{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
-.lv .k{font-size:22px}
-.lv .t{flex:1;min-width:0}
-.lv .t b{display:block;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lv .t small{color:var(--mut);font-size:12.5px}
+.cd .cc .code{font-size:20px}
+.cd .cc .lb{color:var(--tx2);font-size:13px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cd.add{display:grid;place-items:center;min-height:90px;color:var(--tx2);font-weight:800;border:1px dashed var(--line)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;font-weight:700;color:var(--tx2);background:rgba(255,255,255,.05);padding:3px 8px;border-radius:7px}
+
 /* ajustes */
-.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
 .box h3{font-size:15px;font-weight:800;margin-bottom:4px}
 .box p.h{color:var(--mut);font-size:12.5px;margin-bottom:12px;line-height:1.5}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:700;color:var(--tx2)}
 .plan{display:grid;grid-template-columns:1fr 90px 120px auto;gap:8px;align-items:end;margin-bottom:8px}
-/* modal */
+
+/* janelas */
 .ov{position:fixed;inset:0;z-index:50;background:rgba(3,2,8,.72);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px}
 .md{width:100%;max-width:460px;max-height:92vh;overflow:auto;background:var(--bg2);border:1px solid rgba(168,85,247,.35);border-radius:20px;padding:20px;box-shadow:0 30px 80px -20px rgba(124,58,237,.6)}
+.md.wide{max-width:640px}
 .md h3{font-size:18px;font-weight:900;margin-bottom:14px}
 .md .f{margin-bottom:10px}
-.md .row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.md .mrow{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
 /* login */
 .login{min-height:100vh;display:grid;place-items:center;padding:20px}
 .lg{width:100%;max-width:380px;text-align:center}
@@ -115,7 +196,25 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:
 .msg{margin-top:12px;font-size:13.5px;color:#fb7185;min-height:18px}
 .msg.ok{color:var(--ok)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;background:#2a2340;border:1px solid rgba(168,85,247,.4);padding:12px 18px;border-radius:12px;font-weight:700;font-size:14px;box-shadow:0 14px 40px rgba(0,0,0,.5)}
-@media (max-width:560px){.grid2{grid-template-columns:1fr}.plan{grid-template-columns:1fr 70px 100px}.plan .btn{grid-column:1/-1}.kpi b{font-size:22px}}
+
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:900px){
+ .side{inset:auto 0 0 0;width:auto;height:calc(64px + env(safe-area-inset-bottom));flex-direction:row;padding:6px 6px env(safe-area-inset-bottom);border-right:0;border-top:1px solid var(--line)}
+ .side .brand,.side .foot{display:none}
+ .nav{flex-direction:row;flex:1;gap:2px}
+ .nav button{flex:1;flex-direction:column;gap:3px;padding:7px 2px;font-size:10.5px;justify-content:center;text-align:center;border-radius:10px}
+ .nav button.on{box-shadow:none}
+ .nav button .cnt{display:none}
+ .main{margin-left:0;padding-bottom:80px}
+ .mtop{display:flex;position:sticky;top:0;z-index:20;align-items:center;gap:10px;padding:12px 16px;background:rgba(7,6,13,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+ .mtop .brand{padding:0;font-size:17px}.mtop .brand img{width:30px;height:30px}
+ .mtop .sp{flex:1}
+ .wrap{padding:16px 14px 40px}
+ .cols{grid-template-columns:1fr}
+ .kpis{grid-template-columns:repeat(2,1fr)}
+ .kpi b{font-size:23px}
+}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}.plan{grid-template-columns:1fr 70px 100px}.plan .btn{grid-column:1/-1}.devs{grid-template-columns:1fr}.cds{grid-template-columns:1fr}.pagehd h1{font-size:21px}}
 </style>
 </head>
 <body>
@@ -148,22 +247,17 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:
 
 <!-- App -->
 <div id="vApp" class="hide">
- <div class="top">
+ <aside class="side">
   <div class="brand"><img src="mark.png" alt=""><span>Muniz<i>Flix</i><small>PAINEL</small></span></div>
-  <div class="sp"></div>
-  <button class="btn sm" onclick="carregar(true)">↻ Atualizar</button>
- </div>
- <div class="wrap">
-  <div class="tabs" id="tabs">
-   <button data-t="geral" class="on">Visão geral</button>
-   <button data-t="clientes">Clientes</button>
-   <button data-t="aovivo">Assistindo agora</button>
-   <button data-t="ajustes">Ajustes</button>
+  <nav class="nav" id="nav"></nav>
+  <div class="foot">
+   <button class="btn sm" onclick="carregar(true)">↻ Atualizar</button>
+   <small id="updSide"></small>
   </div>
-  <section id="t-geral"></section>
-  <section id="t-clientes" class="hide"></section>
-  <section id="t-aovivo" class="hide"></section>
-  <section id="t-ajustes" class="hide"></section>
+ </aside>
+ <div class="main">
+  <div class="mtop"><div class="brand"><img src="mark.png" alt=""><span>Muniz<i>Flix</i></span></div><div class="sp"></div><button class="btn sm" onclick="carregar(true)">↻</button></div>
+  <div class="wrap" id="page"></div>
  </div>
 </div>
 
@@ -186,9 +280,13 @@ const hm=d=>d?new Date(d).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-d
 function ago(d){if(!d)return 'nunca';const s=(Date.now()-new Date(d))/1000
  if(s<60)return 'agora';if(s<3600)return 'há '+Math.floor(s/60)+' min';if(s<86400)return 'há '+Math.floor(s/3600)+' h';return 'há '+Math.floor(s/86400)+' dias'}
 const days=d=>Math.ceil((new Date(d)-Date.now())/864e5)
-// online: falou com o painel há pouco, ou está assistindo (no player o app pode ficar sem checar por um tempo)
+/** minutos -> "45 min" / "2h 05" */
+const tm=m=>{m=Math.round(m||0);if(m<60)return m+' min';const h=Math.floor(m/60),r=m%60;return h+'h'+(r?' '+String(r).padStart(2,'0'):'')}
+const hrs=m=>{const h=(m||0)/60;return h<10?h.toLocaleString('pt-BR',{maximumFractionDigits:1}):Math.round(h).toLocaleString('pt-BR')}
+// online: falou com o painel há pouco, ou está assistindo (no player o app avisa a cada 3 min)
 const online=c=>!!(c.last_seen&&(Date.now()-new Date(c.last_seen))<ONLINE_MIN*60000)||!!(c.watching&&c.watching_since&&(Date.now()-new Date(c.watching_since))<4*3600e3)
 const KIND={live:'📺',movie:'🎬',series:'🎞️'}
+const KNAME={live:'Canal',movie:'Filme',series:'Série'}
 let toastT
 function toast(t){clearTimeout(toastT);document.querySelectorAll('.toast').forEach(e=>e.remove());const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);toastT=setTimeout(()=>e.remove(),2600)}
 function erro(e){console.error(e);toast('Erro: '+(e?.message||e))}
@@ -211,28 +309,41 @@ $('lgGo').onclick=async()=>{
 async function sair(){await sb.auth.signOut();location.reload()}
 
 /* ---------- Dados ---------- */
-let D={plans:[],clients:[],codes:[],cfg:null,remotes:[]},tab='geral',busca=''
+let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],st:{codes:{},days:{},top:[]}},busca='',filtro='todas',buscaTv='',loadedAt=0
+const PAGES=[['geral','Visão geral','M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z'],
+ ['telas','Telas','M21 3H3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h7v2H8v2h8v-2h-2v-2h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 13H3V5h18v11z'],
+ ['clientes','Clientes','M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 2 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z'],
+ ['aovivo','Agora','M8 5v14l11-7z'],
+ ['ajustes','Ajustes','M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.3 7.3 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.3 7.3 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1L11 21h4l.4-2.9c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5-2.2-1.6zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z']]
+let tab=(()=>{const h=location.hash.slice(1);return PAGES.some(p=>p[0]===h)?h:'geral'})()
+
 async function carregar(manual){
  try{
-  const [p,c,k,g,rm]=await Promise.all([
+  const [p,c,k,g,rm,st]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
    sb.from('codes').select('code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,created_at').order('created_at'),
    tab==='ajustes'||!D.cfg?sb.from('app_config').select('*').eq('id',1).single():Promise.resolve({data:D.cfg}),
-   sb.from('remotes').select('id,code,name,last_seen,approved_at').eq('status','ok').order('approved_at')])
+   sb.from('remotes').select('id,code,name,last_seen,approved_at').eq('status','ok').order('approved_at'),
+   sb.rpc('admin_watch_stats',{p_days:30})])
   for(const r of [p,c,k,g])if(r.error)throw r.error
-  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data}
-  render();if(manual)toast('Atualizado')
+  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data}
+  loadedAt=Date.now();render();if(manual)toast('Atualizado')
  }catch(e){erro(e)}}
 const plano=id=>D.plans.find(p=>p.id===id)
 const codigosDe=id=>D.codes.filter(c=>c.client_id===id)
+const clienteDe=k=>D.clients.find(x=>x.id===k.client_id)
+const stOf=code=>D.st.codes?.[code]||{today:0,week:0,month:0,sessions:0,days:{},recent:[]}
 
-/* ---------- Telas ---------- */
-function render(){({geral:rGeral,clientes:rClientes,aovivo:rAoVivo,ajustes:rAjustes})[tab]()}
-$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t
- document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b))
- document.querySelectorAll('section').forEach(s=>s.classList.toggle('hide',s.id!=='t-'+tab))
- if(tab==='ajustes')carregar();else render()}
+/* ---------- Navegação ---------- */
+function navHtml(){const on=D.codes.filter(online).length,watch=D.codes.filter(c=>online(c)&&c.watching).length
+ const cnt={telas:`<span class="cnt${on?' live':''}">${on}/${D.codes.filter(c=>c.device_tag).length}</span>`,clientes:`<span class="cnt">${D.clients.length}</span>`,aovivo:watch?`<span class="cnt live">${watch}</span>`:''}
+ $('nav').innerHTML=PAGES.map(([id,nm,ic])=>`<button data-t="${id}" class="${id===tab?'on':''}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="${ic}"/></svg><span>${nm}</span>${cnt[id]||''}</button>`).join('')
+ $('updSide').textContent=loadedAt?'Atualizado '+hm(loadedAt)+' · sozinho a cada 20 s':''}
+$('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;ir(b.dataset.t)}
+function ir(t){tab=t;history.replaceState(null,'','#'+t);window.scrollTo(0,0);if(t==='ajustes')carregar();else render()}
+function render(){navHtml();({geral:rGeral,telas:rTelas,clientes:rClientes,aovivo:rAoVivo,ajustes:rAjustes})[tab]()}
+const head=(t,s,extra='')=>`<div class="pagehd"><div><h1>${t}</h1>${s?`<p>${s}</p>`:''}</div><div class="sp"></div>${extra}</div>`
 
 function status(cl){const d=days(cl.expires_at)
  if(!cl.active)return['bad','Desligado']
@@ -240,67 +351,147 @@ function status(cl){const d=days(cl.expires_at)
  if(d<=3)return['warn',d===0?'Vence hoje':'Vence em '+d+(d===1?' dia':' dias')]
  return['ok','Ativo']}
 
+/* ---------- Gráfico: horas assistidas por dia ---------- */
+function ultimosDias(n){const l=[],d=new Date();d.setHours(12,0,0,0);for(let i=n-1;i>=0;i--){const x=new Date(d);x.setDate(d.getDate()-i);l.push(x)}return l}
+const diaKey=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')
+const WD=['dom','seg','ter','qua','qui','sex','sáb']
+function grafico(map){
+ const ds=ultimosDias(14),vals=ds.map(d=>(map[diaKey(d)]||0)/60),mx=Math.max(1,...vals)
+ const step=mx<=2?.5:mx<=5?1:mx<=12?2:mx<=30?5:10,top=Math.ceil(mx/step)*step
+ const W=640,H=200,L=34,B=24,T=8,cw=(W-L)/ds.length,bw=Math.min(26,cw*.62),ys=v=>T+(H-T-B)*(1-v/top)
+ let g=''
+ for(let v=0;v<=top+1e-9;v+=step)g+=`<line class="gl" x1="${L}" x2="${W}" y1="${ys(v)}" y2="${ys(v)}"/><text class="ax" x="${L-8}" y="${ys(v)+4}" text-anchor="end">${v.toLocaleString('pt-BR')}h</text>`
+ ds.forEach((d,i)=>{const v=vals[i],x=L+i*cw+(cw-bw)/2,y=ys(v),h=Math.max(0,H-B-y),last=i===ds.length-1
+  const r=Math.min(4,h/2),path=h<=0?'':`M${x},${H-B} V${y+r} Q${x},${y} ${x+r},${y} H${x+bw-r} Q${x+bw},${y} ${x+bw},${y+r} V${H-B} Z`
+  g+=`<g data-i="${i}"><rect class="hit" x="${L+i*cw}" y="${T}" width="${cw}" height="${H-T}"/>${path?`<path class="bar${last?' today':''}" d="${path}"/>`:''}</g>`
+  if(i%2===ds.length%2||last)g+=`<text class="ax" x="${L+i*cw+cw/2}" y="${H-6}" text-anchor="middle">${last?'hoje':d.getDate()+'/'+(d.getMonth()+1)}</text>`})
+ setTimeout(()=>{const el=document.querySelector('#chartH');if(!el)return;const tip=el.querySelector('.tip')
+  el.querySelectorAll('g[data-i]').forEach(gr=>{gr.onmouseenter=gr.ontouchstart=()=>{const i=+gr.dataset.i,d=ds[i],r=gr.querySelector('rect').getBoundingClientRect(),b=el.getBoundingClientRect()
+    tip.innerHTML=`${tm(vals[i]*60)}<small>${WD[d.getDay()]}, ${d.toLocaleDateString('pt-BR')}</small>`;tip.style.left=(r.left-b.left+r.width/2)+'px';tip.style.top=(Math.max(ys(vals[i]),T)/H*el.querySelector('svg').getBoundingClientRect().height-6)+'px';tip.classList.remove('hide')}
+   gr.onmouseleave=()=>tip.classList.add('hide')})},0)
+ return `<div class="chart" id="chartH"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Horas assistidas por dia nos últimos 14 dias">${g}</svg><div class="tip hide"></div></div>`}
+
+/* ---------- Visão geral ---------- */
 function rGeral(){
- const ativos=D.clients.filter(c=>c.active&&days(c.expires_at)>=0),on=D.codes.filter(online)
+ const ativos=D.clients.filter(c=>c.active&&days(c.expires_at)>=0),on=D.codes.filter(online),vendo=on.filter(c=>c.watching)
  const vencendo=D.clients.filter(c=>c.active&&days(c.expires_at)>=0&&days(c.expires_at)<=7),vencidos=D.clients.filter(c=>c.active&&days(c.expires_at)<0)
  const receita=ativos.reduce((s,c)=>s+Number(c.price||0),0)
- $('t-geral').innerHTML=`<div class="kpis">
-  <div class="kpi hl"><b>${on.length}</b><small>Aparelhos online agora</small></div>
-  <div class="kpi"><b>${ativos.length}</b><small>Clientes ativos</small></div>
-  <div class="kpi"><b>${D.codes.filter(c=>c.device_tag).length}<span style="font-size:15px;color:var(--mut)"> / ${D.codes.length}</span></b><small>Códigos em uso</small></div>
-  <div class="kpi"><b>${brl(receita)}</b><small>Receita por mês</small></div>
-  <div class="kpi"><b style="color:${vencendo.length?'var(--warn)':''}">${vencendo.length}</b><small>Vencem em 7 dias</small></div>
-  <div class="kpi"><b style="color:${vencidos.length?'#fb7185':''}">${vencidos.length}</b><small>Vencidos</small></div></div>
- <h2>Assistindo agora</h2>${listaAoVivo(4)}
- <h2>Vencem em breve</h2>${vencendo.concat(vencidos).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)).map(c=>{const[s,t]=status(c)
-  return `<div class="lv"><div class="k">📅</div><div class="t"><b>${esc(c.name)}</b><small>${dt(c.expires_at)} · ${brl(c.price)}</small></div><span class="tag ${s}">${t}</span><button class="btn sm ok" onclick="renovar('${c.id}')">+30 dias</button></div>`}).join('')||'<div class="empty">Ninguém vencendo nos próximos 7 dias 🎉</div>'}`}
+ const sc=Object.values(D.st.codes||{}),hoje=sc.reduce((s,x)=>s+(x.today||0),0),sem=sc.reduce((s,x)=>s+(x.week||0),0),mes=sc.reduce((s,x)=>s+(x.month||0),0)
+ const top=(D.st.top||[]).slice(0,7),mxTop=Math.max(1,...top.map(t=>t.m))
+ const rank=Object.entries(D.st.codes||{}).map(([code,x])=>({k:D.codes.find(c=>c.code===code),x})).filter(r=>r.k&&r.x.week>0).sort((a,b)=>b.x.week-a.x.week).slice(0,6)
+ $('page').innerHTML=head('Visão geral',`${new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})}`)+`
+ <div class="kpis">
+  <div class="kpi hl"><small><span class="ic">🟢</span>Online agora</small><b>${on.length}</b><em>${vendo.length} assistindo</em></div>
+  <div class="kpi"><small><span class="ic">⏱️</span>Assistido hoje</small><b>${tm(hoje)}</b><em>${hrs(sem)} h nos últimos 7 dias</em></div>
+  <div class="kpi"><small><span class="ic">👥</span>Clientes ativos</small><b>${ativos.length}</b><em>${D.codes.filter(c=>c.device_tag).length} de ${D.codes.length} códigos em uso</em></div>
+  <div class="kpi"><small><span class="ic">💰</span>Receita por mês</small><b>${brl(receita)}</b><em>só clientes ativos</em></div>
+  <div class="kpi"><small><span class="ic">📅</span>Vencimentos</small><b style="color:${vencendo.length+vencidos.length?'var(--warn)':''}">${vencendo.length}</b><em>${vencidos.length?`<span style="color:#fb7185">${vencidos.length} vencido${vencidos.length>1?'s':''}</span> · `:''}nos próximos 7 dias</em></div></div>
+ <div class="cols" style="grid-template-columns:1.6fr 1fr">
+  <div class="panel"><h2>Horas assistidas por dia <span class="n">todas as telas · 14 dias</span></h2>
+   <div class="sum"><div><b>${hrs(sem)} h</b><small>7 dias</small></div><div><b>${hrs(mes)} h</b><small>30 dias</small></div><div><b>${sem?tm(sem/7):'—'}</b><small>média por dia</small></div></div>
+   ${grafico(D.st.days||{})}</div>
+  <div class="panel"><h2>Mais assistidos <span class="n">30 dias</span></h2>
+   ${top.length?'<div class="list">'+top.map((t,i)=>`<div class="row" style="padding:9px 11px"><span class="rank">${i+1}</span><div class="t"><b>${esc(t.t)}</b><small>${KNAME[t.k]||''}${t.n>1?' · em '+t.n+' telas':''}</small><div class="meter"><i style="width:${Math.round(t.m/mxTop*100)}%"></i></div></div><span class="v">${tm(t.m)}</span></div>`).join('')+'</div>'
+   :'<div class="empty">O histórico começa a contar a partir de agora. Assim que as TVs assistirem algo, aparece aqui.</div>'}</div></div>
+ <div class="cols">
+  <div class="panel"><h2>Assistindo agora <button class="lnk" onclick="ir('aovivo')">ver tudo ›</button></h2>${listaAoVivo(5)}</div>
+  <div class="panel"><h2>Quem mais assistiu <span class="n">7 dias</span><button class="lnk" onclick="ir('telas')">telas ›</button></h2>
+   ${rank.length?'<div class="list">'+rank.map(({k,x})=>`<div class="row" style="cursor:pointer" onclick="historico('${k.code}')"><span class="dot${online(k)?(k.watching?' play':' on'):''}"></span><div class="t"><b>${esc(k.label||k.code)}</b><small>${esc(clienteDe(k)?.name||'')} · hoje ${tm(x.today)}</small></div><span class="v">${tm(x.week)}</span></div>`).join('')+'</div>'
+   :'<div class="empty">Sem tempo assistido nos últimos 7 dias ainda.</div>'}</div></div>
+ <div class="panel" style="margin-top:16px"><h2>Vencem em breve <button class="lnk" onclick="ir('clientes')">clientes ›</button></h2>
+  ${vencendo.concat(vencidos).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)).map(c=>{const[s,t]=status(c)
+   return `<div class="row" style="margin-bottom:8px"><div class="k">📅</div><div class="t"><b>${esc(c.name)}</b><small>${dt(c.expires_at)} · ${brl(c.price)}</small></div><span class="tag ${s}">${t}</span><button class="btn sm ok" onclick="renovar('${c.id}')">+30 dias</button></div>`}).join('')||'<div class="empty">Ninguém vencendo nos próximos 7 dias 🎉</div>'}</div>`}
 
 function listaAoVivo(max){
  const on=D.codes.filter(online).sort((a,b)=>(b.watching?1:0)-(a.watching?1:0))
- if(!on.length)return '<div class="empty">Nenhum aparelho online agora.</div>'
- return '<div class="live">'+on.slice(0,max||999).map(c=>{const cl=D.clients.find(x=>x.id===c.client_id)
-  return `<div class="lv"><div class="k">${c.watching?KIND[c.watching_kind]||'▶️':'💤'}</div><div class="t"><b>${c.watching?esc(c.watching):'No menu do app'}</b>
-  <small>${esc(cl?.name||'?')} · ${esc(c.label||c.code)} · ${esc(c.device_model||'')}${c.watching_since?' · desde '+hm(c.watching_since):''}</small></div><span class="dot on"></span></div>`}).join('')+'</div>'}
+ if(!on.length)return '<div class="empty">Nenhuma tela online agora.</div>'
+ return '<div class="list">'+on.slice(0,max||999).map(c=>{const cl=clienteDe(c)
+  return `<div class="row"><div class="k">${c.watching?KIND[c.watching_kind]||'▶️':'💤'}</div><div class="t"><b>${c.watching?esc(c.watching):'No menu do app'}</b>
+  <small>${esc(c.label||c.code)} · ${esc(cl?.name||'?')}${c.watching_since?' · há '+tm((Date.now()-new Date(c.watching_since))/60000):''}</small></div>
+  ${c.device_tag&&c.active?`<a class="btn sm" href="controle/?tv=${c.code}">📱</a>`:''}<span class="dot ${c.watching?'play':'on'}"></span></div>`}).join('')+'</div>'}
 
-function rAoVivo(){$('t-aovivo').innerHTML=`<h2>Assistindo agora <span class="n">atualiza sozinho a cada 20 s</span></h2>${listaAoVivo()}`}
+function rAoVivo(){$('page').innerHTML=head('Assistindo agora','Telas online e o que está passando. Atualiza sozinho a cada 20 segundos.')+`<div class="panel">${listaAoVivo()}</div>`}
 
+/* ---------- Telas: cada aparelho com tempo de tela e histórico ---------- */
+function spark(map){const ds=ultimosDias(14),v=ds.map(d=>map?.[diaKey(d)]||0),mx=Math.max(1,...v)
+ return `<div class="spark" title="Últimos 14 dias">${v.map((x,i)=>`<i class="${x?'':'z'}${i===13&&x?' today':''}" style="height:${x?Math.max(8,Math.round(x/mx*100)):6}%" title="${ds[i].toLocaleDateString('pt-BR')}: ${tm(x)}"></i>`).join('')}</div>`}
+function cardTela(k){
+ const on=online(k),s=stOf(k.code),cl=clienteDe(k),rem=D.remotes.filter(r=>r.code===k.code)
+ return `<div class="dv${k.active?'':' off'}">
+  <div class="dvh"><span class="dot${on?(k.watching?' play':' on'):''}"></span><div class="nm"><b>${esc(k.label||'Tela sem nome')}</b><small>${esc(cl?.name||'?')} · <span class="code">${k.code}</span></small></div>
+   ${k.active?'':'<span class="tag bad">Desligado</span>'}</div>
+  ${on&&k.watching?`<div class="now">${KIND[k.watching_kind]||'▶️'}<span>${esc(k.watching)}</span><small>há ${tm((Date.now()-new Date(k.watching_since))/60000)}</small></div>`
+   :`<div class="idle">${on?'💤 Online, no menu do app':'Offline · visto '+ago(k.last_seen)}</div>`}
+  <div class="st3"><div><b>${tm(s.today)}</b><small>Hoje</small></div><div><b>${tm(s.week)}</b><small>7 dias</small></div><div><b>${tm(s.month)}</b><small>30 dias</small></div></div>
+  ${spark(s.days)}
+  ${s.recent?.length?`<div class="hist">${s.recent.slice(0,3).map(r=>`<div>${KIND[r.k]||'▶️'}<span>${esc(r.t)}</span><small>${dth(r.at)} · ${tm(r.m)}</small></div>`).join('')}</div>`:''}
+  <div class="meta">📺 ${k.device_tag?`<b>${esc(k.device_model||k.device_tag)}</b>${k.app_version?' · v'+esc(k.app_version):''}`:'Aguardando ativação'}${rem.length?'<br>📱 Controle: '+rem.map(r=>'<b>'+esc(r.name)+'</b>').join(', '):''}</div>
+  <div class="acts">
+   ${k.device_tag&&k.active?`<a class="btn sm pri" href="controle/?tv=${k.code}">📱 Controlar</a>`:''}
+   <button class="btn sm" onclick="historico('${k.code}')">📊 Histórico</button>
+   <button class="btn sm" onclick="enviar('${k.code}')">📤 Enviar</button></div></div>`}
+function rTelas(){
+ const q=buscaTv.toLowerCase()
+ let l=D.codes.filter(k=>k.device_tag||filtro==='todas')
+ if(filtro==='online')l=l.filter(online);else if(filtro==='vendo')l=l.filter(k=>online(k)&&k.watching)
+ if(q)l=l.filter(k=>(k.label||'').toLowerCase().includes(q)||k.code.toLowerCase().includes(q)||(clienteDe(k)?.name||'').toLowerCase().includes(q))
+ l.sort((a,b)=>(online(b)?2:0)+(b.watching?1:0)-(online(a)?2:0)-(a.watching?1:0)||(stOf(b.code).week-stOf(a.code).week))
+ const seg=[['todas','Todas'],['online','Online'],['vendo','Assistindo']]
+ $('page').innerHTML=head('Telas','Cada aparelho: o que está passando, tempo de tela e o que assistiu.')+`
+ <div class="bar"><input id="buscaTv" placeholder="Buscar tela, código ou cliente" value="${esc(buscaTv)}">
+  <div class="seg">${seg.map(([v,t])=>`<button class="${filtro===v?'on':''}" onclick="filtro='${v}';rTelas()">${t}</button>`).join('')}</div></div>
+ ${l.length?`<div class="devs">${l.map(cardTela).join('')}</div>`:'<div class="empty">Nenhuma tela neste filtro.</div>'}`
+ const b=$('buscaTv');b.oninput=()=>{buscaTv=b.value;const p=b.selectionStart;rTelas();const n=$('buscaTv');n.focus();n.setSelectionRange(p,p)}}
+
+function historico(code){const k=D.codes.find(x=>x.code===code),s=stOf(code),cl=k&&clienteDe(k)
+ modal(`<h3>📊 ${esc(k?.label||code)} <span style="color:var(--mut);font-size:13px;font-weight:700">${esc(cl?.name||'')} · ${code}</span></h3>
+  <div class="st3" style="margin-bottom:12px"><div><b>${tm(s.today)}</b><small>Hoje</small></div><div><b>${tm(s.week)}</b><small>7 dias</small></div><div><b>${tm(s.month)}</b><small>30 dias</small></div></div>
+  ${spark(s.days)}
+  <h2 style="margin-top:16px">Últimas coisas assistidas</h2>
+  ${s.recent?.length?'<div class="list">'+s.recent.map(r=>`<div class="row" style="padding:9px 11px"><div class="k">${KIND[r.k]||'▶️'}</div><div class="t"><b>${esc(r.t)}</b><small>${dth(r.at)}</small></div><span class="v">${tm(r.m)}</span></div>`).join('')+'</div>':'<div class="empty">Ainda sem histórico nesta tela.</div>'}
+  <div class="mrow">${k?.device_tag&&k.active?`<a class="btn pri" href="controle/?tv=${code}">📱 Controlar</a>`:''}<button class="btn" onclick="fechar()">Fechar</button></div>`,true)}
+
+/* ---------- Clientes ---------- */
 function rClientes(){
- const q=busca.toLowerCase(),lst=D.clients.filter(c=>!q||c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)||codigosDe(c.id).some(k=>k.code.toLowerCase().includes(q)))
- $('t-clientes').innerHTML=`<h2>Clientes <span class="n">${D.clients.length}</span></h2>
- <div class="bar"><input id="busca" placeholder="Buscar por nome, telefone ou código" value="${esc(busca)}"><button class="btn pri" onclick="formCliente()">+ Novo cliente</button></div>
- ${lst.map(cardCliente).join('')||'<div class="empty">Nenhum cliente ainda. Toque em <b>+ Novo cliente</b>.</div>'}`
+ const q=busca.toLowerCase(),lst=D.clients.filter(c=>!q||c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)||codigosDe(c.id).some(k=>k.code.toLowerCase().includes(q)||(k.label||'').toLowerCase().includes(q)))
+ $('page').innerHTML=head('Clientes',`${D.clients.length} clientes · ${D.codes.length} códigos`,'<button class="btn pri" onclick="formCliente()">+ Novo cliente</button>')+`
+ <div class="bar"><input id="busca" placeholder="Buscar por nome, telefone, código ou tela" value="${esc(busca)}"></div>
+ ${lst.map(cardCliente).join('')||'<div class="empty">Nenhum cliente encontrado. Toque em <b>+ Novo cliente</b>.</div>'}`
  const b=$('busca');b.oninput=()=>{busca=b.value;const p=b.selectionStart;rClientes();const n=$('busca');n.focus();n.setSelectionRange(p,p)}}
 
 function cardCliente(c){
- const p=plano(c.plan_id),ks=codigosDe(c.id),lim=p?p.screens:1,[s,t]=status(c)
+ const p=plano(c.plan_id),ks=codigosDe(c.id),lim=p?p.screens:1,[s,t]=status(c),sem=ks.reduce((a,k)=>a+stOf(k.code).week,0)
  return `<div class="cl${c.active?'':' off'}"><div class="clh">
   <div class="nm"><b>${esc(c.name)}</b><small>${c.phone?'📱 '+esc(c.phone)+' · ':''}Vence ${dt(c.expires_at)}${c.notes?' · '+esc(c.notes):''}</small>
-   <div class="tags"><span class="tag ${s}">${t}</span><span class="tag">${esc(p?.name||'Sem plano')}</span><span class="tag">${brl(c.price)}/mês</span></div></div>
+   <div class="tags"><span class="tag ${s}">${t}</span><span class="tag">${esc(p?.name||'Sem plano')}</span><span class="tag">${brl(c.price)}/mês</span>${sem?`<span class="tag">⏱️ ${tm(sem)} em 7 dias</span>`:''}</div></div>
   <div class="acts">
    <button class="btn sm ok" onclick="renovar('${c.id}')">+30 dias</button>
    <button class="btn sm ${c.active?'bad':'ok'}" onclick="ligar('${c.id}',${!c.active})">${c.active?'Desligar':'Ligar'}</button>
    <button class="btn sm" onclick="formCliente('${c.id}')">Editar</button></div></div>
-  <div class="codes">${ks.map(cardCodigo).join('')}
-   ${ks.length<lim?`<button class="cd" style="display:grid;place-items:center;min-height:90px;color:var(--tx2);font-weight:800;border-style:dashed" onclick="novoCodigo('${c.id}')">+ Gerar código (${ks.length}/${lim})</button>`:''}</div></div>`}
+  <div class="cds">${ks.map(cardCodigo).join('')}
+   ${ks.length<lim?`<button class="cd add" onclick="novoCodigo('${c.id}')">+ Gerar código (${ks.length}/${lim})</button>`:''}</div></div>`}
 
 function cardCodigo(k){
- const on=online(k)
- return `<div class="cd"><div class="cc"><span class="dot${on?' on':''}"></span><span class="code">${k.code}</span><span class="lb">${esc(k.label||'')}</span>
+ const on=online(k),s=stOf(k.code)
+ return `<div class="cd"><div class="cc"><span class="dot${on?(k.watching?' play':' on'):''}"></span><span class="code">${k.code}</span><span class="lb">${esc(k.label||'')}</span>
   ${k.active?'':'<span class="tag bad">Desligado</span>'}</div>
-  <div class="dev">${k.device_tag?`📺 <b>${esc(k.device_tag)}</b> · ${esc(k.device_model||'')}<br>Ativado ${dth(k.activated_at)} · visto ${ago(k.last_seen)}${k.app_version?' · v'+esc(k.app_version):''}`:'⏳ Aguardando ativação no aparelho'}</div>
-  ${on&&k.watching?`<div class="watch">${KIND[k.watching_kind]||'▶️'} ${esc(k.watching)} <span>· desde ${hm(k.watching_since)}</span></div>`:''}
-  ${D.remotes.filter(r=>r.code===k.code).map(r=>`<div class="dev">📱 Controle: <b>${esc(r.name)}</b> · usado ${ago(r.last_seen||r.approved_at)} <button class="btn sm bad" style="padding:2px 8px;margin-left:4px" onclick="tirarCelular('${r.id}')">Tirar</button></div>`).join('')}
+  <div class="meta">${k.device_tag?`📺 <b>${esc(k.device_tag)}</b> · ${esc(k.device_model||'')}<br>Ativado ${dth(k.activated_at)} · visto ${ago(k.last_seen)}${k.app_version?' · v'+esc(k.app_version):''}`:'⏳ Aguardando ativação no aparelho'}</div>
+  ${on&&k.watching?`<div class="now">${KIND[k.watching_kind]||'▶️'}<span>${esc(k.watching)}</span><small>desde ${hm(k.watching_since)}</small></div>`:''}
+  ${k.device_tag?`<div class="chips"><span class="chip">Hoje ${tm(s.today)}</span><span class="chip">7 dias ${tm(s.week)}</span><span class="chip">30 dias ${tm(s.month)}</span></div>`:''}
+  ${D.remotes.filter(r=>r.code===k.code).map(r=>`<div class="meta">📱 Controle: <b>${esc(r.name)}</b> · usado ${ago(r.last_seen||r.approved_at)} <button class="btn sm bad" style="height:24px;padding:0 8px;margin-left:4px" onclick="tirarCelular('${r.id}')">Tirar</button></div>`).join('')}
   <div class="acts">
-   ${k.device_tag&&k.active?`<button class="btn sm pri" onclick="location.href='controle/?tv=${k.code}'">📱 Controlar</button>`:''}
+   ${k.device_tag&&k.active?`<a class="btn sm pri" href="controle/?tv=${k.code}">📱 Controlar</a>`:''}
+   ${k.device_tag?`<button class="btn sm" onclick="historico('${k.code}')">📊</button>`:''}
    <button class="btn sm" onclick="enviar('${k.code}')">📤 Enviar</button>
    <button class="btn sm" onclick="copiar('${k.code}')">Copiar</button>
    ${k.device_tag?`<button class="btn sm" onclick="liberar('${k.code}')">Trocar aparelho</button>`:''}
    <button class="btn sm ${k.active?'bad':'ok'}" onclick="ligarCodigo('${k.code}',${!k.active})">${k.active?'Desligar':'Ligar'}</button>
    <button class="btn sm bad" onclick="excluirCodigo('${k.code}')">Excluir</button></div></div>`}
 
+/* ---------- Ajustes ---------- */
 function rAjustes(){
  const g=D.cfg||{servers:[],username:'',password:'',extra:[],contact:''},x=(g.extra||[])[0]||{}
- $('t-ajustes').innerHTML=`<h2>Ajustes</h2>
+ $('page').innerHTML=head('Ajustes','Planos, contato da tela de bloqueio e servidor de IPTV.')+`
  <div class="box"><h3>Planos e preços</h3><p class="h">O número de telas define quantos códigos (aparelhos) cada cliente pode ter.</p>
   ${D.plans.map(p=>`<div class="plan"><label class="f">Nome<input class="field" id="pn${p.id}" value="${esc(p.name)}"></label>
    <label class="f">Telas<input class="field" id="ps${p.id}" type="number" min="1" max="10" value="${p.screens}"></label>
@@ -323,8 +514,9 @@ function rAjustes(){
  <div class="box"><h3>Sessão</h3><p class="h">Link do app para instalar: <a href="${APK}" style="color:var(--acc)">${APK}</a></p><button class="btn bad" onclick="sair()">Sair do painel</button></div>`}
 
 /* ---------- Ações ---------- */
-function modal(html){$('modal').innerHTML=`<div class="ov" onclick="if(event.target===this)fechar()"><div class="md">${html}</div></div>`}
+function modal(html,wide){$('modal').innerHTML=`<div class="ov" onclick="if(event.target===this)fechar()"><div class="md${wide?' wide':''}">${html}</div></div>`}
 function fechar(){$('modal').innerHTML=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('modal').innerHTML)fechar()})
 const isoDia=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
 
 function formCliente(id){
@@ -336,7 +528,7 @@ function formCliente(id){
    <label class="f">Mensalidade (R$)<input class="field" id="fV" type="number" min="0" step="0.01" value="${c.price}"></label></div>
   <label class="f">Vencimento<input class="field" id="fE" type="date" value="${isoDia(c.expires_at)}"></label>
   <label class="f">Observação<input class="field" id="fO" value="${esc(c.notes||'')}"></label>
-  <div class="row">${id?`<button class="btn bad" style="margin-right:auto" onclick="excluirCliente('${id}')">Excluir</button>`:''}<button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" id="fS">Salvar</button></div>`)
+  <div class="mrow">${id?`<button class="btn bad" style="margin-right:auto" onclick="excluirCliente('${id}')">Excluir</button>`:''}<button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" id="fS">Salvar</button></div>`)
  $('fP').onchange=()=>{const p=plano(Number($('fP').value));if(p)$('fV').value=p.price}
  $('fS').onclick=async()=>{
   const name=$('fN').value.trim();if(!name){toast('Informe o nome');return}
@@ -391,7 +583,7 @@ function enviar(code){const k=D.codes.find(x=>x.code===code),c=D.clients.find(x=
 
 📱 Quer escolher filmes e canais pelo celular? Abra ${CTRL} e use o mesmo código.`
  modal(`<h3>Enviar código ${code}</h3><textarea class="field" id="eT" style="min-height:170px">${esc(txt)}</textarea>
-  <div class="row"><button class="btn" onclick="fechar()">Fechar</button><button class="btn" onclick="navigator.clipboard.writeText($('eT').value).then(()=>toast('Mensagem copiada'))">Copiar</button>
+  <div class="mrow"><button class="btn" onclick="fechar()">Fechar</button><button class="btn" onclick="navigator.clipboard.writeText($('eT').value).then(()=>toast('Mensagem copiada'))">Copiar</button>
   <button class="btn pri" onclick="window.open('https://wa.me/${c?.phone?(c.phone.length<=11?'55':'')+c.phone:''}?text='+encodeURIComponent($('eT').value),'_blank')">WhatsApp</button></div>`)}
 
 async function salvarPlano(id){
@@ -419,7 +611,11 @@ async function iniciar(){
  const{data:adm}=await sb.from('admins').select('user_id').eq('user_id',session.user.id).maybeSingle()
  if(!adm){$('naId').textContent=session.user.id;$('vNoAdmin').classList.remove('hide');return}
  $('vApp').classList.remove('hide');await carregar()
- clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&!$('modal').innerHTML&&tab!=='ajustes')carregar()},20000)}
+ // não atualiza no meio de uma digitação nem com janela aberta
+ clearInterval(timer);timer=setInterval(()=>{const a=document.activeElement
+  if(!document.hidden&&!$('modal').innerHTML&&tab!=='ajustes'&&!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))carregar()},20000)}
+// voltou do controle pelo botão "voltar" do navegador: recarrega os dados
+window.addEventListener('pageshow',e=>{if(e.persisted&&!$('vApp').classList.contains('hide'))carregar()})
 iniciar()
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})
 </script>
