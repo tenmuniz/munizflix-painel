@@ -343,6 +343,7 @@ const SB_URL='https://dnrwutpvpdnatbqasskc.supabase.co'
 const SB_KEY='sb_publishable_pvZJgJK3G5C7eJcKRdCCNQ_iBVhgbRc'
 const CTRL=new URL('controle/',location.href).href.split('?')[0]
 const APK='https://github.com/tenmuniz/munizflix-app/releases/latest/download/MunizFlix.apk'
+const WIN='https://github.com/tenmuniz/munizflix-app/releases/download/desktop/MunizFlix-Setup.exe'
 // online = falou com o servidor há pouco (o app checa a cada 5 min; com vídeo tocando, avisa a cada 3 min)
 const ONLINE_MIN=12
 const sb=supabase.createClient(SB_URL,SB_KEY)
@@ -625,7 +626,8 @@ function rAjustes(){
   <section class="box"><div class="bxh"><span class="bxi">📲</span><div><h3>Instalar o app</h3><p class="h">Link do APK mais novo, sempre atualizado. Mande para o cliente ou baixe na TV.</p></div></div>
    <div class="lnkbox"><code>${APK}</code><button class="btn sm" onclick="navigator.clipboard.writeText('${APK}').then(()=>toast('Link copiado'))">Copiar</button></div>
    <div class="lnkbox"><code>${CTRL}</code><button class="btn sm" onclick="navigator.clipboard.writeText('${CTRL}').then(()=>toast('Link copiado'))">Copiar</button></div>
-   <p class="h" style="margin-top:6px">O segundo é o controle pelo celular.</p></section>
+   <div class="lnkbox"><code>${WIN}</code><button class="btn sm" onclick="navigator.clipboard.writeText('${WIN}').then(()=>toast('Link copiado'))">Copiar</button></div>
+   <p class="h" style="margin-top:6px">Na ordem: app da TV/celular Android, controle pelo celular e app para Windows (notebook/PC).</p></section>
 
   <section class="box"><div class="bxh"><span class="bxi">👤</span><div><h3>Sessão</h3><p class="h">Você está no painel do administrador.</p></div></div>
    <div class="bxf" style="justify-content:flex-start"><button class="btn bad" onclick="sair()">Sair do painel</button></div></section>
