@@ -387,11 +387,12 @@ $('lgGo').onclick=async()=>{
 async function sair(){await sb.auth.signOut();location.reload()}
 
 /* ---------- Dados ---------- */
-let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],st:{codes:{},days:{},top:[]}},busca='',filtro='todas',buscaTv='',loadedAt=0
+let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],pays:[],st:{codes:{},days:{},top:[]}},busca='',filtro='todas',buscaTv='',loadedAt=0
 const PAGES=[['geral','Visão geral','M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z'],
  ['telas','Telas','M21 3H3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h7v2H8v2h8v-2h-2v-2h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 13H3V5h18v11z'],
  ['clientes','Clientes','M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 2 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z'],
  ['aovivo','Agora','M8 5v14l11-7z'],
+ ['pagamentos','Pagamentos','M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z'],
  ['ajustes','Ajustes','M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.3 7.3 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.3 7.3 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1L11 21h4l.4-2.9c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5-2.2-1.6zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z']]
 let tab=(()=>{const h=location.hash.slice(1);return PAGES.some(p=>p[0]===h)?h:'geral'})()
 
@@ -399,15 +400,16 @@ async function carregar(manual){
  try{
   // antes de ler: fecha o que ficou "assistindo" em TVs que sumiram
   await sb.rpc('admin_refresh').then(()=>{},()=>{})
-  const [p,c,k,g,rm,st]=await Promise.all([
+  const [p,c,k,g,rm,st,py]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
    sb.from('codes').select('code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,created_at').order('created_at'),
    tab==='ajustes'||!D.cfg?sb.from('app_config').select('*').eq('id',1).single():Promise.resolve({data:D.cfg}),
    sb.from('remotes').select('id,code,name,last_seen,approved_at').eq('status','ok').order('approved_at'),
-   sb.rpc('admin_watch_stats',{p_days:30})])
+   sb.rpc('admin_watch_stats',{p_days:30}),
+   sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at').order('created_at',{ascending:false}).limit(400)])
   for(const r of [p,c,k,g])if(r.error)throw r.error
-  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data}
+  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data}
   loadedAt=Date.now();render();if(manual)toast('Atualizado')
  }catch(e){erro(e)}}
 const plano=id=>D.plans.find(p=>p.id===id)
@@ -417,12 +419,12 @@ const stOf=code=>D.st.codes?.[code]||{today:0,week:0,month:0,sessions:0,days:{},
 
 /* ---------- Navegação ---------- */
 function navHtml(){const on=D.codes.filter(online).length,watch=D.codes.filter(c=>online(c)&&c.watching).length
- const cnt={telas:`<span class="cnt${on?' live':''}">${on}/${D.codes.filter(c=>c.device_tag).length}</span>`,clientes:`<span class="cnt">${D.clients.length}</span>`,aovivo:watch?`<span class="cnt live">${watch}</span>`:''}
+ const cnt={telas:`<span class="cnt${on?' live':''}">${on}/${D.codes.filter(c=>c.device_tag).length}</span>`,clientes:`<span class="cnt">${D.clients.length}</span>`,aovivo:watch?`<span class="cnt live">${watch}</span>`:'',pagamentos:pixMes().n?`<span class="cnt live">${pixMes().n}</span>`:''}
  $('nav').innerHTML=PAGES.map(([id,nm,ic])=>`<button data-t="${id}" class="${id===tab?'on':''}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="${ic}"/></svg><span>${nm}</span>${cnt[id]||''}</button>`).join('')
  $('updSide').textContent=loadedAt?'Atualizado '+hm(loadedAt)+' · sozinho a cada 20 s':''}
 $('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;ir(b.dataset.t)}
 function ir(t){tab=t;history.replaceState(null,'','#'+t);window.scrollTo(0,0);if(t==='ajustes')carregar();else render()}
-function render(){navHtml();({geral:rGeral,telas:rTelas,clientes:rClientes,aovivo:rAoVivo,ajustes:rAjustes})[tab]()}
+function render(){navHtml();({geral:rGeral,telas:rTelas,clientes:rClientes,aovivo:rAoVivo,pagamentos:rPagamentos,ajustes:rAjustes})[tab]()}
 const head=(t,s,extra='')=>`<div class="pagehd"><div><h1>${t}</h1>${s?`<p>${s}</p>`:''}</div><div class="sp"></div>${extra}</div>`
 
 function status(cl){const d=days(cl.expires_at)
@@ -466,7 +468,7 @@ function rGeral(){
   <div class="kpi hl"><small><span class="ic">🟢</span>Online agora</small><b>${on.length}</b><em>${vendo.length} assistindo</em></div>
   <div class="kpi"><small><span class="ic">⏱️</span>Assistido hoje</small><b>${tm(hoje)}</b><em>${hrs(sem)} h nos últimos 7 dias</em></div>
   <div class="kpi"><small><span class="ic">👥</span>Clientes ativos</small><b>${ativos.length}</b><em>${D.codes.filter(c=>c.device_tag).length} de ${D.codes.length} códigos em uso</em></div>
-  <div class="kpi"><small><span class="ic">💰</span>Receita por mês</small><b>${brl(receita)}</b><em>só clientes ativos</em></div>
+  <div class="kpi"><small><span class="ic">💰</span>Receita por mês</small><b>${brl(receita)}</b><em>${pixMes().n?brl(pixMes().v)+' recebidos via Pix este mês':'só clientes ativos'}</em></div>
   <div class="kpi"><small><span class="ic">📅</span>Vencimentos</small><b style="color:${vencendo.length+vencidos.length?'var(--warn)':''}">${vencendo.length}</b><em>${vencidos.length?`<span style="color:#fb7185">${vencidos.length} vencido${vencidos.length>1?'s':''}</span> · `:''}nos próximos 7 dias</em></div></div>
  <div class="cols c16">
   <div class="panel"><h2>Tempo assistido por dia <span class="n">todas as telas</span></h2>
@@ -573,8 +575,35 @@ function linhaCliente(c){
     <button class="btn sm" onclick="formCliente('${c.id}')">✏️ Editar</button>
     ${tel?`<a class="btn sm" target="_blank" href="https://wa.me/${tel}">💬 WhatsApp</a>`:''}
     ${ks.length<lim?`<button class="btn sm" onclick="novoCodigo('${c.id}')">＋ Gerar código (${ks.length}/${lim})</button>`:''}
+    ${ks[0]?`<button class="btn sm" onclick="copiarPix('${ks[0].code}')">💳 Link de pagamento</button>${tel?`<a class="btn sm" target="_blank" href="https://wa.me/${tel}?text=${encodeURIComponent(msgPix(c,ks[0].code))}">📲 Cobrar no WhatsApp</a>`:''}`:''}
     <button class="btn sm ${c.active?'bad':'ok'}" style="margin-left:auto" onclick="ligar('${c.id}',${!c.active})">${c.active?'Desligar cliente':'Ligar cliente'}</button></div>
+   ${ultimoPix(c.id)}
    <div class="cds">${ks.map(cardCodigo).join('')||'<div class="empty">Nenhum código ainda.</div>'}</div></div>`:''}</div>`}
+
+/* ---------- Pagamentos (Pix pelo Mercado Pago) ---------- */
+const PAYURL=code=>'https://munizflix.vercel.app/pagar?c='+code
+const PST={paid:['ok','Pago'],pending:['warn','Aguardando'],expired:['off','Expirado'],canceled:['off','Cancelado'],failed:['bad','Falhou'],refunded:['bad','Devolvido'],charged_back:['bad','Contestado']}
+function pixMes(){const m=new Date();m.setDate(1);m.setHours(0,0,0,0)
+ const l=D.pays.filter(x=>x.status==='paid'&&new Date(x.paid_at||x.created_at)>=m);return{n:l.length,v:l.reduce((s,x)=>s+Number(x.amount||0),0)}}
+function msgPix(c,code){return `Olá, ${String(c.name||'').split(' ')[0]}! Seu acesso MunizFlix ${days(c.expires_at)<0?'venceu':'vence em '+dt(c.expires_at)}. Para renovar por mais 30 dias, é só pagar o Pix por este link (libera na hora, sozinho): ${PAYURL(code)}`}
+function copiarPix(code){navigator.clipboard.writeText(PAYURL(code)).then(()=>toast('Link de pagamento copiado'))}
+function ultimoPix(id){const p=D.pays.find(x=>x.client_id===id&&x.status==='paid');return p?`<p class="h" style="margin:2px 0 10px">💳 Último Pix: <b style="color:var(--ok)">${brl(p.amount)}</b> em ${dth(p.paid_at)}${p.new_expires_at?' · renovou até '+dt(p.new_expires_at):''}</p>`:''}
+let pFiltro='todos'
+function rPagamentos(){
+ const mes=pixMes(),pend=D.pays.filter(x=>x.status==='pending').length
+ const tot=D.pays.filter(x=>x.status==='paid').reduce((s,x)=>s+Number(x.amount||0),0)
+ let l=D.pays;if(pFiltro==='pagos')l=l.filter(x=>x.status==='paid');else if(pFiltro==='outros')l=l.filter(x=>x.status!=='paid')
+ const nome=id=>D.clients.find(c=>c.id===id)?.name||'Cliente apagado'
+ $('page').innerHTML=head('Pagamentos','Pix pelo Mercado Pago · a renovação (+30 dias) é automática quando o Pix cai')+`
+ <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+  <div class="kpi hl"><small><span class="ic">💰</span>Recebido este mês</small><b>${brl(mes.v)}</b><em>${mes.n} pagamento${mes.n===1?'':'s'}</em></div>
+  <div class="kpi"><small><span class="ic">⏳</span>Aguardando agora</small><b>${pend}</b><em>Pix gerados e ainda não pagos</em></div>
+  <div class="kpi"><small><span class="ic">📈</span>Total recebido</small><b>${brl(tot)}</b><em>desde o início</em></div></div>
+ <div class="panel" style="margin-top:16px"><h2>Histórico <span class="sp"></span>
+  <span class="seg">${[['todos','Todos'],['pagos','Pagos'],['outros','Outros']].map(([k,t])=>`<button class="${pFiltro===k?'on':''}" onclick="pFiltro='${k}';rPagamentos()">${t}</button>`).join('')}</span></h2>
+  ${l.length?'<div class="list">'+l.map(x=>{const[cl,t]=PST[x.status]||['off',x.status]
+   return `<div class="row"><div class="k">${x.status==='paid'?'✅':x.status==='pending'?'⏳':'▫️'}</div><div class="t"><b>${esc(nome(x.client_id))}</b><small>${esc(x.code||'')} · ${dth(x.paid_at||x.created_at)}${x.new_expires_at?' · renovou até '+dt(x.new_expires_at):''}</small></div><span class="v">${brl(x.amount)}</span><span class="tag ${cl}">${t}</span></div>`}).join('')+'</div>'
+  :'<div class="empty">Nenhum pagamento ainda. Mande o link de pagamento para um cliente (Clientes › abrir cliente › 💳 Link de pagamento).</div>'}</div>`}
 
 function cardCodigo(k){
  const on=online(k),s=stOf(k.code)
