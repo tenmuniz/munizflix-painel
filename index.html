@@ -387,7 +387,7 @@ $('lgGo').onclick=async()=>{
 async function sair(){await sb.auth.signOut();location.reload()}
 
 /* ---------- Dados ---------- */
-let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],pays:[],st:{codes:{},days:{},top:[]}},busca='',filtro='todas',buscaTv='',loadedAt=0
+let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],pays:[],nts:[],st:{codes:{},days:{},top:[]}},busca='',filtro='todas',buscaTv='',loadedAt=0
 const PAGES=[['geral','Visão geral','M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z'],
  ['telas','Telas','M21 3H3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h7v2H8v2h8v-2h-2v-2h7a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm0 13H3V5h18v11z'],
  ['clientes','Clientes','M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 2 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z'],
@@ -400,16 +400,17 @@ async function carregar(manual){
  try{
   // antes de ler: fecha o que ficou "assistindo" em TVs que sumiram
   await sb.rpc('admin_refresh').then(()=>{},()=>{})
-  const [p,c,k,g,rm,st,py]=await Promise.all([
+  const [p,c,k,g,rm,st,py,nn]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
    sb.from('codes').select('code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,created_at').order('created_at'),
    tab==='ajustes'||!D.cfg?sb.from('app_config').select('*').eq('id',1).single():Promise.resolve({data:D.cfg}),
    sb.from('remotes').select('id,code,name,last_seen,approved_at').eq('status','ok').order('approved_at'),
    sb.rpc('admin_watch_stats',{p_days:30}),
-   sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at').order('created_at',{ascending:false}).limit(400)])
+   sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at').order('created_at',{ascending:false}).limit(400),
+   sb.from('notices').select('id,client_id,title,kind,created_at').order('id',{ascending:false}).limit(300)])
   for(const r of [p,c,k,g])if(r.error)throw r.error
-  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data}
+  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,nts:nn.error?[]:nn.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data}
   loadedAt=Date.now();render();if(manual)toast('Atualizado')
  }catch(e){erro(e)}}
 const plano=id=>D.plans.find(p=>p.id===id)
@@ -575,7 +576,7 @@ function linhaCliente(c){
     <button class="btn sm" onclick="formCliente('${c.id}')">✏️ Editar</button>
     ${tel?`<a class="btn sm" target="_blank" href="https://wa.me/${tel}">💬 WhatsApp</a>`:''}
     ${ks.length<lim?`<button class="btn sm" onclick="novoCodigo('${c.id}')">＋ Gerar código (${ks.length}/${lim})</button>`:''}
-    ${ks[0]?`<button class="btn sm" onclick="copiarPix('${ks[0].code}')">💳 Link de pagamento</button>${tel?`<a class="btn sm" target="_blank" href="https://wa.me/${tel}?text=${encodeURIComponent(msgPix(c,ks[0].code))}">📲 Cobrar no WhatsApp</a>`:''}`:''}
+    ${ks[0]?`<button class="btn sm" onclick="copiarPix('${ks[0].code}')">💳 Link de pagamento</button>`:''}
     <button class="btn sm ${c.active?'bad':'ok'}" style="margin-left:auto" onclick="ligar('${c.id}',${!c.active})">${c.active?'Desligar cliente':'Ligar cliente'}</button></div>
    ${ultimoPix(c.id)}
    <div class="cds">${ks.map(cardCodigo).join('')||'<div class="empty">Nenhum código ainda.</div>'}</div></div>`:''}</div>`}
@@ -585,20 +586,42 @@ const PAYURL=code=>'https://munizflix.vercel.app/pagar?c='+code
 const PST={paid:['ok','Pago'],pending:['warn','Aguardando'],expired:['off','Expirado'],canceled:['off','Cancelado'],failed:['bad','Falhou'],refunded:['bad','Devolvido'],charged_back:['bad','Contestado']}
 function pixMes(){const m=new Date();m.setDate(1);m.setHours(0,0,0,0)
  const l=D.pays.filter(x=>x.status==='paid'&&new Date(x.paid_at||x.created_at)>=m);return{n:l.length,v:l.reduce((s,x)=>s+Number(x.amount||0),0)}}
-function msgPix(c,code){return `Olá, ${String(c.name||'').split(' ')[0]}! Seu acesso MunizFlix ${days(c.expires_at)<0?'venceu':'vence em '+dt(c.expires_at)}. Para renovar por mais 30 dias, é só pagar o Pix por este link (libera na hora, sozinho): ${PAYURL(code)}`}
 function copiarPix(code){navigator.clipboard.writeText(PAYURL(code)).then(()=>toast('Link de pagamento copiado'))}
 function ultimoPix(id){const p=D.pays.find(x=>x.client_id===id&&x.status==='paid');return p?`<p class="h" style="margin:2px 0 10px">💳 Último Pix: <b style="color:var(--ok)">${brl(p.amount)}</b> em ${dth(p.paid_at)}${p.new_expires_at?' · renovou até '+dt(p.new_expires_at):''}</p>`:''}
 let pFiltro='todos'
+/* ---------- Avisos para as TVs (aparecem na tela com o botão "Renovar agora") ---------- */
+let av={alvo:'expiring',dias:5,kind:'pay',title:'Sua assinatura está acabando',body:'Renove agora pelo Pix, aqui mesmo no app: é só tocar em Renovar agora. Pagando por 3, 6 ou 12 meses você ganha desconto.'}
+function alvoN(){const now=Date.now(),lim=now+av.dias*864e5
+ return D.clients.filter(c=>{const e=new Date(c.expires_at).getTime()
+  return av.alvo==='expiring'?c.active&&e<=lim&&e>now-30*864e5:av.alvo==='expired'?e<now&&e>now-60*864e5:c.active}).length}
+function boxAviso(){
+ const grupos={};for(const n of D.nts){const k=n.title+'|'+n.created_at.slice(0,16);(grupos[k]=grupos[k]||{t:n.title,at:n.created_at,kind:n.kind,n:0}).n++}
+ const hist=Object.values(grupos).slice(0,5),n=alvoN()
+ return `<div class="panel" style="margin-top:16px"><h2>📣 Avisar as TVs</h2>
+  <p class="h" style="margin:-4px 0 12px">O aviso aparece na tela da TV/celular do cliente (sem WhatsApp). Com “Pagamento”, vem o botão <b>Renovar agora</b>, que abre os planos e o QR do Pix no próprio app. TVs ligadas recebem na hora; as desligadas, quando abrirem o app.</p>
+  <div class="grid2"><label class="f">Para quem
+    <select class="field" onchange="av.alvo=this.value;rPagamentos()">${[['expiring','Quem vence em breve'],['expired','Quem já venceu'],['all','Todos os clientes ativos']].map(([k,t])=>`<option value="${k}"${av.alvo===k?' selected':''}>${t}</option>`).join('')}</select></label>
+   ${av.alvo==='expiring'?`<label class="f">Vencendo em até (dias)<input class="field" type="number" min="0" max="60" value="${av.dias}" onchange="av.dias=Math.max(0,+this.value||0);rPagamentos()"></label>`:`<label class="f">Tipo<select class="field" onchange="av.kind=this.value"><option value="pay"${av.kind==='pay'?' selected':''}>Pagamento (com botão Renovar)</option><option value="info"${av.kind==='info'?' selected':''}>Só recado</option></select></label>`}</div>
+  <label class="f" style="margin-top:10px">Título<input class="field" maxlength="80" value="${esc(av.title)}" oninput="av.title=this.value"></label>
+  <label class="f" style="margin-top:10px">Mensagem<textarea class="field" rows="3" maxlength="400" oninput="av.body=this.value">${esc(av.body)}</textarea></label>
+  <div class="bxf" style="margin-top:12px"><span class="h"><b>${n}</b> cliente${n===1?' vai':'s vão'} receber</span><button class="btn pri" onclick="enviarAviso()" ${n?'':'disabled'}>Enviar aviso</button></div>
+  ${hist.length?`<div class="list" style="margin-top:12px">${hist.map(h=>`<div class="row"><div class="k">📣</div><div class="t"><b>${esc(h.t)}</b><small>${dth(h.at)} · ${h.kind==='pay'?'pagamento':'recado'}</small></div><span class="tag">${h.n} cliente${h.n===1?'':'s'}</span></div>`).join('')}</div>`:''}</div>`}
+async function enviarAviso(){
+ if(!av.title.trim())return toast('Escreva um título')
+ const n=alvoN();if(!confirm(`Enviar este aviso para ${n} cliente${n===1?'':'s'}?`))return
+ const r=await sb.rpc('admin_notify',{p_target:av.alvo,p_days:av.dias,p_title:av.title.trim(),p_body:av.body.trim(),p_kind:av.alvo==='expiring'?'pay':av.kind})
+ if(r.error)return erro(r.error);toast(`Aviso enviado para ${r.data} cliente${r.data===1?'':'s'}`);carregar()}
 function rPagamentos(){
  const mes=pixMes(),pend=D.pays.filter(x=>x.status==='pending').length
  const tot=D.pays.filter(x=>x.status==='paid').reduce((s,x)=>s+Number(x.amount||0),0)
  let l=D.pays;if(pFiltro==='pagos')l=l.filter(x=>x.status==='paid');else if(pFiltro==='outros')l=l.filter(x=>x.status!=='paid')
  const nome=id=>D.clients.find(c=>c.id===id)?.name||'Cliente apagado'
- $('page').innerHTML=head('Pagamentos','Pix pelo Mercado Pago · a renovação (+30 dias) é automática quando o Pix cai')+`
+ $('page').innerHTML=head('Pagamentos','Pix pelo Mercado Pago · o cliente paga no app e o acesso renova sozinho quando o Pix cai')+`
  <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
   <div class="kpi hl"><small><span class="ic">💰</span>Recebido este mês</small><b>${brl(mes.v)}</b><em>${mes.n} pagamento${mes.n===1?'':'s'}</em></div>
   <div class="kpi"><small><span class="ic">⏳</span>Aguardando agora</small><b>${pend}</b><em>Pix gerados e ainda não pagos</em></div>
   <div class="kpi"><small><span class="ic">📈</span>Total recebido</small><b>${brl(tot)}</b><em>desde o início</em></div></div>
+ ${boxAviso()}
  <div class="panel" style="margin-top:16px"><h2>Histórico <span class="sp"></span>
   <span class="seg">${[['todos','Todos'],['pagos','Pagos'],['outros','Outros']].map(([k,t])=>`<button class="${pFiltro===k?'on':''}" onclick="pFiltro='${k}';rPagamentos()">${t}</button>`).join('')}</span></h2>
   ${l.length?'<div class="list">'+l.map(x=>{const[cl,t]=PST[x.status]||['off',x.status]
@@ -636,6 +659,8 @@ function rAjustes(){
      <button class="btn sm" onclick="salvarPlano(${p.id})">Salvar plano</button></div>`).join('')}
     <button class="pc add" onclick="novoPlano()">＋<span>Novo plano</span></button></div></section>
 
+  ${boxPlanosApp(g)}
+
   <section class="box"><div class="bxh"><span class="bxi">🔒</span><div><h3>Tela de bloqueio</h3><p class="h">Aparece na TV quando o acesso está desligado ou vencido. Deixe vazio para não mostrar contato.</p></div></div>
    <div class="lockpv"><img src="mark.png" alt=""><b>Acesso vencido</b><span id="pvC">${esc(g.contact||'Fale com o administrador')}</span></div>
    <label class="f">Contato<input class="field" id="cfContato" value="${esc(g.contact)}" placeholder="Ex.: WhatsApp do Muniz: (91) 99999-0000" oninput="$('pvC').textContent=this.value||'Fale com o administrador'"></label>
@@ -661,6 +686,31 @@ function rAjustes(){
   <section class="box"><div class="bxh"><span class="bxi">👤</span><div><h3>Sessão</h3><p class="h">Você está no painel do administrador.</p></div></div>
    <div class="bxf" style="justify-content:flex-start"><button class="btn bad" onclick="sair()">Sair do painel</button></div></section>
  </div>`}
+
+/* ---------- Planos que o cliente vê no app (Minha assinatura) ---------- */
+function boxPlanosApp(g){
+ const ps=(g.pay_periods||[]).concat([{m:'',off:'',tag:''}]).slice(0,6),pr=g.promo||{}
+ const ex=Number((D.plans[0]||{}).price||19.9)
+ const preco=(m,o)=>{let a=Math.round(ex*m*(100-o))/100;if(m>1&&a>10)a=Math.round(a)-.1;return brl(a)}
+ return `<section class="box wide"><div class="bxh"><span class="bxi">🛒</span><div><h3>Pagamento no app</h3><p class="h">Períodos que o cliente pode pagar de uma vez em <b>Minha assinatura</b>. O desconto vale sobre o preço mensal de cada cliente (exemplo abaixo com ${brl(ex)}/mês). Apague os meses de uma linha para tirá-la.</p></div></div>
+  <div class="list">${ps.map((p,i)=>`<div class="row" style="gap:8px;flex-wrap:wrap"><label class="f" style="flex:1;min-width:90px">Meses<input class="field" id="pm${i}" type="number" min="1" max="24" value="${p.m}"></label>
+   <label class="f" style="flex:1;min-width:90px">Desconto %<input class="field" id="po${i}" type="number" min="0" max="80" value="${p.off}"></label>
+   <label class="f" style="flex:2;min-width:140px">Selo (opcional)<input class="field" id="pt${i}" maxlength="24" value="${esc(p.tag||'')}" placeholder="Ex.: Mais escolhido"></label>
+   <span class="h" style="align-self:end;padding-bottom:10px;min-width:110px">${p.m?'ex.: '+preco(+p.m,+p.off||0):'nova linha'}</span></div>`).join('')}</div>
+  <div class="grid2" style="margin-top:14px"><label class="f">Promoção: título (vazio = sem promoção)<input class="field" id="prT" maxlength="60" value="${esc(pr.title||'')}" placeholder="Ex.: Black Friday: 1 ano com 30% off"></label>
+   <label class="f">Promoção válida até<input class="field" id="prU" type="date" value="${esc(pr.until||'')}"></label></div>
+  <label class="f" style="margin-top:10px">Promoção: texto<input class="field" id="prX" maxlength="140" value="${esc(pr.text||'')}" placeholder="Ex.: Só até domingo. Pague pelo Pix aqui no app."></label>
+  <label class="f" style="margin-top:10px;max-width:280px">Avisar no app quando faltar (dias)<input class="field" id="rmD" type="number" min="0" max="30" value="${g.remind_days??5}"></label>
+  <div class="bxf"><span class="h">O aviso de vencimento aparece sozinho 1 vez por dia na TV, com o botão Renovar agora.</span><button class="btn pri" onclick="salvarPlanosApp(${ps.length})">Salvar</button></div></section>`}
+async function salvarPlanosApp(n){
+ const ps=[];for(let i=0;i<n;i++){const m=parseInt($('pm'+i).value);if(!(m>=1&&m<=24))continue
+  const o=Math.min(80,Math.max(0,parseFloat($('po'+i).value)||0)),t=$('pt'+i).value.trim();if(ps.some(x=>x.m===m))continue
+  ps.push(t?{m,off:o,tag:t}:{m,off:o})}
+ if(!ps.some(x=>x.m===1))ps.unshift({m:1,off:0})
+ ps.sort((a,b)=>a.m-b.m)
+ const t=$('prT').value.trim(),promo=t?{title:t,text:$('prX').value.trim()||undefined,until:$('prU').value||undefined}:null
+ const r=await sb.from('app_config').update({pay_periods:ps,promo,remind_days:Math.max(0,Math.min(30,parseInt($('rmD').value)||5)),updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error);toast('Pagamento no app salvo');D.cfg=null;carregar()}
 
 /* ---------- Ações ---------- */
 function modal(html,wide){$('modal').innerHTML=`<div class="ov" onclick="if(event.target===this)fechar()"><div class="md${wide?' wide':''}">${html}</div></div>`}
