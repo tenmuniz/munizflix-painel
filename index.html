@@ -577,7 +577,8 @@ function linhaCliente(c){
     ${tel?`<a class="btn sm" target="_blank" href="https://wa.me/${tel}">💬 WhatsApp</a>`:''}
     ${ks.length<lim?`<button class="btn sm" onclick="novoCodigo('${c.id}')">＋ Gerar código (${ks.length}/${lim})</button>`:''}
     ${ks[0]?`<button class="btn sm" onclick="copiarPix('${ks[0].code}')">💳 Link de pagamento</button>`:''}
-    <button class="btn sm ${c.active?'bad':'ok'}" style="margin-left:auto" onclick="ligar('${c.id}',${!c.active})">${c.active?'Desligar cliente':'Ligar cliente'}</button></div>
+    <button class="btn sm ${c.active?'bad':'ok'}" style="margin-left:auto" onclick="ligar('${c.id}',${!c.active})">${c.active?'Desligar cliente':'Ligar cliente'}</button>
+    <button class="btn sm bad" onclick="excluirCliente('${c.id}')">🗑️ Excluir de vez</button></div>
    ${ultimoPix(c.id)}
    <div class="cds">${ks.map(cardCodigo).join('')||'<div class="empty">Nenhum código ainda.</div>'}</div></div>`:''}</div>`}
 
@@ -741,7 +742,9 @@ function formCliente(id){
 
 async function excluirCliente(id){const c=D.clients.find(x=>x.id===id)
  if(!confirm(`Excluir "${c.name}" e todos os códigos dele? Os aparelhos param de funcionar. Não dá para desfazer.`))return
- const r=await sb.from('clients').delete().eq('id',id);if(r.error)return erro(r.error);fechar();toast('Cliente excluído');carregar()}
+ const r=await sb.from('clients').delete().eq('id',id).select('id');if(r.error)return erro(r.error)
+ if(!r.data?.length){toast('Não consegui excluir. Entre de novo no painel e tente outra vez.');return}
+ fechar();aberto='';toast('Cliente "'+c.name+'" excluído');carregar()}
 
 async function novoCodigo(cid){
  const label=prompt('Nome do aparelho (opcional). Ex.: TV da sala','')
