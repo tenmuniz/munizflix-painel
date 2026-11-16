@@ -211,7 +211,11 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .shb{flex:1;overflow-y:auto;padding:16px 18px 40px;display:flex;flex-direction:column;gap:18px}
 .shb section h4{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:9px;display:flex;align-items:center;gap:8px}
 .lk{color:#c4b5fd;font-weight:700;cursor:pointer}.lk:hover{text-decoration:underline}
-.codeb{display:inline-flex;align-items:center;gap:5px;font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--tx);padding:2px 8px;border-radius:7px;background:rgba(255,255,255,.07)}.codeb:hover{background:rgba(168,85,247,.25)}
+.codeb{display:inline-flex;align-items:center;gap:8px;font-family:ui-monospace,Consolas,monospace;font-weight:800;font-size:22px;letter-spacing:.06em;color:#fff;padding:8px 16px;border-radius:12px;background:var(--grad);box-shadow:0 6px 18px -6px rgba(192,38,211,.7);cursor:pointer;transition:filter .15s,transform .12s}.codeb:hover{filter:brightness(1.15)}.codeb:active{transform:scale(.97)}.codeb svg{width:18px;height:18px;opacity:.85}
+.codetag{flex:none;margin-left:auto;font-family:ui-monospace,Consolas,monospace;font-weight:900;font-size:26px;letter-spacing:.08em;color:#fff;padding:10px 20px;border-radius:14px;background:linear-gradient(135deg,#a855f7,#ec4899);box-shadow:0 0 20px rgba(168,85,247,.5),0 8px 24px -6px rgba(236,72,153,.6);text-shadow:0 2px 8px rgba(0,0,0,.4);white-space:nowrap;line-height:1}
+.codebox{flex:none;margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 18px;border-radius:14px;background:linear-gradient(135deg,#a855f7,#ec4899);box-shadow:0 0 24px rgba(168,85,247,.55),0 8px 28px -6px rgba(236,72,153,.65);min-width:110px}
+.codelbl{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.codeval{font-family:ui-monospace,Consolas,monospace;font-weight:900;font-size:28px;letter-spacing:.1em;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.5);line-height:1}
 .qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
 .qa .btn{height:46px}
 .st3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -782,7 +786,7 @@ function sheetCliente(id){const c=D.clients.find(x=>x.id===id);if(!c)return''
    ${c.notes?`<p class="h">${ic('edit',13)} ${esc(c.notes)}</p>`:''}
    <section><h4>Telas (${ks.length} de ${lim})<span class="sp"></span>${sem?`<span style="text-transform:none;letter-spacing:0">${tm(sem)} em 7 dias</span>`:''}</h4>
     <div class="list">${ks.map(k=>{const e=estado(k),a=agoraDe(k)
-      return `<div class="row click" onclick="abrir('tela','${k.code}')"><span class="dot ${e}"></span><div class="t"><b>${esc(k.label||'Tela sem nome')} <span class="code" style="color:var(--mut);font-size:12.5px">${k.code}</span></b><small>${e==='play'?'Assistindo: '+esc(k.watching):esc(a.t)}${k.active?'':' · desligada por você'}</small></div>${ic('chev',16)}</div>`}).join('')}
+      return `<div class="row click codrow" onclick="abrir('tela','${k.code}')"><span class="dot ${e}"></span><div class="t"><b>${esc(k.label||'Tela sem nome')}</b><small>${e==='play'?'Assistindo: '+esc(k.watching):esc(a.t)}${k.active?'':' · desligada por você'}</small></div><div class="codebox"><span class="codelbl">CÓDIGO</span><span class="codeval">${k.code}</span></div>${ic('chev',16)}</div>`}).join('')}
      ${ks.length<lim?`<button class="arow" onclick="novoCodigo('${id}')">${ic('plus',20)}<div><b>Adicionar tela</b><small>Gera um código novo para mais um aparelho (${ks.length} de ${lim} usados)</small></div>${ic('chev',16)}</button>`
       :`<p class="h">O plano ${esc(p?.name||'')} permite ${pl(lim,'tela','telas')}. Para mais, troque o plano em Editar.</p>`}</div></section>
    <section><h4>Pagamentos por Pix</h4>
