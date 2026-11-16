@@ -39,6 +39,7 @@ a{color:inherit}
 .nav button.on{color:#fff;background:linear-gradient(90deg,rgba(124,58,237,.32),rgba(192,38,211,.12));box-shadow:inset 3px 0 0 #c026d3}
 .nav button .cnt{margin-left:auto;font-size:11.5px;font-weight:800;background:rgba(255,255,255,.07);color:var(--tx2);padding:2px 8px;border-radius:999px}
 .nav button .cnt.live{background:rgba(74,222,128,.14);color:var(--ok)}
+.nav button .cnt.bad{background:var(--bad);color:#fff}
 .side .foot{margin-top:auto;display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--line2)}
 .side .foot small{color:var(--mut);font-size:11.5px;padding:0 6px}
 .main{margin-left:var(--side);min-height:100vh}
@@ -113,6 +114,30 @@ em.agora{color:var(--ok);font-style:normal;font-weight:800}
 .tag.warn{color:var(--warn);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
 .tag.bad{color:#fb7185;border-color:rgba(244,63,94,.35);background:rgba(244,63,94,.08)}
 .tags{display:flex;gap:6px;flex-wrap:wrap}
+.pr-hero{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
+.pr-hero.on{border-color:rgba(74,222,128,.4);background:linear-gradient(135deg,rgba(74,222,128,.10),var(--card))}
+.pr-hero h2{margin:0 0 4px;font-size:20px}.pr-hero p{margin:0;color:var(--tx2);font-size:14px}.pr-hero>div:nth-child(2){flex:1}
+.pr-big{font-size:42px;line-height:1}
+.pr-step{display:flex;gap:14px}.pr-c{flex:1;min-width:0}.pr-c h3{margin:2px 0 4px}
+.pr-n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:var(--grad);color:#fff}
+.pr-step.done .pr-n{background:var(--ok);color:#06210f}
+.pr-bar{height:12px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:12px}.pr-bar i{display:block;height:100%;background:var(--ok);border-radius:99px}
+.pr-pct{margin:6px 0 10px;font-size:14px}
+.pr-alerta{border-color:rgba(244,63,94,.5);background:linear-gradient(135deg,rgba(244,63,94,.10),var(--card))}.pr-alerta h3{margin:0 0 4px;color:#fb7185}
+.pr-quando{color:#fb7185!important;font-weight:700}
+.pr-grupos{display:flex;flex-direction:column;gap:14px;margin-top:12px}
+.pr-gh{display:flex;gap:10px;align-items:center;margin-bottom:8px}.pr-gh b{display:block;font-size:15px}.pr-gh small{color:var(--tx2);font-size:13px}
+.pr-gi{font-size:24px;width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:rgba(255,255,255,.06);flex:none}
+.pr-num{display:inline-block;min-width:22px;padding:1px 8px;border-radius:99px;background:rgba(255,255,255,.08);font-size:12px;text-align:center}
+.pr-ok .pr-gi,.pr-web .pr-gi,.pr-win .pr-gi{background:rgba(74,222,128,.12)}.pr-antigo .pr-gi{background:rgba(251,191,36,.14)}.pr-falso .pr-gi{background:rgba(244,63,94,.16)}
+.pr-antigo .pr-gh small{color:var(--warn)}.pr-falso .pr-gh small{color:#fb7185}
+.pr-sim{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}.pr-sim .tag{font-size:13px;padding:5px 10px}
+.pr-calma{margin-top:14px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04)}
+.pr-list{display:flex;flex-direction:column;gap:6px;font-size:14px}.pr-list small,.pr-nm small{color:var(--mut)}
+.pr-rows{display:flex;flex-direction:column;gap:8px}
+.pr-row{display:flex;align-items:center;gap:12px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card2)}
+.pr-nm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:14px}
+@media(max-width:600px){.pr-row{flex-direction:column;align-items:stretch}.pr-hero{flex-wrap:wrap}.pr-hero>div:nth-child(2){flex:1 1 calc(100% - 60px)}.pr-hero>.btn{width:100%}.pr-big{font-size:34px}}
 
 /* filtros */
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
@@ -354,7 +379,7 @@ const dt=d=>d?new Date(d).toLocaleDateString('pt-BR'):'—'
 const dth=d=>d?new Date(d).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—'
 const hm=d=>d?new Date(d).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):''
 function ago(d){if(!d)return 'nunca';const s=(Date.now()-new Date(d))/1000
- if(s<60)return 'agora';if(s<3600)return 'há '+Math.floor(s/60)+' min';if(s<86400)return 'há '+Math.floor(s/3600)+' h';return 'há '+Math.floor(s/86400)+' dias'}
+ if(s<60)return 'agora';if(s<3600)return 'há '+Math.floor(s/60)+' min';if(s<86400)return 'há '+Math.floor(s/3600)+' h';const n=Math.floor(s/86400);return 'há '+n+(n===1?' dia':' dias')}
 const days=d=>Math.ceil((new Date(d)-Date.now())/864e5)
 /** minutos -> "45 min" / "2h 05" */
 const tm=m=>{m=Math.round(m||0);if(m<60)return m+' min';const h=Math.floor(m/60),r=m%60;return h+'h'+(r?' '+String(r).padStart(2,'0'):'')}
@@ -393,6 +418,7 @@ const PAGES=[['geral','Visão geral','M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8
  ['clientes','Clientes','M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 2 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z'],
  ['aovivo','Agora','M8 5v14l11-7z'],
  ['pagamentos','Pagamentos','M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z'],
+ ['protecao','Proteção','M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3zm-1.4 14.6L7 13l1.4-1.4 2.2 2.2 5-5L17 10.2l-6.4 6.4z'],
  ['ajustes','Ajustes','M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.3 7.3 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.3 7.3 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1L11 21h4l.4-2.9c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5-2.2-1.6zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z']]
 let tab=(()=>{const h=location.hash.slice(1);return PAGES.some(p=>p[0]===h)?h:'geral'})()
 
@@ -403,7 +429,7 @@ async function carregar(manual){
   const [p,c,k,g,rm,st,py,nn]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
-   sb.from('codes').select('code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,created_at').order('created_at'),
+   sb.from('codes').select('code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,created_at,app_sig,app_plat,app_origin,copia_em').order('created_at'),
    tab==='ajustes'||!D.cfg?sb.from('app_config').select('*').eq('id',1).single():Promise.resolve({data:D.cfg}),
    sb.from('remotes').select('id,code,name,last_seen,approved_at').eq('status','ok').order('approved_at'),
    sb.rpc('admin_watch_stats',{p_days:30}),
@@ -420,12 +446,12 @@ const stOf=code=>D.st.codes?.[code]||{today:0,week:0,month:0,sessions:0,days:{},
 
 /* ---------- Navegação ---------- */
 function navHtml(){const on=D.codes.filter(online).length,watch=D.codes.filter(c=>online(c)&&c.watching).length
- const cnt={telas:`<span class="cnt${on?' live':''}">${on}/${D.codes.filter(c=>c.device_tag).length}</span>`,clientes:`<span class="cnt">${D.clients.length}</span>`,aovivo:watch?`<span class="cnt live">${watch}</span>`:'',pagamentos:pixMes().n?`<span class="cnt live">${pixMes().n}</span>`:''}
+ const cnt={telas:`<span class="cnt${on?' live':''}">${on}/${D.codes.filter(c=>c.device_tag).length}</span>`,clientes:`<span class="cnt">${D.clients.length}</span>`,aovivo:watch?`<span class="cnt live">${watch}</span>`:'',pagamentos:pixMes().n?`<span class="cnt live">${pixMes().n}</span>`:'',protecao:alertasCopia().length?`<span class="cnt bad">${alertasCopia().length}</span>`:''}
  $('nav').innerHTML=PAGES.map(([id,nm,ic])=>`<button data-t="${id}" class="${id===tab?'on':''}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="${ic}"/></svg><span>${nm}</span>${cnt[id]||''}</button>`).join('')
  $('updSide').textContent=loadedAt?'Atualizado '+hm(loadedAt)+' · sozinho a cada 20 s':''}
 $('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;ir(b.dataset.t)}
 function ir(t){tab=t;history.replaceState(null,'','#'+t);window.scrollTo(0,0);if(t==='ajustes')carregar();else render()}
-function render(){navHtml();({geral:rGeral,telas:rTelas,clientes:rClientes,aovivo:rAoVivo,pagamentos:rPagamentos,ajustes:rAjustes})[tab]()}
+function render(){navHtml();({geral:rGeral,telas:rTelas,clientes:rClientes,aovivo:rAoVivo,pagamentos:rPagamentos,protecao:rProtecao,ajustes:rAjustes})[tab]()}
 const head=(t,s,extra='')=>`<div class="pagehd"><div><h1>${t}</h1>${s?`<p>${s}</p>`:''}</div><div class="sp"></div>${extra}</div>`
 
 function status(cl){const d=days(cl.expires_at)
@@ -511,7 +537,7 @@ function cardTela(k){
   <div class="st3"><div><b>${tm(s.today)}</b><small>Hoje</small></div><div><b>${tm(s.week)}</b><small>7 dias</small></div><div><b>${tm(s.month)}</b><small>30 dias</small></div></div>
   ${spark(s.days)}
   ${s.recent?.length?`<div class="hist">${s.recent.slice(0,3).map(r=>`<div>${KIND[r.k]||'▶️'}<span>${esc(r.t)}</span><small>${dth(r.at)} · ${tm(r.m)}${r.on?' · <em class="agora">agora</em>':''}</small></div>`).join('')}</div>`:''}
-  <div class="meta">📺 ${k.device_tag?`<b>${esc(k.device_model||k.device_tag)}</b>${k.app_version?' · v'+esc(k.app_version):''}`:'Aguardando ativação'}${rem.length?'<br>📱 Controle: '+rem.map(r=>'<b>'+esc(r.name)+'</b>').join(', '):''}</div>
+  <div class="meta">📺 ${k.device_tag?`<b>${esc(k.device_model||k.device_tag)}</b>${k.app_version?' · v'+esc(k.app_version):''}${seloApp(k)}`:'Aguardando ativação'}${rem.length?'<br>📱 Controle: '+rem.map(r=>'<b>'+esc(r.name)+'</b>').join(', '):''}</div>
   <div class="acts">
    ${k.device_tag&&k.active?`<a class="btn sm pri" href="controle/?tv=${k.code}">📱 Controlar</a>`:''}
    <button class="btn sm" onclick="historico('${k.code}')">📊 Histórico</button>
@@ -633,7 +659,7 @@ function cardCodigo(k){
  const on=online(k),s=stOf(k.code)
  return `<div class="cd"><div class="cc"><span class="dot${on?(k.watching?' play':' on'):''}"></span><span class="code">${k.code}</span><span class="lb">${esc(k.label||'')}</span>
   ${k.active?'':'<span class="tag bad">Desligado</span>'}</div>
-  <div class="meta">${k.device_tag?`📺 <b>${esc(k.device_tag)}</b> · ${esc(k.device_model||'')}<br>Ativado ${dth(k.activated_at)} · visto ${ago(k.last_seen)}${k.app_version?' · v'+esc(k.app_version):''}`:'⏳ Aguardando ativação no aparelho'}</div>
+  <div class="meta">${k.device_tag?`📺 <b>${esc(k.device_tag)}</b> · ${esc(k.device_model||'')}<br>Ativado ${dth(k.activated_at)} · visto ${ago(k.last_seen)}${k.app_version?' · v'+esc(k.app_version):''}${seloApp(k)}`:'⏳ Aguardando ativação no aparelho'}</div>
   ${on&&k.watching?`<div class="now">${KIND[k.watching_kind]||'▶️'}<span>${esc(k.watching)}</span><small>desde ${hm(desde(k))}</small></div>`:''}
   ${k.device_tag?`<div class="chips"><span class="chip">Hoje ${tm(s.today)}</span><span class="chip">7 dias ${tm(s.week)}</span><span class="chip">30 dias ${tm(s.month)}</span></div>`:''}
   ${D.remotes.filter(r=>r.code===k.code).map(r=>`<div class="meta">📱 Controle: <b>${esc(r.name)}</b> · usado ${ago(r.last_seen||r.approved_at)} <button class="btn sm bad" style="height:24px;padding:0 8px;margin-left:4px" onclick="tirarCelular('${r.id}')">Tirar</button></div>`).join('')}
@@ -645,6 +671,72 @@ function cardCodigo(k){
    ${k.device_tag?`<button class="btn sm" onclick="liberar('${k.code}')">Trocar aparelho</button>`:''}
    <button class="btn sm ${k.active?'bad':'ok'}" onclick="ligarCodigo('${k.code}',${!k.active})">${k.active?'Desligar':'Ligar'}</button>
    <button class="btn sm bad" onclick="excluirCodigo('${k.code}')">Excluir</button></div></div>`}
+
+/* ---------- Proteção contra cópia: o app é o original? ---------- */
+// reconhece sozinho: Android pela assinatura do APK; site/iPad/iPhone e Windows pelo endereço de onde o app fala
+const ORIGEM={web:'https://munizflix.vercel.app',windows:'app://munizflix'}
+function appTipo(k){
+ if(!k.device_tag)return''
+ if(k.app_plat==='android')return k.app_sig&&D.cfg&&k.app_sig===D.cfg.sig_ok?'ok':'falso'
+ if(k.app_plat==='web'||k.app_plat==='windows'){if(k.app_origin!==ORIGEM[k.app_plat])return'falso';return k.app_plat==='web'?'web':'win'}
+ return'antigo'}
+const APPT={ok:['ok','✅ App oficial'],falso:['bad','⚠️ App copiado'],web:['ok','🌐 Site / iPad / iPhone'],win:['ok','🪟 App do Windows'],antigo:['warn','⏳ Precisa atualizar o app']}
+// cópias: aparelho ativo com app copiado + tentativas recusadas nos últimos 30 dias
+function alertasCopia(){const m=new Map()
+ for(const k of D.codes){if(k.device_tag&&k.active&&appTipo(k)==='falso')m.set(k.code,k)
+  else if(k.copia_em&&Date.now()-new Date(k.copia_em)<30*864e5)m.set(k.code,k)}
+ return[...m.values()]}
+function seloApp(k){const t=appTipo(k);if(!t)return''
+ const[c,l]=APPT[t];return `<br><span class="tag ${c}" title="Veja a aba Proteção">${l}</span>`}
+
+/* ---------- Aba Proteção: automática (o dono não marca nada) ---------- */
+const GRUPOS=[
+ ['ok','📺','App oficial na TV ou celular Android','Continua funcionando com a proteção ligada.'],
+ ['web','🌐','Site, iPad e iPhone','Reconhecido sozinho pelo endereço oficial. Continua funcionando.'],
+ ['win','🪟','App do Windows','Reconhecido sozinho. Continua funcionando.'],
+ ['antigo','⏳','Precisa atualizar o app','Com a proteção ligada, PARA de funcionar até atualizar.'],
+ ['falso','⚠️','App copiado (não é o seu)','Com a proteção ligada, é bloqueado.']]
+function rProtecao(){
+ const g=D.cfg||{},on=!!g.sig_enforce
+ const ativos=D.codes.filter(k=>k.active&&k.device_tag)
+ const de=t=>ativos.filter(k=>appTipo(k)===t)
+ const velhos=de('antigo'),total=ativos.length,novos=total-velhos.length,pct=total?Math.round(novos*100/total):100
+ const param=velhos.length+de('falso').length,seguem=total-param
+ const alertas=alertasCopia()
+ const nome=k=>`<b>${esc(clienteDe(k)?.name||'?')}</b>`
+ const det=k=>`<small>${esc(k.label||'Tela')} · ${k.code}${k.device_model?' · '+esc(k.device_model):''}${k.last_seen?' · visto '+ago(k.last_seen):''}</small>`
+ const linha=k=>`<div class="pr-row"><div class="pr-nm">${nome(k)}${det(k)}</div></div>`
+ $('page').innerHTML=head('Proteção','Impede que cópias do MunizFlix usem a sua lista de canais.')+`
+ <div class="pr-hero ${on?'on':''}"><div class="pr-big">${on?'🛡️':'⚪'}</div><div><h2>${on?'Seu app está protegido':'Proteção desligada'}</h2>
+   <p>${on?'Cópias do MunizFlix são recusadas sozinhas e não recebem a sua lista.':'Você não precisa marcar nada: o sistema reconhece sozinho onde cada cliente está usando.'}</p></div>
+   ${on?`<button class="btn bad" onclick="salvarProtecao(false)">Desligar</button>`:''}</div>
+
+ ${alertas.length?`<section class="box pr-alerta"><h3>🚨 Alguém usou um app copiado</h3>
+  <p class="h">Provavelmente baixou uma cópia do MunizFlix por aí e colocou um código seu. Veja para quem você deu o código. Se não reconhece, desligue o código.</p>
+  <div class="pr-rows">${alertas.map(k=>`<div class="pr-row"><div class="pr-nm">${nome(k)}${det(k)}<small class="pr-quando">${k.copia_em?'🚫 Bloqueado '+ago(k.copia_em):'⚠️ Está usando agora (a proteção está desligada)'}</small></div>
+   ${k.active?`<button class="btn sm bad" onclick="ligarCodigo('${k.code}',false)">Desligar código</button>`:'<span class="tag">Código desligado</span>'}</div>`).join('')}</div></section>`:''}
+
+ <section class="box"><h3>Onde seus clientes estão usando</h3>
+  <p class="h">O painel descobre sozinho. Não precisa investigar nem marcar nada.</p>
+  <div class="pr-grupos">${GRUPOS.map(([t,ic,tt,ex])=>{const l=de(t);if(!l.length)return''
+   return `<div class="pr-g pr-${t}"><div class="pr-gh"><span class="pr-gi">${ic}</span><div><b>${tt} <span class="pr-num">${l.length}</span></b><small>${ex}</small></div></div><div class="pr-rows">${l.map(linha).join('')}</div></div>`}).join('')||'<div class="empty">Nenhum aparelho ativado ainda.</div>'}</div>
+ </section>
+
+ <section class="box pr-step ${!velhos.length?'done':''}"><div class="pr-n">${!velhos.length?'✓':'1'}</div><div class="pr-c">
+  <h3>Esperar todo mundo atualizar o app</h3>
+  <p class="h">O app novo aparece sozinho na TV como "Nova versão disponível". Quem usa o site, iPad ou iPhone atualiza sozinho.</p>
+  <div class="pr-bar"><i style="width:${pct}%"></i></div><p class="pr-pct"><b>${novos} de ${total}</b> aparelhos prontos</p>
+  ${velhos.length?`<p class="h">Faltam ${velhos.length}: estão no grupo <b>⏳ Precisa atualizar</b> acima. Se demorar, peça para o cliente abrir o MunizFlix e tocar em <b>Atualizar</b>.</p>`:'<p class="msg ok">Todos prontos! 🎉</p>'}
+ </div></section>
+
+ <section class="box pr-step ${on?'done':''}"><div class="pr-n">${on?'✓':'2'}</div><div class="pr-c">
+  <h3>Ligar a proteção</h3>
+  ${on?'<p class="msg ok">Ligada. Pronto! 🛡️</p>':`
+   <div class="pr-sim"><span class="tag ok">✅ ${seguem} continua${seguem===1?'':'m'} funcionando</span>${param?`<span class="tag bad">⛔ ${param} para${param===1?'':'m'} de funcionar</span>`:''}</div>
+   <p class="h">${param?'O ideal é esperar o passo 1 terminar, assim ninguém fica sem assistir.':'Ninguém vai ficar sem assistir. Pode ligar.'}</p>
+   <button class="btn ${param?'':'pri'}" style="margin-top:8px" onclick="salvarProtecao(true)">🛡️ Ligar a proteção</button>`}
+  <p class="h pr-calma">😌 <b>Errou? Sem problema.</b> Toque em <b>Desligar</b> no topo desta tela. Em até 5 minutos tudo volta ao normal nos aparelhos (ou na hora, se o cliente tocar em "Tentar de novo").</p>
+ </div></section>`}
 
 /* ---------- Ajustes ---------- */
 function rAjustes(){
@@ -761,6 +853,12 @@ async function ligar(id,on){const c=D.clients.find(x=>x.id===id)
  if(!on&&!confirm(`Desligar "${c.name}"? Todos os aparelhos dele param de funcionar.`))return
  const r=await sb.from('clients').update({active:on}).eq('id',id);if(r.error)return erro(r.error);toast(on?'Ligado':'Desligado');carregar()}
 
+async function salvarProtecao(on){
+ const param=D.codes.filter(k=>k.active&&k.device_tag&&['antigo','falso'].includes(appTipo(k)))
+ if(on&&param.length&&!confirm(`Estes ${param.length} aparelho(s) vão PARAR de funcionar:\n\n${param.map(k=>'• '+(clienteDe(k)?.name||'?')+' ('+(k.label||k.code)+') — '+(appTipo(k)==='falso'?'app copiado':'precisa atualizar o app')).join('\n')}\n\nLigar mesmo assim?`))return
+ if(!on&&!confirm('Desligar a proteção? Cópias do MunizFlix voltam a conseguir usar a sua lista.'))return
+ const r=await sb.from('app_config').update({sig_enforce:on,updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error);toast(on?'🛡️ Proteção ligada':'Proteção desligada');D.cfg=null;carregar()}
 async function ligarCodigo(code,on){
  if(!on&&!confirm(`Desligar o código ${code}? Esse aparelho para de funcionar.`))return
  const r=await sb.from('codes').update({active:on}).eq('code',code);if(r.error)return erro(r.error);toast(on?'Código ligado':'Código desligado');carregar()}
