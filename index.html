@@ -211,11 +211,7 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .shb{flex:1;overflow-y:auto;padding:16px 18px 40px;display:flex;flex-direction:column;gap:18px}
 .shb section h4{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:9px;display:flex;align-items:center;gap:8px}
 .lk{color:#c4b5fd;font-weight:700;cursor:pointer}.lk:hover{text-decoration:underline}
-.codeb{display:inline-flex;align-items:center;gap:8px;font-family:ui-monospace,Consolas,monospace;font-weight:800;font-size:22px;letter-spacing:.06em;color:#fff;padding:8px 16px;border-radius:12px;background:var(--grad);box-shadow:0 6px 18px -6px rgba(192,38,211,.7);cursor:pointer;transition:filter .15s,transform .12s}.codeb:hover{filter:brightness(1.15)}.codeb:active{transform:scale(.97)}.codeb svg{width:18px;height:18px;opacity:.85}
-.codetag{flex:none;margin-left:auto;font-family:ui-monospace,Consolas,monospace;font-weight:900;font-size:26px;letter-spacing:.08em;color:#fff;padding:10px 20px;border-radius:14px;background:linear-gradient(135deg,#a855f7,#ec4899);box-shadow:0 0 20px rgba(168,85,247,.5),0 8px 24px -6px rgba(236,72,153,.6);text-shadow:0 2px 8px rgba(0,0,0,.4);white-space:nowrap;line-height:1}
-.codebox{flex:none;margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 18px;border-radius:14px;background:linear-gradient(135deg,#a855f7,#ec4899);box-shadow:0 0 24px rgba(168,85,247,.55),0 8px 28px -6px rgba(236,72,153,.65);min-width:110px}
-.codelbl{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7)}
-.codeval{font-family:ui-monospace,Consolas,monospace;font-weight:900;font-size:28px;letter-spacing:.1em;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.5);line-height:1}
+.codeb{display:inline-flex;align-items:center;gap:5px;font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--tx);padding:2px 8px;border-radius:7px;background:rgba(255,255,255,.07)}.codeb:hover{background:rgba(168,85,247,.25)}
 .qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
 .qa .btn{height:46px}
 .st3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -313,7 +309,20 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .pc.add{align-items:center;justify-content:center;border-style:dashed;color:var(--mut);font-weight:700;min-height:150px;gap:6px}.pc.add:hover{color:#fff;border-color:var(--acc)}
 .lockpv{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px;border-radius:14px;background:radial-gradient(circle at 50% 0,#2a1a4f,#0b0914);border:1px solid var(--line2);margin-bottom:14px;text-align:center}
 .lockpv img{width:42px;height:42px;border-radius:12px}.lockpv b{font-size:16px}.lockpv span{color:var(--tx2);font-size:13px}
-.srv2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.srv2 h4{font-size:14px;font-weight:800;margin-bottom:10px}.srv2 h4 small{color:var(--mut);font-weight:600;font-size:12px}
+.svs{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
+.sv{position:relative;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid var(--line2);display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.sv::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--line2)}
+.sv.ok::before{background:var(--ok)}.sv.warn::before{background:var(--warn)}.sv.bad::before{background:var(--bad)}
+.sv.warn{border-color:rgba(251,191,36,.35)}.sv.bad{border-color:rgba(251,113,133,.4);background:linear-gradient(135deg,rgba(251,113,133,.07),transparent)}
+.svh{display:flex;align-items:center;gap:11px}.svh .tag{flex:none;font-size:13px;padding:5px 12px}
+.svi{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(168,85,247,.16);color:#d8b4fe}
+.svt{flex:1;min-width:0}.svt small{display:block;color:var(--mut);font-size:12.5px;font-weight:600;margin-top:2px}
+.svf{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.svb{display:flex;gap:8px;flex-wrap:wrap}.svb .btn{flex:1;justify-content:center;white-space:nowrap}
+.svn{font-size:12px;margin-top:-4px}
+.svd{border-top:1px solid var(--line2);padding-top:10px}.svd summary{cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;color:var(--tx2);list-style:none;padding:4px 0}
+.svd summary::-webkit-details-marker{display:none}.svd summary::after{content:"▾";margin-left:auto;color:var(--mut)}.svd[open] summary::after{content:"▴"}.svd[open] summary{margin-bottom:10px}
+.sv.add{align-items:center;justify-content:center;border-style:dashed;color:var(--mut);font-weight:700;min-height:120px;gap:6px}.sv.add::before{display:none}.sv.add:hover{color:#fff;border-color:var(--acc)}
 .pw{position:relative;display:block}.pw .eye{position:absolute;right:6px;top:6px;width:32px;height:32px;display:grid;place-items:center;color:var(--mut);border-radius:8px}.pw .eye:hover{color:#fff;background:rgba(255,255,255,.08)}
 .lrow{display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line2)}
 .lrow .k{flex:none;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:rgba(168,85,247,.14);color:#d8b4fe}
@@ -340,7 +349,7 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
  .tabbar button{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 2px;border-radius:12px;font-size:10.5px;font-weight:700;color:var(--mut)}
  .tabbar button.on{color:#fff;background:rgba(168,85,247,.2)}
  .tabbar .bdg{position:absolute;top:3px;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 4px;border-radius:99px;font-size:10px;font-weight:800;display:grid;place-items:center;background:var(--ok);color:#052e1b}.tabbar .bdg.bad{background:#e11d48;color:#fff}
- .cols,.cols.c16,.avg,.srv2{grid-template-columns:minmax(0,1fr)}
+ .cols,.cols.c16,.avg,.svs{grid-template-columns:minmax(0,1fr)}
  .row.rw{flex-wrap:wrap}.row.rw .acts{width:100%}.row.rw .acts .btn{flex:1}
  .pagehd h1,.hello h1{font-size:23px}
  .fil{flex-wrap:nowrap;overflow-x:auto;margin:0 -14px 14px;padding:0 14px 2px;scrollbar-width:none}.fil::-webkit-scrollbar{display:none}.fil button{flex:none;white-space:nowrap}
@@ -648,6 +657,12 @@ function pendencias(){const l=[],nomes=(a,n=3)=>a.slice(0,n).map(c=>c.name).join
  if(cop.length)l.push(['bad','shield',pl(cop.length,'aparelho com app copiado','aparelhos com app copiado'),'Alguém usou uma cópia do MunizFlix com um código seu.',"ir('protecao')"])
  if(venc.length)l.push(['bad','alert',pl(venc.length,'cliente vencido','clientes vencidos'),nomes(venc),"ir('financeiro')"])
  if(breve.length)l.push(['warn','cal',pl(breve.length,'cliente vence','clientes vencem')+' em até 7 dias',nomes(breve),"ir('financeiro')"])
+ // servidores de IPTV vencidos ou vencendo em até 5 dias (nome e vencimento cadastrados em Ajustes → Servidores)
+ const g=D.cfg||{},srv=[{...(g.server_info||{}),n:1},...(g.extra||[]).map((x,k)=>({...x,n:k+2}))].filter(x=>x.exp)
+  .map(x=>({nm:x.name||'Servidor '+x.n,d:diasSrv(x.exp)})).filter(x=>x.d<=5)
+ if(srv.length){const v=srv.some(x=>x.d<0)
+  l.push([v?'bad':'warn','signal',srv.length===1?(srv[0].d<0?'Servidor vencido: ':'Servidor vence ')+srv[0].nm+(srv[0].d>0?' em '+pl(srv[0].d,'dia','dias'):srv[0].d===0?' hoje':''):pl(srv.length,'servidor','servidores')+' vencendo',
+   srv.length===1?'Renovou? Toque aqui e use Renovei +30 dias.':srv.map(x=>x.nm+(x.d<0?' (vencido)':x.d===0?' (hoje)':' ('+x.d+'d)')).join(', '),"ir('ajustes',{aj:'servidor'})"])}
  if(novos.length)l.push(['info','key',pl(novos.length,'código ainda não usado','códigos ainda não usados'),'Criado há mais de um dia e ninguém ativou.',"ir('aovivo',{fTela:'novo'})"])
  return l}
 function rInicio(){
@@ -767,7 +782,7 @@ function sheetCliente(id){const c=D.clients.find(x=>x.id===id);if(!c)return''
    ${c.notes?`<p class="h">${ic('edit',13)} ${esc(c.notes)}</p>`:''}
    <section><h4>Telas (${ks.length} de ${lim})<span class="sp"></span>${sem?`<span style="text-transform:none;letter-spacing:0">${tm(sem)} em 7 dias</span>`:''}</h4>
     <div class="list">${ks.map(k=>{const e=estado(k),a=agoraDe(k)
-      return `<div class="row click codrow" onclick="abrir('tela','${k.code}')"><span class="dot ${e}"></span><div class="t"><b>${esc(k.label||'Tela sem nome')}</b><small>${e==='play'?'Assistindo: '+esc(k.watching):esc(a.t)}${k.active?'':' · desligada por você'}</small></div><div class="codebox"><span class="codelbl">CÓDIGO</span><span class="codeval">${k.code}</span></div>${ic('chev',16)}</div>`}).join('')}
+      return `<div class="row click" onclick="abrir('tela','${k.code}')"><span class="dot ${e}"></span><div class="t"><b>${esc(k.label||'Tela sem nome')} <span class="code" style="color:var(--mut);font-size:12.5px">${k.code}</span></b><small>${e==='play'?'Assistindo: '+esc(k.watching):esc(a.t)}${k.active?'':' · desligada por você'}</small></div>${ic('chev',16)}</div>`}).join('')}
      ${ks.length<lim?`<button class="arow" onclick="novoCodigo('${id}')">${ic('plus',20)}<div><b>Adicionar tela</b><small>Gera um código novo para mais um aparelho (${ks.length} de ${lim} usados)</small></div>${ic('chev',16)}</button>`
       :`<p class="h">O plano ${esc(p?.name||'')} permite ${pl(lim,'tela','telas')}. Para mais, troque o plano em Editar.</p>`}</div></section>
    <section><h4>Pagamentos por Pix</h4>
@@ -928,10 +943,10 @@ function rProtecao(){
 
 /* ---------- Ajustes (uma seção por vez) ---------- */
 let aj='planos'
-const AJ=[['planos','Planos','card'],['app','Pagamento no app','wallet'],['servidor','Servidor de IPTV','signal'],['bloqueio','Tela de bloqueio','lock'],['links','Links','link'],['conta','Conta','user']]
+const AJ=[['planos','Planos','card'],['app','Pagamento no app','wallet'],['servidor','Servidores','signal'],['bloqueio','Tela de bloqueio','lock'],['links','Links','link'],['conta','Conta','user']]
 function rAjustes(){
  const g=D.cfg||{servers:[],username:'',password:'',extra:[],contact:''}
- $('page').innerHTML=head('Ajustes','Planos, pagamento, servidor de IPTV, links de instalação e sua conta.')+`
+ $('page').innerHTML=head('Ajustes','Planos, pagamento, servidores de IPTV, links de instalação e sua conta.')+`
  <div class="ajn">${AJ.map(([id,t,i])=>`<button class="${aj===id?'on':''}" onclick="aj='${id}';render()" title="${t}">${ic(i,17)}<span>${t}</span></button>`).join('')}</div>
  ${({planos:ajPlanos,app:ajApp,servidor:ajServidor,bloqueio:ajBloqueio,links:ajLinks,conta:ajConta})[aj](g)}`}
 const bxh=(i,t,s)=>`<div class="bxh"><span class="bxi">${ic(i,20)}</span><div><h3>${t}</h3><p class="h">${s}</p></div></div>`
@@ -957,20 +972,84 @@ function ajApp(g){
   <label class="f" style="margin-top:12px">Promoção: texto<input class="field" id="prX" maxlength="140" value="${esc(pr.text||'')}" placeholder="Ex.: Só até domingo. Pague pelo Pix aqui no app."></label>
   <label class="f" style="margin-top:12px;max-width:300px">Avisar no app quando faltar (dias)<input class="field" id="rmD" type="number" min="0" max="30" value="${g.remind_days??5}"></label>
   <div class="bxf"><span class="h">O aviso de vencimento aparece sozinho 1 vez por dia na TV, com o botão Renovar agora.</span><button class="btn pri" onclick="salvarPlanosApp(${ps.length})">Salvar</button></div></section>`}
-function ajServidor(g){const x=(g.extra||[])[0]||{}
+/* Servidores de IPTV: um cartão por assinatura (nome, vencimento, custo, endereços, usuário e senha).
+ * Servidor 1 = servers/username/password + server_info{name,exp,cost}; os outros = itens de extra {url,urls,user,pass,name,exp,cost}.
+ * SV é a cópia que está sendo editada na tela (k = posição em extra no banco; -1 = ainda não salvo). */
+let SV=null,svAt=null
+const PONTES=['https://munizflix-ponte.munizflix.workers.dev','https://munizflix.vercel.app/api/ponte']
+function svDe(g){const si=g.server_info||{}
+ return[{main:true,k:-1,txt:(g.servers||[]).join('\n'),user:g.username||'',pass:g.password||'',name:si.name||'',exp:si.exp||'',cost:si.cost??''},
+  ...(g.extra||[]).map((x,k)=>({k,txt:[x.url,...(x.urls||[])].filter(Boolean).join('\n'),user:x.user||'',pass:x.pass||'',name:x.name||'',exp:x.exp||'',cost:x.cost??''}))]}
+const dLoc=s=>new Date(s+'T00:00:00')
+const isoD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')
+const dBR=s=>s?dLoc(s).toLocaleDateString('pt-BR'):'—'
+/** dias até o vencimento (data sem hora, como na loja: hoje 17/11 e vence 16/12 = 29 dias) */
+const diasSrv=s=>{if(!s)return null;const h=new Date();h.setHours(0,0,0,0);return Math.round((dLoc(s)-h)/864e5)}
+function svSelo(exp){const d=diasSrv(exp)
+ if(d===null)return['','sem vencimento']
+ if(d<0)return['bad','vencido há '+pl(-d,'dia','dias')]
+ if(d===0)return['bad','vence hoje']
+ return[d<=5?'warn':'ok',pl(d,'dia','dias')]}
+function ajServidor(g){
+ if(!SV||svAt!==g.updated_at){SV=svDe(g);svAt=g.updated_at}
  const olho=id=>`<button class="eye" type="button" onclick="const i=$('${id}');i.type=i.type==='password'?'text':'password'" aria-label="Mostrar senha">${ic('eye',17)}</button>`
- return `<section class="box">${bxh('signal','Servidor de IPTV','As telas liberadas recebem estes dados ao abrir o app. Mudou de lista? Troque aqui e todas passam a usar a nova, sem instalar nada.')}
-  <div class="srv2"><div><h4>Servidor 1 (principal)</h4>
-    <label class="f">Endereço(s), um por linha<textarea class="field" id="cfSrv" rows="3">${esc((g.servers||[]).join('\n'))}</textarea></label>
+ const total=SV.reduce((s,x)=>s+(Number(x.cost)||0),0)
+ return `<section class="box">${bxh('signal','Servidores de IPTV','As telas recebem estes dados ao abrir o app. O conteúdo de todos os servidores é somado (sem repetir títulos). Renovou um servidor? Toque em <b>Renovei +30 dias</b> no cartão dele.')}
+  <div class="svs">${SV.map((x,i)=>{const[c,t]=svSelo(x.exp),novo=x.k<0&&!x.main
+   return `<div class="sv ${c}">
+   <div class="svh"><span class="svi">${ic('signal',20)}</span><div class="svt"><input class="pnm" value="${esc(x.name)}" placeholder="${x.main?'Nome (ex.: servidor principal)':'Nome (ex.: AURA TV+)'}" maxlength="40" oninput="SV[${i}].name=this.value" aria-label="Nome do servidor ${i+1}"><small>Servidor ${i+1} · ${x.main?'principal':'soma ao catálogo'}</small></div><span class="tag ${c}">${t}</span></div>
+   <div class="svf"><label class="f">Vencimento<input class="field" type="date" value="${esc(x.exp)}" onchange="SV[${i}].exp=this.value;render()"></label>
+    <label class="f">Por renovação<span class="money"><i>R$</i><input class="field" type="number" min="0" step="0.01" value="${esc(x.cost)}" placeholder="0,00" oninput="SV[${i}].cost=this.value"></span></label></div>
+   <div class="svb"><button class="btn ok sm" onclick="renovei(${i})">${ic('refresh',15)}Renovei +30 dias</button><button class="btn sm" onclick="conferirSrv(${i})" id="svc${i}">${ic('search',15)}Conferir no servidor</button></div>
+   <p class="h svn">A nova validade conta a partir do vencimento atual. Vencido volta a valer a partir de hoje.</p>
+   <details class="svd"${novo?' open':''}><summary>${ic('key',15)}Endereços, usuário e senha</summary>
+    <label class="f">Endereço(s), um por linha<textarea class="field" rows="3" placeholder="http://..." oninput="SV[${i}].txt=this.value">${esc(x.txt)}</textarea></label>
     <p class="h" style="margin-top:6px">Com mais de um endereço, o app tenta o próximo sozinho quando o primeiro não responde.</p>
-    <div class="grid2" style="margin-top:10px"><label class="f">Usuário<input class="field" id="cfUser" value="${esc(g.username)}"></label>
-     <label class="f">Senha<span class="pw"><input class="field" id="cfPass" type="password" value="${esc(g.password)}">${olho('cfPass')}</span></label></div></div>
-   <div><h4>Servidor 2 <small>opcional · o conteúdo é somado ao do servidor 1</small></h4>
-    <label class="f">Endereço<input class="field" id="cfXu" value="${esc(x.url||'')}" placeholder="http://..."></label>
-    <div class="grid2" style="margin-top:10px"><label class="f">Usuário<input class="field" id="cfXl" value="${esc(x.user||'')}"></label>
-     <label class="f">Senha<span class="pw"><input class="field" id="cfXp" type="password" value="${esc(x.pass||'')}">${olho('cfXp')}</span></label></div></div></div>
-  <div class="bxf"><span class="h">${g.updated_at?'Última alteração: '+dth(g.updated_at):''}</span><button class="btn pri" onclick="salvarServidor()">Salvar servidor</button></div>
+    <div class="grid2" style="margin-top:10px"><label class="f">Usuário<input class="field" value="${esc(x.user)}" oninput="SV[${i}].user=this.value" autocomplete="off"></label>
+     <label class="f">Senha<span class="pw"><input class="field" id="svp${i}" type="password" value="${esc(x.pass)}" oninput="SV[${i}].pass=this.value" autocomplete="new-password">${olho('svp'+i)}</span></label></div>
+    ${x.main?'':`<button class="btn bad sm" style="margin-top:12px" onclick="tirarSrv(${i})">${ic('trash',15)}Tirar este servidor</button>`}</details></div>`}).join('')}
+   <button class="sv add" onclick="SV.push({k:-1,txt:'',user:'',pass:'',name:'',exp:'',cost:''});render()">${ic('plus',22)}<span>Adicionar servidor</span></button></div>
+  <div class="bxf"><span class="h">${total?`Custo: <b>${brl(total)}</b> a cada renovação (${pl(SV.length,'servidor','servidores')})`:''}${g.updated_at?(total?' · ':'')+'Última alteração: '+dth(g.updated_at):''}</span><button class="btn pri" onclick="salvarServidor()">Salvar servidores</button></div>
   <p class="note">Para saber se cada servidor está respondendo, abra o app e veja em Perfil → Servidores (bolinha verde, amarela ou vermelha).</p></section>`}
+async function tirarSrv(i){const x=SV[i]
+ if(!await confirmar({t:'Tirar o servidor '+(i+1)+'?',m:`${x.name?x.name+': o':'O'} conteúdo dele sai do app de todos os clientes depois que você tocar em Salvar servidores.`,ok:'Tirar',perigo:true,icone:'trash'}))return
+ SV.splice(i,1);render()}
+/** Renovou a assinatura na loja: +30 dias a partir do vencimento atual (ou de hoje, se já venceu). Salva só o vencimento. */
+async function renovei(i){const x=SV[i]
+ if(!x.main&&x.k<0)return toast('Salve o servidor novo primeiro (Salvar servidores)',true)
+ const h=new Date();h.setHours(0,0,0,0)
+ const base=x.exp&&dLoc(x.exp)>=h?dLoc(x.exp):h,nv=new Date(base);nv.setDate(nv.getDate()+30)
+ const nome=x.name||'Servidor '+(i+1)
+ if(!await confirmar({t:'Renovou '+nome+'?',m:`O vencimento passa de ${dBR(x.exp)} para ${nv.toLocaleDateString('pt-BR')}.`,ok:'Sim, renovei',icone:'refresh'}))return
+ salvarVenc(i,isoD(nv),'Renovado até '+nv.toLocaleDateString('pt-BR'))}
+async function salvarVenc(i,exp,msg){const x=SV[i],g=D.cfg,up={updated_at:new Date().toISOString()}
+ if(x.main)up.server_info={...(g.server_info||{}),exp}
+ else{const ex=(g.extra||[]).map(e=>({...e}));if(!ex[x.k])return toast('Salve os servidores primeiro',true);ex[x.k].exp=exp;up.extra=ex}
+ const r=await sb.from('app_config').update(up).eq('id',1)
+ if(r.error)return erro(r.error)
+ Object.assign(g,up);svAt=g.updated_at;x.exp=exp;toast(msg);render()}
+/** Pergunta ao próprio servidor (pela ponte) até quando a assinatura vale. Só funciona com servidor já salvo. */
+async function conferirSrv(i){const x=SV[i],urls=x.txt.split('\n').map(s=>s.trim().replace(/\/+$/,'')).filter(Boolean),b=$('svc'+i)
+ if(!urls.length||!x.user||!x.pass)return toast('Preencha endereço, usuário e senha',true)
+ b.disabled=true;b.lastChild.textContent='Conferindo...'
+ let info=null
+ achar:for(const u of urls)for(const p of PONTES){
+  try{const ac=new AbortController(),t=setTimeout(()=>ac.abort(),15000)
+   const r=await fetch(p+'/x?u='+encodeURIComponent(u+'/player_api.php?username='+encodeURIComponent(x.user)+'&password='+encodeURIComponent(x.pass)),{signal:ac.signal})
+   clearTimeout(t)
+   if(r.status===403){info={proibido:true};continue achar}
+   if(!r.ok)continue
+   const j=await r.json();if(j?.user_info){info=j.user_info;break achar}}catch{/* tenta a próxima */}}
+ b.disabled=false;b.lastChild.textContent='Conferir no servidor'
+ if(!info)return toast('O servidor não respondeu. Tente de novo daqui a pouco.',true)
+ if(info.proibido)return toast('Salve o servidor primeiro e espere uns 10 minutos para conferir',true)
+ if(String(info.auth)!=='1')return toast('O servidor recusou o usuário e a senha',true)
+ if(!info.exp_date)return toast('Servidor ativo, mas ele não informa o vencimento ('+(info.status||'sem status')+')')
+ const d=new Date(Number(info.exp_date)*1e3),exp=isoD(d),tel=info.max_connections?` · ${pl(Number(info.max_connections),'tela','telas')} ao mesmo tempo`:''
+ if(exp===x.exp)return toast(`Confere: o servidor vale até ${d.toLocaleDateString('pt-BR')}${tel}`)
+ if(!await confirmar({t:'O servidor diz outra data',m:`Segundo o servidor, a assinatura vale até ${d.toLocaleDateString('pt-BR')} (aqui está ${dBR(x.exp)})${tel}. Usar a data do servidor?`,ok:'Usar a data do servidor',icone:'cal'}))return
+ if(!x.main&&x.k<0){x.exp=exp;return render()}
+ salvarVenc(i,exp,'Vencimento atualizado')}
 function ajBloqueio(g){
  return `<section class="box" style="max-width:620px">${bxh('lock','Tela de bloqueio','Aparece na TV quando o acesso está desligado ou vencido. Deixe vazio para não mostrar contato.')}
   <div class="lockpv"><img src="mark.png" alt=""><b>Acesso vencido</b><span id="pvC">${esc(g.contact||'Fale com o administrador')}</span></div>
@@ -1004,15 +1083,21 @@ async function salvarPlano(id){
 async function novoPlano(){const r=await sb.from('plans').insert({name:'Novo plano',screens:1,price:0});if(r.error)return erro(r.error);toast('Plano criado: ajuste o nome e o preço');carregar()}
 async function salvarContato(){const r=await sb.from('app_config').update({contact:$('cfContato').value.trim(),updated_at:new Date().toISOString()}).eq('id',1);if(r.error)return erro(r.error);toast('Contato salvo');carregar()}
 async function salvarServidor(){
- const servers=$('cfSrv').value.split('\n').map(s=>s.trim().replace(/\/+$/,'')).filter(Boolean)
- if(!servers.length||!servers.every(s=>/^https?:\/\/\S+$/.test(s)))return toast('Endereço inválido (use http://...)',true)
- const user=$('cfUser').value.trim(),pass=$('cfPass').value
- if(!user||!pass)return toast('Informe usuário e senha',true)
- const xu=$('cfXu').value.trim().replace(/\/+$/,''),xl=$('cfXl').value.trim(),xp=$('cfXp').value,extra=xu?[{url:xu,user:xl,pass:xp}]:[]
- if(xu&&!/^https?:\/\/\S+$/.test(xu))return toast('Endereço do servidor 2 inválido (use http://...)',true)
- if(!await confirmar({t:'Salvar o servidor?',m:'Todos os aparelhos passam a usar estes dados na próxima vez que abrirem o app. Se algo estiver errado, ninguém consegue assistir.',ok:'Salvar servidor',icone:'signal'}))return
- const r=await sb.from('app_config').update({servers,username:user,password:pass,extra,updated_at:new Date().toISOString()}).eq('id',1)
- if(r.error)return erro(r.error);toast('Servidor salvo');carregar()}
+ const ls=[]
+ for(let i=0;i<SV.length;i++){const x=SV[i],n='servidor '+(i+1)+(x.name?' ('+x.name+')':'')
+  const urls=x.txt.split('\n').map(s=>s.trim().replace(/\/+$/,'')).filter(Boolean)
+  if(!x.main&&!urls.length&&!x.user&&!x.pass)continue // cartão novo deixado em branco
+  if(!urls.length||!urls.every(s=>/^https?:\/\/\S+$/.test(s)))return toast('Endereço inválido no '+n+' (use http://...)',true)
+  if(!x.user.trim()||!x.pass)return toast('Informe usuário e senha do '+n,true)
+  const c=x.cost===''||x.cost==null?undefined:Math.max(0,Number(x.cost)||0)
+  ls.push({main:!!x.main,urls,user:x.user.trim(),pass:x.pass,name:x.name.trim()||undefined,exp:x.exp||undefined,cost:c})}
+ const[m,...ex]=ls
+ const extra=ex.map(x=>{const o={url:x.urls[0],user:x.user,pass:x.pass};if(x.urls.length>1)o.urls=x.urls.slice(1)
+  if(x.name)o.name=x.name;if(x.exp)o.exp=x.exp;if(x.cost!==undefined)o.cost=x.cost;return o})
+ const server_info={};if(m.name)server_info.name=m.name;if(m.exp)server_info.exp=m.exp;if(m.cost!==undefined)server_info.cost=m.cost
+ if(!await confirmar({t:'Salvar '+pl(ls.length,'servidor','servidores')+'?',m:'Todos os aparelhos passam a usar estes dados na próxima vez que abrirem o app. Se algo estiver errado, ninguém consegue assistir.',ok:'Salvar servidores',icone:'signal'}))return
+ const r=await sb.from('app_config').update({servers:m.urls,username:m.user,password:m.pass,extra,server_info,updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error);SV=null;toast('Servidores salvos');carregar()}
 
 /* ---------- Busca geral (Ctrl+K) ---------- */
 let palL=[],palS=0
