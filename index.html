@@ -334,6 +334,38 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .sw:focus-visible{outline:2px solid var(--ok);outline-offset:3px;border-radius:8px}
 .svsw{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.svsw small{color:var(--mut);font-size:12px}
 .svoff{opacity:.62;border-left-color:var(--line2)!important}.svoff .svh .pnm{text-decoration:line-through}
+.tag.test{color:#fbbf24;border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.1)}
+.venc.test{border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.07)}.venc.test.bad{border-color:rgba(248,113,113,.45);background:rgba(248,113,113,.07)}
+.venc .vbtns{display:flex;gap:8px;flex-wrap:wrap}
+.ck{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px;color:var(--tx2);cursor:pointer}.ck input{width:18px;height:18px;accent-color:var(--ok)}
+@media(max-width:560px){#btnTeste span{display:none}}
+.tag.fish{color:#5eead4;border-color:rgba(45,212,191,.4);background:rgba(45,212,191,.1)}
+.venc.fish{border-color:rgba(45,212,191,.45);background:linear-gradient(135deg,rgba(14,165,233,.14),rgba(16,185,129,.12))}.venc.fish b{color:#5eead4}
+.fishrow{display:flex;align-items:center;gap:12px;border:1px solid var(--line2);border-radius:14px;padding:10px 12px;margin:12px 0}
+.fishrow .fishic{font-size:26px;line-height:1}.fishrow div{flex:1;display:flex;flex-direction:column;gap:2px}.fishrow small{color:var(--mut);font-size:12.5px}
+.avmod{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.chipb.on{border-color:var(--ok);color:var(--tx);background:rgba(52,211,153,.12)}
+.avseg{display:flex;flex-wrap:wrap;width:100%;margin-top:6px}.avseg button{display:inline-flex;align-items:center;gap:6px;flex:1;justify-content:center;min-width:120px}
+.avh .t{min-width:0}.avh .avb{display:block;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.ppg{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}.ppcol{display:flex;flex-direction:column;gap:16px;min-width:0}.ppcol .box{margin:0}
+.ppside{position:sticky;top:14px;border:1px solid var(--line2);border-radius:18px;padding:14px;background:rgba(255,255,255,.02)}
+.pc.sel{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok) inset}.pc{cursor:pointer}
+.pc .pcf{grid-template-columns:auto minmax(0,1fr)}.stp{display:flex;align-items:center;border:1px solid var(--line2);border-radius:12px;overflow:hidden;margin-top:6px;width:max-content}
+.stp button{width:38px;height:38px;border:0;background:rgba(255,255,255,.05);color:var(--tx);font-size:20px;cursor:pointer;font-family:inherit}.stp button:disabled{opacity:.35;cursor:default}
+.stp button:focus-visible{outline:2px solid var(--ok);outline-offset:-2px}.stp b{min-width:40px;text-align:center;font-size:16px}
+.pers2{display:flex;flex-direction:column;gap:10px}.per2{display:grid;grid-template-columns:130px minmax(0,1fr) 40px;grid-template-areas:'m d x' 't t e2' 'e e e';gap:10px 14px;align-items:end;border:1px solid var(--line2);border-radius:14px;padding:10px 12px}
+.per2>.f:first-child{grid-area:m}.per2 .pslide{grid-area:d}.per2>label.f:not(.pslide){grid-area:t}.per2 .pex{grid-area:e;white-space:normal;padding:0;color:var(--ok)}.per2>button,.per2>span.h{grid-area:x;align-self:start}
+.pslide input{width:100%;margin-top:10px;accent-color:var(--ok)}.pslide b{color:var(--tx)}.pex{font-size:13px;font-weight:700;color:var(--tx);padding-bottom:10px;white-space:nowrap}
+.ppbar{position:sticky;bottom:0;z-index:2;background:var(--bg,#0b0b12);border:1px solid var(--line2);border-radius:16px;padding:12px 14px;margin:0;gap:10px}
+#ppSave.pulse{box-shadow:0 0 0 3px rgba(52,211,153,.35)}
+.ppapp{border-radius:18px;padding:16px;background:linear-gradient(160deg,#151127,#0c0b14);border:1px solid var(--line2)}.ppapp>small{color:var(--mut)}.ppapp h4{margin:2px 0 10px;font-size:19px}
+.ppl{display:flex;gap:10px;align-items:center;border:1px solid var(--line2);border-radius:12px;padding:8px 10px;margin-bottom:10px}.ppl div{display:flex;flex-direction:column}.ppl span{font-size:12px;color:var(--tx2)}
+.ppro{display:flex;gap:10px;align-items:center;border-radius:12px;padding:9px 11px;margin-bottom:10px;background:linear-gradient(135deg,rgba(139,92,246,.3),rgba(192,38,211,.24));border:1px solid rgba(217,70,239,.45)}.ppro div{display:flex;flex-direction:column}.ppro span{font-size:12px;color:var(--tx2)}.ppro small{font-size:11px;color:#fbbf24;font-weight:700}
+.pps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ppc{position:relative;display:flex;flex-direction:column;gap:2px;border:1px solid var(--line2);border-radius:12px;padding:12px 10px 10px;background:rgba(255,255,255,.03)}
+.ppc.tg{border-color:rgba(217,70,239,.6)}.ppc em{position:absolute;top:-9px;left:8px;font-style:normal;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:99px;background:#a21caf;color:#fff}
+.ppc b{font-size:13px}.ppc strong{font-size:17px}.ppc small{font-size:11px;color:var(--mut)}.ppc i{font-style:normal;font-size:11px;color:var(--ok);font-weight:700}
+.ppbtn{display:block;text-align:center;margin-top:12px;padding:10px;border-radius:12px;background:#7c3aed;font-weight:800;font-size:14px}
+@media(max-width:980px){.ppg{grid-template-columns:minmax(0,1fr)}.ppside{position:static}}
+@media(max-width:620px){.per2{grid-template-areas:'m x' 'd d' 't t' 'e e';grid-template-columns:auto minmax(0,1fr)}.per2>button{justify-self:end}.ppbar{flex-wrap:wrap}}
 .svs{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
 .sv{position:relative;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid var(--line2);display:flex;flex-direction:column;gap:12px;overflow:hidden}
 .sv::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--line2)}
@@ -433,6 +465,7 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
    <div class="sp"></div>
    <div class="live" id="liveT"></div>
    <button class="btn ico ghost" onclick="carregar({manual:true})" title="Atualizar agora" aria-label="Atualizar agora" id="btnUpd"></button>
+   <button class="btn" onclick="novoTeste()" id="btnTeste" title="Cria um cliente de teste que se desliga sozinho"></button>
    <button class="btn pri" onclick="formCliente()" id="btnNovo"></button>
   </header>
   <main class="wrap" id="page"></main>
@@ -563,7 +596,7 @@ async function carregar(o={}){
    sb.rpc('admin_watch_stats',{p_days:30}),
    sb.rpc('admin_pico_titulo',{p_days:30}),
    sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at').order('created_at',{ascending:false}).limit(400),
-   sb.from('notices').select('id,client_id,title,kind,created_at').order('id',{ascending:false}).limit(300)])
+   sb.from('notices').select('id,client_id,title,body,kind,created_at').order('id',{ascending:false}).limit(600)])
   for(const r of [p,c,k,g])if(r.error)throw r.error
   D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,nts:nn.error?[]:nn.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data,pico:pc.error||!pc.data?null:pc.data}
   loadedAt=Date.now();falha=false;render();if(o.manual)toast('Atualizado')
@@ -600,17 +633,26 @@ function agoraDe(c){const e=estado(c)
  return{t:'Código ainda não usado',s:'Criado '+ago(c.created_at)}}
 
 /* ---------- situação do cliente ---------- */
-const sit=c=>{const d=days(c.expires_at);return !c.active?'off':d<0?'venc':d<=7?'breve':'ok'}
+/* Peixe = cliente isento de pagamento (família, amigos): nunca vence, não é cobrado, telas sem limite */
+const sit=c=>{const d=days(c.expires_at);return !c.active?'off':c.peixe?'peixe':c.teste?'teste':d<0?'venc':d<=7?'breve':'ok'}
+/** Teste = cliente que se desliga sozinho no fim do tempo; se pagar o Pix com o código, vira cliente normal */
+const pagante=c=>!c.peixe&&!c.teste
+const restaTxt=e=>{const m=Math.round((new Date(e)-Date.now())/60000),a=Math.abs(m),t=a<60?pl(a,'minuto','minutos'):a<48*60?pl(Math.round(a/60),'hora','horas'):pl(Math.round(a/1440),'dia','dias');return m>=0?'faltam '+t:'acabou há '+t}
+const dtHm=e=>new Date(e).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})
+const limTelas=c=>c.peixe?99:c.teste?1:(plano(c.plan_id)?.screens||1)
 function sitTag(c){const d=days(c.expires_at)
  if(!c.active)return['bad','Desligado']
+ if(c.peixe)return['fish','🐟 Peixe']
+ if(c.teste)return new Date(c.expires_at)<Date.now()?['bad','Teste acabou']:['test','Teste']
  if(d<0)return['bad','Vencido']
  if(d<=7)return['warn',d===0?'Vence hoje':'Vence em '+pl(d,'dia','dias')]
  return['ok','Em dia']}
-const vencTxt=c=>{const d=days(c.expires_at);return d<0?'venceu há '+pl(-d,'dia','dias'):d===0?'vence hoje':'em '+pl(d,'dia','dias')}
+const vencTxt=c=>{if(c.peixe)return'isento, nunca vence';if(c.teste)return restaTxt(c.expires_at);const d=days(c.expires_at);return d<0?'venceu há '+pl(-d,'dia','dias'):d===0?'vence hoje':'em '+pl(d,'dia','dias')}
 const ini=s=>s.replace(/\(.*?\)/g,'').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()
 const hueOf=s=>{let h=0;for(const ch of s)h=(h*31+ch.charCodeAt(0))%360;return h}
 const avatar=(c,lg)=>`<span class="av${lg?' lg':''}" style="--h:${hueOf(c.name)}">${esc(ini(c.name))}</span>`
 
+const swc=(on,acao,rot,txt)=>`<button type="button" class="sw${on?' on':''}" role="switch" aria-checked="${on}" aria-label="${rot}" onclick="event.stopPropagation();${acao}"><i></i><span>${txt||(on?'Ligado':'Desligado')}</span></button>`
 /* ---------- Proteção: o app é o original? ---------- */
 // reconhece sozinho: Android pela assinatura do APK; site/iPad/iPhone e Windows pelo endereço de onde o app fala
 const ORIGEM={web:'https://munizflix.vercel.app',windows:'app://munizflix'}
@@ -693,12 +735,12 @@ function pendencias(){const l=[],nomes=(a,n=3)=>a.slice(0,n).map(c=>c.name).join
  return l}
 function rInicio(){
  const ativos=D.clients.filter(c=>c.active&&days(c.expires_at)>=0),on=D.codes.filter(online),vd=D.codes.filter(vendo)
- const receita=ativos.reduce((s,c)=>s+Number(c.price||0),0),mes=pixMes()
+ const receita=ativos.filter(pagante).reduce((s,c)=>s+Number(c.price||0),0),mes=pixMes()
  const sc=Object.values(D.st.codes||{}),hoje=sc.reduce((s,x)=>s+(x.today||0),0),sem=sc.reduce((s,x)=>s+(x.week||0),0),m30=sc.reduce((s,x)=>s+(x.month||0),0)
  const mais=(D.st.top||[]).slice(0,6),mxTop=Math.max(1,...mais.map(t=>t.m))
  const rank=Object.entries(D.st.codes||{}).map(([code,x])=>({k:D.codes.find(c=>c.code===code),x})).filter(r=>r.k&&r.x.week>0).sort((a,b)=>b.x.week-a.x.week).slice(0,6)
  const pend=pendencias(),hr=new Date().getHours()
- const prox=D.clients.filter(c=>c.active&&days(c.expires_at)<=10).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)).slice(0,6)
+ const prox=D.clients.filter(c=>c.active&&pagante(c)&&days(c.expires_at)<=10).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)).slice(0,6)
  const aoVivo=on.slice().sort((a,b)=>(vendo(b)?1:0)-(vendo(a)?1:0)).slice(0,6)
  $('page').innerHTML=`<div class="hello"><div><h1>${hr>=5&&hr<12?'Bom dia':hr>=12&&hr<18?'Boa tarde':'Boa noite'}</h1><p>${new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'})}</p></div></div>
  ${pend.length?`<div class="attn">${pend.map(([c,i,t,s,a])=>`<div class="at ${c}" onclick="${a}" tabindex="0" role="button"><span class="k">${ic(i,21)}</span><div><b>${t}</b><small>${esc(s)}</small></div><span class="go">${ic('chev',17)}</span></div>`).join('')}</div>`
@@ -788,28 +830,29 @@ function rAoVivo(){
 let cFiltro='todos',cOrdem='venc',busca=''
 function rClientes(){
  const q=busca.toLowerCase()
- const cont={todos:D.clients.length,ok:0,breve:0,venc:0,off:0};D.clients.forEach(c=>cont[sit(c)]++)
+ const cont={todos:D.clients.length,ok:0,breve:0,venc:0,off:0,peixe:0,teste:0};D.clients.forEach(c=>cont[sit(c)]++)
  let lst=D.clients.filter(c=>(cFiltro==='todos'||sit(c)===cFiltro)&&(!q||c.name.toLowerCase().includes(q)||(c.phone||'').includes(q)||(c.notes||'').toLowerCase().includes(q)||codigosDe(c.id).some(k=>k.code.toLowerCase().includes(q)||(k.label||'').toLowerCase().includes(q))))
  const sem=c=>codigosDe(c.id).reduce((a,k)=>a+stOf(k.code).week,0)
  lst=lst.sort(cOrdem==='nome'?(a,b)=>a.name.localeCompare(b.name):cOrdem==='uso'?(a,b)=>sem(b)-sem(a):(a,b)=>new Date(a.expires_at)-new Date(b.expires_at))
- const F=[['todos','Todos'],['ok','Em dia'],['breve','Vencem em 7 dias'],['venc','Vencidos'],['off','Desligados']]
+ const F=[['todos','Todos'],['ok','Em dia'],['breve','Vencem em 7 dias'],['venc','Vencidos'],['off','Desligados'],...(cont.teste?[['teste','Testes']]:[]),...(cont.peixe?[['peixe','🐟 Peixe']]:[])]
  const receita=D.clients.filter(c=>sit(c)==='ok'||sit(c)==='breve').reduce((s,c)=>s+Number(c.price||0),0)
  $('page').innerHTML=head('Clientes',`${pl(D.clients.length,'cliente','clientes')} · ${brl(receita)} por mês`)+`
  <div class="fil">${F.map(([v,t])=>`<button class="f-${v}${cFiltro===v?' on':''}" onclick="cFiltro='${v}';render()">${t}<b>${cont[v]}</b></button>`).join('')}</div>
  <div class="bar"><div class="inp">${ic('search',17)}<input class="field" id="busca" placeholder="Buscar por nome, telefone, código ou tela" value="${esc(busca)}"></div>
   <div class="seg" title="Ordenar por">${[['venc','Vencimento'],['nome','Nome'],['uso','Mais assistem']].map(([v,t])=>`<button class="${cOrdem===v?'on':''}" onclick="cOrdem='${v}';render()">${t}</button>`).join('')}</div></div>
+ ${cFiltro==='teste'?`<div class="bxf" style="margin:0 0 12px"><span class="h">Teste se desliga sozinho no fim do tempo. Se a pessoa pagar o Pix no app com o código do teste, ela vira cliente normal (mesmo código).</span>${velhosTeste().length?`<button class="btn sm bad" onclick="apagarTestes()">${ic('trash',15)}Apagar ${pl(velhosTeste().length,'teste acabado','testes acabados')} há mais de 7 dias</button>`:''}</div>`:''}
  ${lst.length?`<div class="ctab"><div class="chd"><span>Cliente</span><span>Situação</span><span>Plano</span><span>Vencimento</span><span>Telas</span><span></span></div>${lst.map(linhaCliente).join('')}</div>`
   :`<div class="empty">${D.clients.length?'Nenhum cliente neste filtro.':'Você ainda não tem clientes. Toque em “Novo cliente”, lá em cima, para começar.'}</div>`}`
  const b=$('busca');b.oninput=()=>{busca=b.value;const p=b.selectionStart;rClientes();const n=$('busca');n.focus();n.setSelectionRange(p,p)}}
 function linhaCliente(c){
- const p=plano(c.plan_id),ks=codigosDe(c.id),lim=p?p.screens:1,[s,t]=sitTag(c),d=days(c.expires_at)
+ const p=plano(c.plan_id),ks=codigosDe(c.id),lim=limTelas(c),[s,t]=sitTag(c),d=days(c.expires_at)
  return `<div class="crow${c.active?'':' off'}" onclick="abrir('cli','${c.id}')" tabindex="0" onkeydown="if(event.key==='Enter')this.click()">
   <div class="cnm">${avatar(c)}<div><b>${esc(c.name)}</b><small>${c.phone?esc(c.phone):'sem telefone'}${c.notes?' · '+esc(c.notes):''}</small></div></div>
   <div class="c-st"><span class="tag ${s}">${t}</span></div>
-  <div class="c2 c-pl"><b>${esc(p?.name||'Sem plano')}</b><small>${brl(c.price)}/mês</small></div>
-  <div class="c2 c-ve"><b>${dt(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':d<=7?'var(--warn)':''}">${vencTxt(c)}</small></div>
-  <div class="ctv c-tv">${ks.map(k=>`<span class="dot ${estado(k)}" title="${esc(k.label||k.code)}: ${EST[estado(k)]}"></span>`).join('')}<small>${ks.filter(k=>k.device_tag).length}/${lim}</small></div>
-  <div class="cac"><button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">Renovar</button>${ic('chev',17)}</div></div>`}
+  <div class="c2 c-pl"><b>${esc(p?.name||'Sem plano')}</b><small>${c.peixe?'isento':brl(c.price)+'/mês'}</small></div>
+  <div class="c2 c-ve">${c.peixe?'<b>Sempre</b><small>isento, nunca vence</small>':c.teste?`<b>${dtHm(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':'var(--warn)'}">${vencTxt(c)}</small>`:`<b>${dt(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':d<=7?'var(--warn)':''}">${vencTxt(c)}</small>`}</div>
+  <div class="ctv c-tv">${ks.map(k=>`<span class="dot ${estado(k)}" title="${esc(k.label||k.code)}: ${EST[estado(k)]}"></span>`).join('')}<small>${ks.filter(k=>k.device_tag).length}/${c.peixe?'∞':lim}</small></div>
+  <div class="cac">${c.peixe?'':`${c.teste?`<button class="btn sm" onclick="event.stopPropagation();maisTeste('${c.id}')">${ic('clock',15)}Mais tempo</button>`:''}<button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">${c.teste?'Virar cliente':'Renovar'}</button>`}${ic('chev',17)}</div></div>`}
 
 /* ---------- Janela lateral: cliente e tela ---------- */
 let sheet=null
@@ -824,25 +867,30 @@ const arow=(i,t,s,fn,bad)=>`<button class="arow${bad?' bad':''}" onclick="${fn}"
 const xBtn=`<button class="btn ico ghost" onclick="fecharSheet()" aria-label="Fechar">${ic('x',20)}</button>`
 
 function sheetCliente(id){const c=D.clients.find(x=>x.id===id);if(!c)return''
- const p=plano(c.plan_id),ks=codigosDe(id),lim=p?p.screens:1,[s,t]=sitTag(c),d=days(c.expires_at),st=sit(c)
+ const p=plano(c.plan_id),ks=codigosDe(id),lim=limTelas(c),[s,t]=sitTag(c),d=days(c.expires_at),st=sit(c)
  const pays=D.pays.filter(x=>x.client_id===id).slice(0,5),sem=ks.reduce((a,k)=>a+stOf(k.code).week,0)
  return `<header class="shh">${avatar(c,true)}<div class="sht"><span class="tag ${s}">${t}</span><h2>${esc(c.name)}</h2>
-   <p>${c.phone?esc(c.phone):'sem telefone'} · ${esc(p?.name||'Sem plano')} · ${brl(c.price)}/mês</p></div>${xBtn}</header>
+   <p>${c.phone?esc(c.phone):'sem telefone'} · ${esc(p?.name||'Sem plano')} · ${c.peixe?'isento':brl(c.price)+'/mês'}</p></div>${xBtn}</header>
   <div class="shb">
-   <div class="venc ${st==='venc'||st==='off'?'bad':st==='breve'?'warn':''}"><div><small>${c.active?'Vencimento':'Cliente desligado'}</small><b>${dt(c.expires_at)}</b><em>${vencTxt(c)}</em></div>
-    <button class="btn pri" onclick="renovar('${id}')">${ic('refresh',17)}Renovar</button></div>
+   ${c.teste?`<div class="venc test ${d<0?'bad':''}"><div><small>${c.active?'Cliente em teste':'Cliente desligado'}</small><b>${new Date(c.expires_at)<Date.now()?'Teste acabou':'Teste até '+dtHm(c.expires_at)}</b><em>${vencTxt(c)} · se pagar o Pix com o código, vira cliente</em></div>
+    <div class="vbtns"><button class="btn" onclick="maisTeste('${id}')">${ic('clock',17)}Mais tempo</button><button class="btn pri" onclick="renovar('${id}')">${ic('check',17)}Virar cliente</button></div></div>`
+   :c.peixe?`<div class="venc fish"><div><small>${c.active?'Cliente Peixe':'Cliente desligado'}</small><b>🐟 Isento de pagamento</b><em>nunca vence · telas sem limite · não recebe cobrança</em></div></div>`
+   :`<div class="venc ${st==='venc'||st==='off'?'bad':st==='breve'?'warn':''}"><div><small>${c.active?'Vencimento':'Cliente desligado'}</small><b>${dt(c.expires_at)}</b><em>${vencTxt(c)}</em></div>
+    <button class="btn pri" onclick="renovar('${id}')">${ic('refresh',17)}Renovar</button></div>`}
    <div class="qa">
     ${c.phone?`<a class="btn" target="_blank" rel="noopener" href="${wa(c.phone)}">${ic('chat',17)}WhatsApp</a>`:''}
-    <button class="btn" onclick="cobrar('${id}')">${ic('card',17)}Cobrar</button>
+    ${c.peixe?'':`<button class="btn" onclick="cobrar('${id}')">${ic('card',17)}Cobrar</button>`}
+    <button class="btn" onclick="avisoPara('${id}')">${ic('mega',17)}Mandar aviso</button>
     <button class="btn" onclick="formCliente('${id}')">${ic('edit',17)}Editar</button></div>
+   <div class="fishrow"><span class="fishic">🐟</span><div><b>Peixe</b><small>${c.peixe?'Isento: não paga, não vence e não recebe cobrança.':'Ligue para deixar este cliente isento de pagamento (ex.: família).'}</small></div>${swc(!!c.peixe,`setPeixe('${id}',${!c.peixe})`,'Cliente Peixe')}</div>
    ${c.notes?`<p class="h">${ic('edit',13)} ${esc(c.notes)}</p>`:''}
-   <section><h4>Telas (${ks.length} de ${lim})<span class="sp"></span>${sem?`<span style="text-transform:none;letter-spacing:0">${tm(sem)} em 7 dias</span>`:''}</h4>
+   <section><h4>Telas (${ks.length}${c.peixe?'':' de '+lim})<span class="sp"></span>${sem?`<span style="text-transform:none;letter-spacing:0">${tm(sem)} em 7 dias</span>`:''}</h4>
     <div class="list">${ks.map(k=>{const e=estado(k),a=agoraDe(k)
       return `<div class="row click codrow" onclick="abrir('tela','${k.code}')"><span class="dot ${e}"></span><div class="t"><b>${esc(k.label||'Tela sem nome')}</b><small>${e==='play'?'Assistindo: '+esc(k.watching):esc(a.t)}${k.active?'':' · desligada por você'}</small></div><div class="codebox"><span class="codelbl">CÓDIGO</span><span class="codeval">${k.code}</span></div>${ic('chev',16)}</div>`}).join('')}
-     ${ks.length<lim?`<button class="arow" onclick="novoCodigo('${id}')">${ic('plus',20)}<div><b>Adicionar tela</b><small>Gera um código novo para mais um aparelho (${ks.length} de ${lim} usados)</small></div>${ic('chev',16)}</button>`
-      :`<p class="h">O plano ${esc(p?.name||'')} permite ${pl(lim,'tela','telas')}. Para mais, troque o plano em Editar.</p>`}</div></section>
+     ${ks.length<lim?`<button class="arow" onclick="novoCodigo('${id}')">${ic('plus',20)}<div><b>Adicionar tela</b><small>Gera um código novo para mais um aparelho (${c.peixe?'Peixe: sem limite':ks.length+' de '+lim+' usados'})</small></div>${ic('chev',16)}</button>`
+      :`<p class="h">O plano ${esc(p?.name||'')} permite ${pl(lim,'tela','telas')}. Para mais, troque o plano em Editar (ou ligue o Peixe).</p>`}</div></section>
    <section><h4>Pagamentos por Pix</h4>
-    ${pays.length?'<div class="list">'+pays.map(x=>linhaPix(x,true)).join('')+'</div>':'<p class="h">Nenhum Pix deste cliente ainda. Use “Cobrar” para mandar o link de pagamento.</p>'}</section>
+    ${pays.length?'<div class="list">'+pays.map(x=>linhaPix(x,true)).join('')+'</div>':`<p class="h">${c.peixe?'Cliente Peixe não paga.':'Nenhum Pix deste cliente ainda. Use “Cobrar” para mandar o link de pagamento.'}</p>`}</section>
    <section><h4>Gerenciar</h4><div class="list">
     ${arow('power',c.active?'Desligar cliente':'Ligar cliente de novo',c.active?'Todas as telas dele param de funcionar até você ligar de novo.':'As telas voltam a funcionar (se não estiver vencido).',`ligar('${id}',${!c.active})`,c.active)}
     ${arow('trash','Excluir cliente','Apaga o cliente e os códigos dele. Não dá para desfazer.',`excluirCliente('${id}')`,true)}</div></section>
@@ -890,8 +938,8 @@ let pFiltro='todos'
 function rFinanceiro(){
  const mes=pixMes(),pend=D.pays.filter(x=>x.status==='pending').length
  const tot=D.pays.filter(x=>x.status==='paid').reduce((s,x)=>s+Number(x.amount||0),0)
- const ativos=D.clients.filter(c=>c.active&&days(c.expires_at)>=0),previsto=ativos.reduce((s,c)=>s+Number(c.price||0),0)
- const cobrarL=D.clients.filter(c=>c.active&&days(c.expires_at)<=7).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)),aReceber=cobrarL.reduce((s,c)=>s+Number(c.price||0),0)
+ const ativos=D.clients.filter(c=>c.active&&pagante(c)&&days(c.expires_at)>=0),previsto=ativos.reduce((s,c)=>s+Number(c.price||0),0)
+ const cobrarL=D.clients.filter(c=>c.active&&pagante(c)&&days(c.expires_at)<=7).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)),aReceber=cobrarL.reduce((s,c)=>s+Number(c.price||0),0)
  let l=D.pays;if(pFiltro==='pagos')l=l.filter(x=>x.status==='paid');else if(pFiltro==='outros')l=l.filter(x=>x.status!=='paid')
  const ms=receitaMeses(6),mx=Math.max(1,...ms.map(m=>m.v))
  $('page').innerHTML=head('Financeiro','O cliente paga por Pix no app e o acesso renova sozinho quando o pagamento cai.')+`
@@ -916,37 +964,72 @@ function rFinanceiro(){
   ${l.length?'<div class="list">'+l.slice(0,80).map(x=>linhaPix(x)).join('')+'</div>'+(l.length>80?`<p class="note">Mostrando os 80 mais recentes de ${l.length}.</p>`:'')
   :'<div class="empty">Nenhum pagamento aqui ainda.</div>'}</div>`}
 
-/* ---------- Avisos para as TVs (aparecem na tela, com o botão "Renovar agora") ---------- */
-let av={alvo:'expiring',dias:5,kind:'pay',title:'Sua assinatura está acabando',body:'Renove agora pelo Pix, aqui mesmo no app: é só tocar em Renovar agora. Pagando por 3, 6 ou 12 meses você ganha desconto.'}
-const avKind=()=>av.alvo==='expiring'?'pay':av.kind
-function alvoN(){const now=Date.now(),lim=now+av.dias*864e5
- return D.clients.filter(c=>{const e=new Date(c.expires_at).getTime()
-  return av.alvo==='expiring'?c.active&&e<=lim&&e>now-30*864e5:av.alvo==='expired'?e<now&&e>now-60*864e5:c.active}).length}
+/* ---------- Avisos: aparecem na tela da TV/celular do cliente. Só vão quando VOCÊ manda (não existe mais aviso automático). ---------- */
+const AVMOD=[
+ ['venc','Vence em breve','pay','Sua assinatura está acabando','Renove agora pelo Pix, aqui mesmo no app: é só tocar em Renovar agora. Pagando por 3, 6 ou 12 meses você ganha desconto.'],
+ ['venceu','Venceu','pay','Sua assinatura venceu','Para voltar a assistir, renove pelo Pix aqui no app. A liberação é na hora.'],
+ ['manut','Manutenção','info','Manutenção rápida','Alguns canais podem ficar fora do ar por alguns minutos. Já estamos resolvendo. Obrigado pela paciência!'],
+ ['novo','Novidade','info','Novidade no MunizFlix','Chegaram filmes e séries novos. Dá uma olhada na tela inicial!'],
+ ['livre','Em branco','info','','']]
+let av={alvo:'expiring',dias:5,cli:'',kind:'pay',mod:'venc',title:AVMOD[0][3],body:AVMOD[0][4],hq:''}
+const avCli=()=>D.clients.find(c=>c.id===av.cli)
+const avKind=()=>av.alvo==='expiring'||av.alvo==='expired'?'pay':av.alvo==='client'&&avCli()?.peixe?'info':av.kind
+function alvoL(){const now=Date.now(),lim=now+av.dias*864e5,k=avKind()
+ return D.clients.filter(c=>{if(c.peixe&&k==='pay')return false;const e=new Date(c.expires_at).getTime()
+  return av.alvo==='client'?c.id===av.cli:av.alvo==='expiring'?c.active&&e<=lim&&e>now-30*864e5:av.alvo==='expired'?e<now&&e>now-60*864e5:c.active})}
 function avPrev(){const t=$('pvT'),b=$('pvB');if(t)t.textContent=av.title||'Título do aviso';if(b)b.textContent=av.body}
+function avModelo(k){const m=AVMOD.find(x=>x[0]===k);if(!m)return;av.mod=k;av.title=m[3];av.body=m[4];if(av.alvo==='client'||av.alvo==='all')av.kind=m[2]
+ if(k==='venc'&&av.alvo!=='client')av.alvo='expiring';if(k==='venceu'&&av.alvo!=='client')av.alvo='expired';render()}
+/** histórico: cada envio vira um grupo (mesmo título no mesmo minuto) com o nome de quem recebeu */
+function avGrupos(){const g={},o=[]
+ for(const n of D.nts){const k=n.title+'|'+n.created_at.slice(0,16);if(!g[k]){g[k]={k,t:n.title,b:n.body,at:n.created_at,kind:n.kind,ids:[],cs:[]};o.push(g[k])}
+  g[k].ids.push(n.id);const c=D.clients.find(x=>x.id===n.client_id);g[k].cs.push(c?c.name:'Cliente apagado')}
+ return o}
 function rAvisos(){
- const grupos={};for(const n of D.nts){const k=n.title+'|'+n.created_at.slice(0,16);(grupos[k]=grupos[k]||{t:n.title,at:n.created_at,kind:n.kind,n:0}).n++}
- const hist=Object.values(grupos).slice(0,8),n=alvoN()
- $('page').innerHTML=head('Avisos','Mande um recado que aparece na tela da TV ou do celular do cliente, sem precisar de WhatsApp.')+`
+ const L=alvoL(),n=L.length,k=avKind(),q=av.hq.trim().toLowerCase()
+ const hist=avGrupos().filter(h=>!q||h.t.toLowerCase().includes(q)||h.cs.some(x=>x.toLowerCase().includes(q)))
+ const cl=avCli(),ord=D.clients.slice().sort((a,b)=>a.name.localeCompare(b.name))
+ const quem=n?L.slice(0,6).map(c=>esc(c.name)).join(', ')+(n>6?' e mais '+(n-6):''):''
+ $('page').innerHTML=head('Avisos','Recado que aparece na tela da TV ou do celular do cliente. Só é enviado quando você manda daqui: o app não mostra mais lembrete sozinho.')+`
  <div class="avg">
   <div class="panel"><div class="ph">${ic('mega',18)}Novo aviso</div>
-   <div class="grid2"><label class="f">Para quem
-     <select class="field" onchange="av.alvo=this.value;render()">${[['expiring','Quem vence em breve'],['expired','Quem já venceu'],['all','Todos os clientes ativos']].map(([k,t])=>`<option value="${k}"${av.alvo===k?' selected':''}>${t}</option>`).join('')}</select></label>
-    ${av.alvo==='expiring'?`<label class="f">Vencendo em até (dias)<input class="field" type="number" min="0" max="60" value="${av.dias}" onchange="av.dias=Math.max(0,+this.value||0);render()"></label>`
-     :`<label class="f">Tipo<select class="field" onchange="av.kind=this.value;render()"><option value="pay"${av.kind==='pay'?' selected':''}>Pagamento (com botão Renovar)</option><option value="info"${av.kind==='info'?' selected':''}>Só recado</option></select></label>`}</div>
-   <label class="f" style="margin-top:12px">Título<input class="field" maxlength="80" value="${esc(av.title)}" oninput="av.title=this.value;avPrev()"></label>
+   <div class="avmod">${AVMOD.map(m=>`<button class="chipb${av.mod===m[0]?' on':''}" onclick="avModelo('${m[0]}')">${m[1]}</button>`).join('')}</div>
+   <label class="f">Para quem</label>
+   <div class="seg avseg">${[['client','Um cliente','user'],['expiring','Vence em breve','cal'],['expired','Já venceu','alert'],['all','Todos ativos','users']].map(([v,t,i])=>`<button class="${av.alvo===v?'on':''}" onclick="av.alvo='${v}';render()">${ic(i,15)}${t}</button>`).join('')}</div>
+   ${av.alvo==='client'?`<label class="f" style="margin-top:12px">Cliente<select class="field" onchange="av.cli=this.value;render()"><option value="">Escolha o cliente…</option>${ord.map(c=>`<option value="${c.id}"${c.id===av.cli?' selected':''}>${esc(c.name)}${c.peixe?' 🐟':''} · ${esc(sitTag(c)[1])}</option>`).join('')}</select></label>`:''}
+   <div class="grid2" style="margin-top:12px">
+    ${av.alvo==='expiring'?`<label class="f">Vencendo em até (dias)<input class="field" type="number" min="0" max="60" value="${av.dias}" onchange="av.dias=Math.max(0,+this.value||0);render()"></label>`:''}
+    ${av.alvo==='client'||av.alvo==='all'?`<label class="f">Tipo<select class="field" onchange="av.kind=this.value;render()"${av.alvo==='client'&&cl?.peixe?' disabled':''}><option value="pay"${k==='pay'?' selected':''}>Pagamento (com botão Renovar)</option><option value="info"${k==='info'?' selected':''}>Só recado</option></select></label>`:''}</div>
+   ${av.alvo==='client'&&cl?.peixe?'<p class="h" style="margin-top:6px">🐟 Cliente Peixe: vai como recado, sem botão de pagamento.</p>':''}
+   <label class="f" style="margin-top:12px">Título<input class="field" maxlength="80" value="${esc(av.title)}" oninput="av.title=this.value;avPrev()" placeholder="Ex.: Aviso importante"></label>
    <label class="f" style="margin-top:12px">Mensagem<textarea class="field" rows="4" maxlength="400" oninput="av.body=this.value;avPrev()">${esc(av.body)}</textarea></label>
-   <div class="bxf"><span class="h"><b style="color:var(--tx)">${pl(n,'cliente','clientes')}</b> ${n===1?'vai':'vão'} receber</span><button class="btn pri" onclick="enviarAviso()" ${n?'':'disabled'}>${ic('send',17)}Enviar aviso</button></div>
-   <p class="note">TVs ligadas recebem na hora; as desligadas recebem quando abrirem o app. Com “Pagamento”, o aviso vem com o botão Renovar agora, que abre os planos e o QR do Pix no próprio app.</p></div>
+   <div class="bxf"><span class="h"><b style="color:var(--tx)">${n?pl(n,'cliente','clientes'):'Ninguém'}</b> ${n===1?'vai':'vão'} receber${quem?': '+quem:''}${k==='pay'&&av.alvo!=='client'&&D.clients.some(c=>c.peixe)?' (Peixe fica de fora)':''}</span><button class="btn pri" onclick="enviarAviso()" ${n&&av.title.trim()?'':'disabled'}>${ic('send',17)}Enviar aviso</button></div>
+   <p class="note">Aparece 1 vez em cada tela: as ligadas recebem na hora, as desligadas quando abrirem o app. Com “Pagamento” vem o botão Renovar agora (planos e QR do Pix no próprio app).</p></div>
   <div class="tvprev"><div class="ph">${ic('tv',18)}Como aparece na TV</div>
-   <div class="tvscr"><div class="ntc"><b id="pvT">${esc(av.title||'Título do aviso')}</b><p id="pvB">${esc(av.body)}</p>${avKind()==='pay'?'<span>Renovar agora</span><span class="sec">Agora não</span>':'<span>Entendi</span>'}</div></div>
+   <div class="tvscr"><div class="ntc"><b id="pvT">${esc(av.title||'Título do aviso')}</b><p id="pvB">${esc(av.body)}</p>${k==='pay'?'<span>Renovar agora</span><span class="sec">Depois</span>':'<span>Entendi</span>'}</div></div>
    <p class="note">É uma prévia aproximada.</p></div></div>
- <div class="panel" style="margin-top:16px"><div class="ph">${ic('clock',18)}Avisos enviados</div>
-  ${hist.length?`<div class="list">${hist.map(h=>`<div class="row"><div class="k">${ic(h.kind==='pay'?'card':'mega',17)}</div><div class="t"><b>${esc(h.t)}</b><small>${dth(h.at)} · ${h.kind==='pay'?'pagamento':'recado'}</small></div><span class="tag">${pl(h.n,'cliente','clientes')}</span></div>`).join('')}</div>`:'<div class="empty">Nenhum aviso enviado ainda.</div>'}</div>`}
+ <div class="panel" style="margin-top:16px"><div class="ph">${ic('clock',18)}Avisos enviados<span class="n">${pl(avGrupos().length,'envio','envios')}</span><span class="sp"></span>
+  ${D.nts.length?`<button class="btn sm bad" onclick="apagarAvisos()">${ic('trash',15)}Apagar todo o histórico</button>`:''}</div>
+  ${D.nts.length?`<div class="bar" style="margin:0 0 10px"><div class="inp">${ic('search',17)}<input class="field" id="avBusca" placeholder="Buscar por título ou cliente" value="${esc(av.hq)}"></div></div>`:''}
+  ${hist.length?`<div class="list">${hist.slice(0,40).map(h=>`<div class="row avh"><div class="k">${ic(h.kind==='pay'?'card':'mega',17)}</div>
+    <div class="t"><b>${esc(h.t)}</b><small>${dth(h.at)} · ${h.kind==='pay'?'pagamento':'recado'} · ${h.cs.length===1?esc(h.cs[0]):pl(h.cs.length,'cliente','clientes')+': '+esc(h.cs.slice(0,4).join(', '))+(h.cs.length>4?' e mais '+(h.cs.length-4):'')}</small>${h.b?`<small class="avb">${esc(h.b)}</small>`:''}</div>
+    <button class="btn sm ico ghost" title="Apagar este envio" aria-label="Apagar este envio" onclick="apagarAvisos('${esc(h.k)}')">${ic('trash',16)}</button></div>`).join('')}</div>${hist.length>40?`<p class="note">Mostrando os 40 envios mais recentes.</p>`:''}`
+   :`<div class="empty">${D.nts.length?'Nada encontrado.':'Nenhum aviso enviado ainda.'}</div>`}
+  <p class="note">Apagar tira o aviso do histórico e também das telas que ainda não o viram.</p></div>`
+ const b=$('avBusca');if(b)b.oninput=()=>{av.hq=b.value;const p=b.selectionStart;rAvisos();const x=$('avBusca');x.focus();x.setSelectionRange(p,p)}}
 async function enviarAviso(){
  if(!av.title.trim())return toast('Escreva um título',true)
- const n=alvoN();if(!await confirmar({t:`Enviar para ${pl(n,'cliente','clientes')}?`,m:`“${av.title.trim()}” vai aparecer na tela de quem estiver nesse grupo.`,ok:'Enviar',icone:'send'}))return
- const r=await sb.rpc('admin_notify',{p_target:av.alvo,p_days:av.dias,p_title:av.title.trim(),p_body:av.body.trim(),p_kind:avKind()})
+ if(av.alvo==='client'&&!av.cli)return toast('Escolha o cliente',true)
+ const n=alvoL().length;if(!n)return toast('Ninguém neste grupo',true)
+ if(!await confirmar({t:av.alvo==='client'?`Enviar para ${avCli().name}?`:`Enviar para ${pl(n,'cliente','clientes')}?`,m:`“${av.title.trim()}” vai aparecer na tela ${n===1?'deste cliente':'de quem estiver nesse grupo'}.`,ok:'Enviar',icone:'send'}))return
+ const r=await sb.rpc('admin_notify',{p_target:av.alvo,p_days:av.dias,p_title:av.title.trim(),p_body:av.body.trim(),p_kind:avKind(),...(av.alvo==='client'?{p_client:av.cli}:{})})
  if(r.error)return erro(r.error);toast(`Aviso enviado para ${pl(r.data,'cliente','clientes')}`);carregar()}
+async function apagarAvisos(k){const g=k?avGrupos().find(x=>x.k===k):null;if(k&&!g)return
+ const ids=g?g.ids:D.nts.map(x=>x.id)
+ if(!await confirmar(g?{t:`Apagar “${g.t}”?`,m:`Sai do histórico (${pl(ids.length,'cliente','clientes')}) e não aparece mais nas telas que ainda não viram.`,ok:'Apagar',perigo:true,icone:'trash'}
+  :{t:'Apagar todo o histórico de avisos?',m:`São ${pl(avGrupos().length,'envio','envios')}. Nenhum deles vai aparecer mais nas telas. Não dá para desfazer.`,ok:'Apagar tudo',perigo:true,icone:'trash'}))return
+ for(let i=0;i<ids.length;i+=200){const r=await sb.from('notices').delete().in('id',ids.slice(i,i+200));if(r.error)return erro(r.error)}
+ toast(g?'Aviso apagado':'Histórico apagado');carregar()}
 
 /* ---------- Proteção: automática (o dono não marca nada) ---------- */
 const GRUPOS=[
@@ -999,35 +1082,96 @@ function rProtecao(){
 
 /* ---------- Ajustes (uma seção por vez) ---------- */
 let aj='planos'
-const AJ=[['planos','Planos','card'],['app','Pagamento no app','wallet'],['servidor','Servidores','signal'],['bloqueio','Tela de bloqueio','lock'],['links','Links','link'],['conta','Conta','user']]
+const AJ=[['planos','Planos e preços','card'],['servidor','Servidores','signal'],['bloqueio','Tela de bloqueio','lock'],['links','Links','link'],['conta','Conta','user']]
 function rAjustes(){
  const g=D.cfg||{servers:[],username:'',password:'',extra:[],contact:''}
  $('page').innerHTML=head('Ajustes','Planos, pagamento, servidores de IPTV, links de instalação e sua conta.')+`
  <div class="ajn">${AJ.map(([id,t,i])=>`<button class="${aj===id?'on':''}" onclick="aj='${id}';render()" title="${t}">${ic(i,17)}<span>${t}</span></button>`).join('')}</div>
- ${({planos:ajPlanos,app:ajApp,servidor:ajServidor,bloqueio:ajBloqueio,links:ajLinks,conta:ajConta})[aj](g)}`}
+ ${({planos:ajPlanos,app:ajPlanos,servidor:ajServidor,bloqueio:ajBloqueio,links:ajLinks,conta:ajConta})[aj](g)}`
+ if(aj==='planos'||aj==='app')ppPrev()}
 const bxh=(i,t,s)=>`<div class="bxh"><span class="bxi">${ic(i,20)}</span><div><h3>${t}</h3><p class="h">${s}</p></div></div>`
-function ajPlanos(){const nPl=id=>D.clients.filter(c=>c.plan_id===id).length
- return `<section class="box">${bxh('card','Planos e preços','O número de telas define quantos aparelhos (códigos) cada cliente pode ter.')}
-  <div class="plans">${D.plans.map(p=>`<div class="pc"><div class="pch"><input class="pnm" id="pn${p.id}" value="${esc(p.name)}" aria-label="Nome do plano"><span class="tag">${pl(nPl(p.id),'cliente','clientes')}</span></div>
-    <div class="pcf"><label class="f">Telas<input class="field" id="ps${p.id}" type="number" min="1" max="10" value="${p.screens}"></label>
-     <label class="f">Preço por mês<span class="money"><i>R$</i><input class="field" id="pp${p.id}" type="number" min="0" step="0.01" value="${p.price}"></span></label></div>
-    <button class="btn sm" onclick="salvarPlano(${p.id})">Salvar plano</button></div>`).join('')}
-   <button class="pc add" onclick="novoPlano()">${ic('plus',22)}<span>Novo plano</span></button></div></section>`}
-/* Planos que o cliente vê no app (Minha assinatura) */
-function ajApp(g){
- const ps=(g.pay_periods||[]).concat([{m:'',off:'',tag:''}]).slice(0,6),pr=g.promo||{}
- const ex=Number((D.plans[0]||{}).price||19.9)
- const preco=(m,o)=>{let a=Math.round(ex*m*(100-o))/100;if(m>1&&a>10)a=Math.round(a)-.1;return brl(a)}
- return `<section class="box">${bxh('wallet','Pagamento no app',`Períodos que o cliente pode pagar de uma vez em <b>Minha assinatura</b>. O desconto vale sobre o preço mensal de cada cliente (exemplo com ${brl(ex)}/mês). Apague os meses de uma linha para tirá-la.`)}
-  <div class="list">${ps.map((p,i)=>`<div class="row" style="gap:10px;flex-wrap:wrap;align-items:flex-end"><label class="f" style="flex:1;min-width:90px">Meses<input class="field" id="pm${i}" type="number" min="1" max="24" value="${p.m}"></label>
-   <label class="f" style="flex:1;min-width:90px">Desconto %<input class="field" id="po${i}" type="number" min="0" max="80" value="${p.off}"></label>
-   <label class="f" style="flex:2;min-width:140px">Selo (opcional)<input class="field" id="pt${i}" maxlength="24" value="${esc(p.tag||'')}" placeholder="Ex.: Mais escolhido"></label>
-   <span class="h" style="padding-bottom:12px;min-width:110px">${p.m?'ex.: '+preco(+p.m,+p.off||0):'nova linha'}</span></div>`).join('')}</div>
-  <div class="grid2" style="margin-top:16px"><label class="f">Promoção: título (vazio = sem promoção)<input class="field" id="prT" maxlength="60" value="${esc(pr.title||'')}" placeholder="Ex.: Black Friday: 1 ano com 30% off"></label>
-   <label class="f">Promoção válida até<input class="field" id="prU" type="date" value="${esc(pr.until||'')}"></label></div>
-  <label class="f" style="margin-top:12px">Promoção: texto<input class="field" id="prX" maxlength="140" value="${esc(pr.text||'')}" placeholder="Ex.: Só até domingo. Pague pelo Pix aqui no app."></label>
-  <label class="f" style="margin-top:12px;max-width:300px">Avisar no app quando faltar (dias)<input class="field" id="rmD" type="number" min="0" max="30" value="${g.remind_days??5}"></label>
-  <div class="bxf"><span class="h">O aviso de vencimento aparece sozinho 1 vez por dia na TV, com o botão Renovar agora.</span><button class="btn pri" onclick="salvarPlanosApp(${ps.length})">Salvar</button></div></section>`}
+/* Planos e preços: tudo que o cliente vê em "Minha assinatura" (app Android, site/iPad e Windows).
+ * PP = cópia de edição; só vale ao tocar em Salvar. Planos: nome, telas, preço, benefícios. Períodos: meses + desconto + selo.
+ * Promoção programada: aparece no app só entre o início e o fim. */
+let PP=null
+function ppDe(){const g=D.cfg||{},pr=g.promo||{}
+ return{pl:D.plans.map(p=>({id:p.id,name:p.name,screens:p.screens,price:Number(p.price)||0,perks:p.perks||''})),
+  per:(g.pay_periods?.length?g.pay_periods:[{m:1,off:0}]).map(x=>({m:x.m,off:Number(x.off)||0,tag:x.tag||''})),
+  promo:{on:!!pr.title,title:pr.title||'',text:pr.text||'',from:pr.from||'',until:pr.until||''},sel:D.plans[0]?.id??null,del:[],nv:-1}}
+/** mesmo cálculo do servidor do Pix (supabase/functions/pix): preço "redondo" nos pacotes */
+function ppPreco(mensal,m,off){const full=Math.round(mensal*m*100)/100;let a=Math.max(1,Math.round(full*(100-off))/100);if(m>1&&a>10)a=Math.round(a)-.1;return{full,a}}
+const mesesTxt=m=>m===12?'1 ano':pl(m,'mês','meses')
+const hojeIso=()=>isoDia(Date.now())
+function promoEstado(pr){if(!pr.on||!pr.title.trim())return['','Desligada']
+ const h=hojeIso();if(pr.until&&pr.until<h)return['bad','Encerrada em '+new Date(pr.until+'T12:00').toLocaleDateString('pt-BR')]
+ if(pr.from&&pr.from>h)return['warn','Programada: começa '+new Date(pr.from+'T12:00').toLocaleDateString('pt-BR')]
+ return['ok','No ar agora'+(pr.until?' até '+new Date(pr.until+'T12:00').toLocaleDateString('pt-BR'):'')]}
+const ppMuda=()=>{const b=$('ppSave');if(b)b.classList.add('pulse');ppPrev()}
+function ppPrev(){const el=$('ppPrev');if(el)el.innerHTML=ppPrevHtml()
+ document.querySelectorAll('[data-pex]').forEach(e=>{const[i]=e.dataset.pex.split(',').map(Number),x=PP.per[i],p=PP.pl.find(y=>y.id===PP.sel)||PP.pl[0]
+  if(x&&p){const r=ppPreco(p.price,x.m,x.off);e.textContent=brl(r.a)+(x.m>1?' · '+brl(r.a/x.m)+'/mês':'')}})}
+function ppPrevHtml(){const p=PP.pl.find(y=>y.id===PP.sel)||PP.pl[0];if(!p)return'<p class="h">Crie um plano para ver a prévia.</p>'
+ const pr=PP.promo,[pc]=promoEstado(pr),per=PP.per.filter(x=>x.m>=1).slice().sort((a,b)=>a.m-b.m)
+ return `<div class="ppapp"><small>Minha assinatura</small><h4>Olá, Maria!</h4>
+  <div class="ppl">${ic('tv',16)}<div><b>Plano ${esc(p.name||'sem nome')}</b><span>${p.screens===1?'1 tela':p.screens+' telas ao mesmo tempo'}${p.perks.trim()?' · '+esc(p.perks.trim()):''}</span></div></div>
+  ${pc==='ok'?`<div class="ppro">✨<div><b>${esc(pr.title)}</b>${pr.text?`<span>${esc(pr.text)}</span>`:''}${pr.until?`<small>Até ${new Date(pr.until+'T12:00').toLocaleDateString('pt-BR')}</small>`:''}</div></div>`:''}
+  <div class="pps">${per.map((x,i)=>{const r=ppPreco(p.price,x.m,x.off);return `<div class="ppc${x.tag?' tg':''}">${x.tag?`<em>${esc(x.tag)}</em>`:''}<b>${mesesTxt(x.m)}</b><strong>${brl(r.a)}</strong>
+   <small>${x.m>1?brl(r.a/x.m)+'/mês':'renovação mensal'}${r.full>r.a&&x.m>1?` <s>${brl(r.full)}</s>`:''}</small>${r.full-r.a>=1?`<i>economize ${brl(r.full-r.a)}</i>`:''}</div>`}).join('')}</div>
+  <span class="ppbtn">Pagar com Pix</span></div>`}
+function ajPlanos(){if(!PP)PP=ppDe()
+ const nPl=id=>D.clients.filter(c=>c.plan_id===id).length,[pc,pt]=promoEstado(PP.promo),pr=PP.promo
+ const stp=(v,acao,min,max)=>`<span class="stp"><button type="button" aria-label="menos" onclick="${acao}=Math.max(${min},${v}-1);ppMuda();render()"${v<=min?' disabled':''}>−</button><b>${v}</b><button type="button" aria-label="mais" onclick="${acao}=Math.min(${max},${v}+1);ppMuda();render()"${v>=max?' disabled':''}>+</button></span>`
+ return `<div class="ppg"><div class="ppcol">
+ <section class="box">${bxh('card','Planos','O número de telas é quantos aparelhos o cliente pode ter. O preço é o valor por mês. Tudo aparece no app de todos os aparelhos.')}
+  <div class="plans">${PP.pl.map((p,i)=>`<div class="pc${PP.sel===p.id?' sel':''}" data-pid="${p.id}" onclick="ppSel(${p.id})">
+    <div class="pch"><input class="pnm" value="${esc(p.name)}" maxlength="40" aria-label="Nome do plano" oninput="PP.pl[${i}].name=this.value;ppMuda()"><span class="tag">${p.id<0?'novo':pl(nPl(p.id),'cliente','clientes')}</span></div>
+    <div class="pcf"><div class="f">Telas${stp(p.screens,`PP.pl[${i}].screens`,1,10)}</div>
+     <label class="f">Preço por mês<span class="money"><i>R$</i><input class="field" type="number" min="0" step="0.01" value="${p.price}" oninput="PP.pl[${i}].price=Math.max(0,parseFloat(this.value)||0);ppMuda()"></span></label></div>
+    <label class="f">Benefícios (aparece no app)<input class="field" maxlength="80" value="${esc(p.perks)}" placeholder="Ex.: Full HD, filmes e séries" oninput="PP.pl[${i}].perks=this.value;ppMuda()"></label>
+    ${p.id<0||!nPl(p.id)?`<button class="btn sm ghost bad" onclick="event.stopPropagation();ppTiraPlano(${i})">${ic('trash',15)}Apagar plano</button>`:`<small class="h">Para apagar, mude antes os clientes deste plano.</small>`}</div>`).join('')}
+   <button class="pc add" onclick="PP.pl.push({id:PP.nv--,name:'Novo plano',screens:1,price:${Number(PP.pl[0]?.price)||19.9},perks:''});PP.sel=PP.pl.at(-1).id;ppMuda();render()">${ic('plus',22)}<span>Novo plano</span></button></div></section>
+ <section class="box">${bxh('wallet','Períodos à venda','Quanto tempo o cliente pode pagar de uma vez pelo Pix no app. O desconto vale sobre o preço do plano dele. O de 1 mês sempre existe.')}
+  <div class="pers2">${PP.per.map((x,i)=>`<div class="per2">
+    <div class="f">Meses${stp(x.m,`PP.per[${i}].m`,1,24)}</div>
+    <label class="f pslide">Desconto <b id="ppo${i}">${x.off}%</b><input type="range" min="0" max="50" step="1" value="${x.off}" oninput="PP.per[${i}].off=+this.value;$('ppo${i}').textContent=this.value+'%';ppMuda()"${x.m===1?' disabled title="O de 1 mês é o preço cheio"':''}></label>
+    <label class="f">Selo<input class="field" maxlength="24" value="${esc(x.tag)}" placeholder="Ex.: Mais escolhido" oninput="PP.per[${i}].tag=this.value;ppMuda()"></label>
+    <span class="pex" data-pex="${i}"></span>
+    ${x.m===1&&PP.per.filter(y=>y.m===1).length===1?'<span class="h" style="width:34px"></span>':`<button class="btn sm ico ghost" aria-label="Tirar período" title="Tirar período" onclick="PP.per.splice(${i},1);ppMuda();render()">${ic('trash',16)}</button>`}</div>`).join('')}</div>
+  ${PP.per.length<6?`<button class="btn sm" style="margin-top:10px" onclick="const u=[1,3,6,12,2,24].find(m=>!PP.per.some(y=>y.m===m))||2;PP.per.push({m:u,off:u>=12?25:u>=6?15:u>=3?10:0,tag:''});ppMuda();render()">${ic('plus',15)}Adicionar período</button>`:''}
+  <p class="note">Os preços de exemplo usam o plano marcado (toque num plano para trocar). Pacotes acima de R$ 10 ficam “redondos” (ex.: 53,73 vira 53,90).</p></section>
+ <section class="box">${bxh('bolt','Promoção','Faixa de destaque em Minha assinatura. Programe o início e o fim: ela entra e sai sozinha.')}
+  <div class="svsw" style="margin-bottom:10px">${swc(pr.on,'PP.promo.on=!PP.promo.on;ppMuda();render()','Promoção ligada')}<span class="tag ${pc}">${pt}</span></div>
+  ${pr.on?`<label class="f">Título<input class="field" maxlength="60" value="${esc(pr.title)}" placeholder="Ex.: Black Friday: 1 ano com 30% off" oninput="PP.promo.title=this.value;ppMuda()"></label>
+  <label class="f" style="margin-top:12px">Texto<input class="field" maxlength="140" value="${esc(pr.text)}" placeholder="Ex.: Só até domingo. Pague pelo Pix aqui no app." oninput="PP.promo.text=this.value;ppMuda()"></label>
+  <div class="grid2" style="margin-top:12px"><label class="f">Começa em (vazio = agora)<input class="field" type="date" value="${esc(pr.from)}" onchange="PP.promo.from=this.value;ppMuda();render()"></label>
+   <label class="f">Termina em (vazio = sem fim)<input class="field" type="date" value="${esc(pr.until)}" onchange="PP.promo.until=this.value;ppMuda();render()"></label></div>
+  <div class="chips" style="margin-top:8px">${[[2,'Este fim de semana'],[7,'7 dias'],[15,'15 dias'],[30,'30 dias']].map(([n,t])=>`<button type="button" class="chipb" onclick="PP.promo.from=hojeIso();PP.promo.until=isoDia(Date.now()+${n}*864e5);ppMuda();render()">${t}</button>`).join('')}</div>`:''}
+ </section>
+ <div class="bxf ppbar"><span class="h">Nada muda no app até você salvar. Depois de salvo, vale para todos na próxima vez que abrirem Minha assinatura.</span>
+  <button class="btn" onclick="PP=null;render()">Desfazer</button><button class="btn pri" id="ppSave" onclick="salvarPP()">${ic('check',17)}Salvar planos e preços</button></div>
+ </div>
+ <aside class="ppside"><div class="ph">${ic('phone',18)}Como o cliente vê no app</div>
+  <div class="chips" style="margin:0 0 10px">${PP.pl.map(p=>`<button class="chipb${PP.sel===p.id?' on':''}" data-pid="${p.id}" onclick="ppSel(${p.id})">${esc(p.name||'?')}</button>`).join('')}</div>
+  <div id="ppPrev">${ppPrevHtml()}</div><p class="note">Prévia aproximada da tela Minha assinatura.</p></aside></div>`}
+/** marca o plano da prévia sem redesenhar a tela (não tira o foco do campo que está sendo digitado) */
+function ppSel(id){if(PP.sel===id)return;PP.sel=id;document.querySelectorAll('[data-pid]').forEach(e=>e.classList.toggle(e.classList.contains('pc')?'sel':'on',+e.dataset.pid===id));ppPrev()}
+function ppTiraPlano(i){const p=PP.pl[i];if(p.id>0)PP.del.push(p.id);PP.pl.splice(i,1);if(PP.sel===p.id)PP.sel=PP.pl[0]?.id??null;ppMuda();render()}
+async function salvarPP(){const P=PP
+ for(const p of P.pl)if(!p.name.trim())return toast('Dê um nome para todos os planos',true)
+ if(!P.pl.length)return toast('Precisa ter pelo menos 1 plano',true)
+ const ms=P.per.map(x=>x.m);if(new Set(ms).size!==ms.length)return toast('Tem dois períodos com o mesmo número de meses',true)
+ if(P.promo.on&&!P.promo.title.trim())return toast('Escreva o título da promoção (ou desligue a promoção)',true)
+ if(P.promo.on&&P.promo.from&&P.promo.until&&P.promo.until<P.promo.from)return toast('A promoção termina antes de começar',true)
+ if(!await confirmar({t:'Salvar planos e preços?',m:'Os clientes passam a ver estes planos, períodos e promoção no app (Android, site/iPad e Windows). O preço mensal de quem já é cliente não muda (fica o de cada cliente).',ok:'Salvar',icone:'check'}))return
+ for(const id of P.del){const r=await sb.from('plans').delete().eq('id',id);if(r.error)return erro(r.error)}
+ for(const p of P.pl){const row={name:p.name.trim(),screens:p.screens,price:Math.round(p.price*100)/100,perks:p.perks.trim()||null}
+  const o=D.plans.find(x=>x.id===p.id)
+  if(p.id<0){const r=await sb.from('plans').insert(row);if(r.error)return erro(r.error)}
+  else if(!o||o.name!==row.name||o.screens!==row.screens||Number(o.price)!==row.price||(o.perks||null)!==row.perks){const r=await sb.from('plans').update(row).eq('id',p.id);if(r.error)return erro(r.error)}}
+ const per=P.per.map(x=>{const o={m:x.m,off:x.m===1?0:x.off};if(x.tag.trim())o.tag=x.tag.trim();return o});if(!per.some(x=>x.m===1))per.unshift({m:1,off:0});per.sort((a,b)=>a.m-b.m)
+ const pr=P.promo,promo=pr.on&&pr.title.trim()?{title:pr.title.trim(),text:pr.text.trim()||undefined,from:pr.from||undefined,until:pr.until||undefined}:null
+ const r=await sb.from('app_config').update({pay_periods:per,promo,updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error);PP=null;toast('Planos e preços salvos');carregar()}
 /* Servidores de IPTV: um cartão por assinatura (nome, vencimento, custo, endereços, usuário e senha).
  * Servidor 1 = servers/username/password + server_info{name,exp,cost}; os outros = itens de extra {url,urls,user,pass,name,exp,cost}.
  * SV é a cópia que está sendo editada na tela (k = posição em extra no banco; -1 = ainda não salvo). */
@@ -1155,20 +1299,6 @@ function ajConta(){
  return `<section class="box" style="max-width:620px">${bxh('user','Sua conta','Você está no painel do administrador.')}
   <div class="list">${arow('refresh','Atualizar tudo agora','Busca de novo todos os dados do painel.',"carregar({manual:true})")}
    ${arow('out','Sair do painel','Vai pedir e-mail e senha para entrar de novo.','sair()',true)}</div></section>`}
-async function salvarPlanosApp(n){
- const ps=[];for(let i=0;i<n;i++){const m=parseInt($('pm'+i).value);if(!(m>=1&&m<=24))continue
-  const o=Math.min(80,Math.max(0,parseFloat($('po'+i).value)||0)),t=$('pt'+i).value.trim();if(ps.some(x=>x.m===m))continue
-  ps.push(t?{m,off:o,tag:t}:{m,off:o})}
- if(!ps.some(x=>x.m===1))ps.unshift({m:1,off:0})
- ps.sort((a,b)=>a.m-b.m)
- const t=$('prT').value.trim(),promo=t?{title:t,text:$('prX').value.trim()||undefined,until:$('prU').value||undefined}:null
- const r=await sb.from('app_config').update({pay_periods:ps,promo,remind_days:Math.max(0,Math.min(30,parseInt($('rmD').value)||5)),updated_at:new Date().toISOString()}).eq('id',1)
- if(r.error)return erro(r.error);toast('Pagamento no app salvo');carregar()}
-async function salvarPlano(id){
- const row={name:$('pn'+id).value.trim(),screens:Number($('ps'+id).value),price:Number($('pp'+id).value)||0}
- if(!row.name||!(row.screens>=1&&row.screens<=10))return toast('Confira o nome e as telas (1 a 10)',true)
- const r=await sb.from('plans').update(row).eq('id',id);if(r.error)return erro(r.error);toast('Plano salvo');carregar()}
-async function novoPlano(){const r=await sb.from('plans').insert({name:'Novo plano',screens:1,price:0});if(r.error)return erro(r.error);toast('Plano criado: ajuste o nome e o preço');carregar()}
 async function salvarContato(){const r=await sb.from('app_config').update({contact:$('cfContato').value.trim(),updated_at:new Date().toISOString()}).eq('id',1);if(r.error)return erro(r.error);toast('Contato salvo');carregar()}
 async function salvarServidor(){
  const ls=[]
@@ -1225,29 +1355,75 @@ function palRender(q){q=q.trim().toLowerCase();palL=[];palS=0;let h=''
 
 /* ---------- Ações ---------- */
 const isoDia=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
+let fPx=false
 function formCliente(id){
  const c=id?D.clients.find(x=>x.id===id):{name:'',phone:'',notes:'',plan_id:D.plans[0]?.id,price:D.plans[0]?.price||0,expires_at:new Date(Date.now()+30*864e5)}
- dlgRes=null
+ dlgRes=null;fPx=!!c.peixe
  dialogo(`<h3>${id?'Editar cliente':'Novo cliente'}</h3>
   <label class="f">Nome (pessoa ou casa)<input class="field" id="fN" ${id?'':'autofocus'} value="${esc(c.name)}" placeholder="Ex.: Casa dos pais" maxlength="80"></label>
   <label class="f">WhatsApp<input class="field" id="fT" value="${esc(c.phone||'')}" placeholder="Ex.: 91999990000" inputmode="tel"></label>
   <div class="grid2"><label class="f">Plano<select class="field" id="fP">${D.plans.map(p=>`<option value="${p.id}"${p.id===c.plan_id?' selected':''}>${esc(p.name)} (${pl(p.screens,'tela','telas')})</option>`).join('')}</select></label>
    <label class="f">Mensalidade (R$)<input class="field" id="fV" type="number" min="0" step="0.01" value="${c.price}"></label></div>
-  <label class="f">Vencimento<input class="field" id="fE" type="date" value="${isoDia(c.expires_at)}"></label>
+  <div class="fishrow" style="margin-top:12px"><span class="fishic">🐟</span><div><b>Peixe (isento de pagamento)</b><small>Para família e amigos: não paga, não vence, telas sem limite.</small></div>${swc(!!c.peixe,"fPx=!fPx;this.classList.toggle('on',fPx);this.setAttribute('aria-checked',fPx);this.querySelector('span').textContent=fPx?'Ligado':'Desligado';$('fEw').style.display=fPx?'none':''",'Cliente Peixe')}</div>
+  <label class="f" id="fEw"${c.peixe?' style="display:none"':''}>Vencimento<input class="field" id="fE" type="date" value="${isoDia(c.expires_at)}"></label>
   ${id?'':`<div class="chips" style="margin-top:8px">${[[1,'Teste de 1 dia'],[3,'Teste de 3 dias'],[7,'7 dias'],[30,'30 dias']].map(([n,t])=>`<button type="button" class="chipb" onclick="$('fE').value=isoDia(Date.now()+${n}*864e5)">${t}</button>`).join('')}</div>`}
   <label class="f">Observação<input class="field" id="fO" value="${esc(c.notes||'')}" maxlength="120"></label>
   <div class="drow"><button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" id="fS">${id?'Salvar':'Criar cliente'}</button></div>`)
  $('fP').onchange=()=>{const p=plano(Number($('fP').value));if(p)$('fV').value=p.price}
  $('fS').onclick=async()=>{
   const name=$('fN').value.trim();if(!name)return toast('Informe o nome',true)
-  const v=$('fE').value;if(!v)return toast('Informe o vencimento',true)
-  const row={name,phone:$('fT').value.replace(/\D/g,'')||null,notes:$('fO').value.trim()||null,plan_id:Number($('fP').value)||null,price:Number($('fV').value)||0,expires_at:new Date(v+'T23:59:59').toISOString()}
+  const v=$('fE').value;if(!v&&!fPx)return toast('Informe o vencimento',true)
+  const row={name,phone:$('fT').value.replace(/\D/g,'')||null,notes:$('fO').value.trim()||null,plan_id:Number($('fP').value)||null,price:Number($('fV').value)||0,peixe:fPx,
+   expires_at:new Date((v||isoDia(Date.now()+30*864e5))+'T23:59:59').toISOString()}
   $('fS').disabled=true
   const r=id?await sb.from('clients').update(row).eq('id',id):await sb.from('clients').insert(row).select().single()
   if(r.error){$('fS').disabled=false;return erro(r.error)}
   fechar();await carregar()
   if(!id){toast('Cliente criado. Agora o primeiro código.');abrir('cli',r.data.id);novoCodigo(r.data.id)}else toast('Salvo')}}
 
+/* ---------- Teste: cliente com tempo curto que se desliga sozinho ---------- */
+const horasTeste=()=>Math.max(1,Number(D.cfg?.teste_horas)||24)
+const HTESTE=[[2,'2 horas'],[6,'6 horas'],[24,'1 dia'],[72,'3 dias'],[168,'7 dias']]
+let tst=null
+function novoTeste(){tst={h:horasTeste(),pad:false};dlgRes=null;tsDraw()}
+function tsDraw(){const p0=D.plans[0],nome=$('tN')?.value??'',tel=$('tT')?.value??'',pid=$('tP')?.value??(p0?.id||'')
+ dialogo(`<div class="dic">${ic('clock',24)}</div><h3>Novo teste</h3><p class="dm">Cria um cliente com 1 tela que se desliga sozinho no fim do tempo. Se a pessoa pagar o Pix no app com o código do teste, vira cliente normal com o mesmo código.</p>
+  <label class="f">Quanto tempo</label><div class="opts">${HTESTE.map(([h,t])=>`<button class="opt${tst.h===h?' on':''}" onclick="tst.h=${h};tsDraw()"><b>${t}</b><small>até ${dtHm(Date.now()+h*3600e3)}</small></button>`).join('')}</div>
+  ${tst.h!==horasTeste()?`<label class="ck"><input type="checkbox" ${tst.pad?'checked':''} onchange="tst.pad=this.checked"> Usar sempre ${HTESTE.find(x=>x[0]===tst.h)[1]} como padrão</label>`:`<p class="h">Este é o seu tempo padrão de teste.</p>`}
+  <div class="grid2" style="margin-top:12px"><label class="f">Nome (opcional)<input class="field" id="tN" maxlength="80" value="${esc(nome)}" placeholder="Ex.: Vizinho do João"></label>
+   <label class="f">WhatsApp (opcional)<input class="field" id="tT" value="${esc(tel)}" placeholder="Ex.: 91999990000" inputmode="tel"></label></div>
+  <label class="f">Plano quando assinar<select class="field" id="tP">${D.plans.map(p=>`<option value="${p.id}"${String(p.id)===String(pid)?' selected':''}>${esc(p.name)} · ${brl(p.price)}/mês</option>`).join('')}</select></label>
+  <div class="drow"><button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" id="tS" onclick="criarTeste()">${ic('clock',17)}Criar teste e enviar código</button></div>`)}
+async function criarTeste(){const p=plano(Number($('tP').value))||D.plans[0];if(!p)return toast('Crie um plano antes (Ajustes)',true)
+ const nome=$('tN').value.trim()||'Teste '+new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})
+ const row={name:nome,phone:$('tT').value.replace(/\D/g,'')||null,notes:null,plan_id:p.id,price:Number(p.price)||0,teste:true,active:true,expires_at:new Date(Date.now()+tst.h*3600e3).toISOString()}
+ $('tS').disabled=true
+ if(tst.pad){const r=await sb.from('app_config').update({teste_horas:tst.h}).eq('id',1);if(r.error){$('tS').disabled=false;return erro(r.error)}}
+ const r=await sb.from('clients').insert(row).select().single();if(r.error){$('tS').disabled=false;return erro(r.error)}
+ const k=await sb.rpc('admin_new_code',{p_client:r.data.id,p_label:'Teste'});if(k.error){fechar();await carregar();return erro(k.error)}
+ fechar();await carregar();toast('Teste criado: código '+k.data);abrir('cli',r.data.id);enviar(k.data)}
+/** Mais tempo de teste: soma ao que falta (se já acabou, conta de agora) */
+let mt=null
+const mtFim=(c,h)=>new Date(Math.max(Date.now(),new Date(c.expires_at).getTime())+h*3600e3)
+function maisTeste(id){const c=D.clients.find(x=>x.id===id);if(!c)return;mt={id,h:horasTeste()};dlgRes=null;mtDraw()}
+function mtDraw(){const c=D.clients.find(x=>x.id===mt.id)
+ dialogo(`<div class="dic">${ic('clock',24)}</div><h3>Mais tempo de teste</h3><p class="dm">${esc(c.name)}: ${new Date(c.expires_at)<Date.now()?'o teste acabou ('+vencTxt(c)+'). O tempo novo conta a partir de agora.':'teste até '+dtHm(c.expires_at)+' ('+vencTxt(c)+'). O tempo novo é somado.'}</p>
+  <div class="opts">${HTESTE.map(([h,t])=>`<button class="opt${mt.h===h?' on':''}" onclick="mt.h=${h};mtDraw()"><b>+ ${t}</b><small>até ${dtHm(mtFim(c,h))}</small></button>`).join('')}</div>
+  <div class="drow"><button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" onclick="mtOk()">${ic('clock',17)}Teste até ${dtHm(mtFim(c,mt.h))}</button></div>`)}
+async function mtOk(){const c=D.clients.find(x=>x.id===mt.id),n=mtFim(c,mt.h);fechar()
+ const r=await sb.from('clients').update({expires_at:n.toISOString(),active:true}).eq('id',mt.id);if(r.error)return erro(r.error);toast(c.name+': teste até '+dtHm(n));carregar()}
+const velhosTeste=()=>D.clients.filter(c=>c.teste&&new Date(c.expires_at)<Date.now()-7*864e5)
+async function apagarTestes(){const l=velhosTeste();if(!l.length)return
+ if(!await confirmar({t:'Apagar '+pl(l.length,'teste','testes')+'?',m:'Testes que acabaram há mais de 7 dias e não pagaram: '+l.slice(0,6).map(c=>c.name).join(', ')+(l.length>6?' e mais '+(l.length-6):'')+'. Os códigos deles são apagados.',ok:'Apagar',perigo:true,icone:'trash'}))return
+ const r=await sb.from('clients').delete().in('id',l.map(c=>c.id)).select('id');if(r.error)return erro(r.error);toast(pl(r.data?.length||0,'teste apagado','testes apagados'));carregar()}
+async function setPeixe(id,on){const c=D.clients.find(x=>x.id===id);if(!c)return
+ if(!await confirmar(on?{t:`Deixar “${c.name}” como Peixe?`,m:'Fica isento de pagamento: não vence, não recebe cobrança nem aviso de pagamento, e pode ter quantas telas quiser.',ok:'Ligar Peixe',icone:'check'}
+  :{t:`Tirar o Peixe de “${c.name}”?`,m:`Volta a ser cliente normal: vence em ${dt(c.expires_at)}${days(c.expires_at)<0?' (já passou: as telas param até renovar)':''} e volta a ser cobrado.`,ok:'Tirar Peixe',perigo:days(c.expires_at)<0}))return
+ const row={peixe:on};if(!on&&days(c.expires_at)<0)row.expires_at=novaData(c,1).toISOString() // dá 30 dias para não cortar na hora
+ const r=await sb.from('clients').update(row).eq('id',id);if(r.error)return erro(r.error)
+ toast(on?'🐟 '+c.name+' agora é Peixe':c.name+' voltou a ser cliente normal'+(row.expires_at?' (vence em '+dt(row.expires_at)+')':''));carregar()}
+function avisoPara(id){const c=D.clients.find(x=>x.id===id);if(!c)return
+ av.alvo='client';av.cli=id;av.kind='info';if(av.mod==='venc'||av.mod==='venceu')av.mod='';fecharSheet();ir('avisos')}
 async function excluirCliente(id){const c=D.clients.find(x=>x.id===id)
  if(!await confirmar({t:`Excluir “${c.name}”?`,m:'Todos os códigos dele são apagados e os aparelhos param de funcionar. Não dá para desfazer.',ok:'Excluir de vez',perigo:true,icone:'trash'}))return
  const r=await sb.from('clients').delete().eq('id',id).select('id');if(r.error)return erro(r.error)
@@ -1266,19 +1442,21 @@ async function renomear(code){const k=D.codes.find(x=>x.code===code)
 
 /* Renovar: escolhe quantos meses (cada mês = 30 dias, igual ao Pix) ou uma data */
 let rn=null
-function novaData(c,m){const base=Math.max(Date.now(),new Date(c.expires_at).getTime()),n=new Date(base+m*30*864e5);n.setHours(23,59,59,0);return n}
-function renovar(id){const c=D.clients.find(x=>x.id===id);if(!c)return;rn={id,m:1,data:''};dlgRes=null;rnDraw()}
+function novaData(c,m){const base=c.teste?Date.now():Math.max(Date.now(),new Date(c.expires_at).getTime()),n=new Date(base+m*30*864e5);n.setHours(23,59,59,0);return n}
+function renovar(id){const c=D.clients.find(x=>x.id===id);if(!c)return;if(c.peixe)return toast('Cliente Peixe não precisa renovar')
+ rn={id,m:1,data:''};dlgRes=null;rnDraw()}
 function rnDraw(){const c=D.clients.find(x=>x.id===rn.id),alvo=rn.data?new Date(rn.data+'T23:59:59'):novaData(c,rn.m)
- dialogo(`<div class="dic">${ic('refresh',24)}</div><h3>Renovar ${esc(c.name)}</h3><p class="dm">Hoje vence em ${dt(c.expires_at)} (${vencTxt(c)}). O tempo novo é somado ao que ele ainda tem.</p>
+ dialogo(`<div class="dic">${ic('refresh',24)}</div><h3>${c.teste?'Virar cliente: ':'Renovar '}${esc(c.name)}</h3><p class="dm">${c.teste?'Ele pagou por fora? Escolha quanto tempo. O código do teste continua o mesmo.':`Hoje vence em ${dt(c.expires_at)} (${vencTxt(c)}). O tempo novo é somado ao que ele ainda tem.`}</p>
   <div class="opts">${[1,3,6,12].map(m=>`<button class="opt${!rn.data&&rn.m===m?' on':''}" onclick="rn.m=${m};rn.data='';rnDraw()"><b>+ ${pl(m,'mês','meses')}</b><small>até ${dt(novaData(c,m))}</small></button>`).join('')}</div>
   <label class="f">Ou escolha a data<input class="field" type="date" value="${rn.data}" onchange="rn.data=this.value;rnDraw()"></label>
   <div class="drow"><button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" onclick="rnOk()">Renovar até ${dt(alvo)}</button></div>`)}
 async function rnOk(){const c=D.clients.find(x=>x.id===rn.id),n=rn.data?new Date(rn.data+'T23:59:59'):novaData(c,rn.m)
  if(isNaN(n))return toast('Data inválida',true)
- fechar();const r=await sb.from('clients').update({expires_at:n.toISOString(),active:true}).eq('id',rn.id);if(r.error)return erro(r.error);toast(c.name+': renovado até '+dt(n));carregar()}
+ fechar();const r=await sb.from('clients').update({expires_at:n.toISOString(),active:true,teste:false}).eq('id',rn.id);if(r.error)return erro(r.error);toast(c.name+': renovado até '+dt(n));carregar()}
 
 /* Cobrar: mensagem pronta para o WhatsApp, com o link do Pix */
-function cobrar(id){const c=D.clients.find(x=>x.id===id);if(!c)return;const k=codigosDe(id)[0],d=days(c.expires_at)
+function cobrar(id){const c=D.clients.find(x=>x.id===id);if(!c)return;if(c.peixe)return toast('Cliente Peixe é isento de pagamento')
+ const k=codigosDe(id)[0],d=days(c.expires_at)
  const quando=d<0?`venceu no dia ${dt(c.expires_at)}`:d===0?'vence hoje':`vence em ${pl(d,'dia','dias')} (${dt(c.expires_at)})`
  const txt=`Olá, ${c.name}! Tudo bem?\n\nSua assinatura do *MunizFlix* ${quando}.\n\n${k?`Para renovar é rapidinho, pelo Pix:\n${PAYURL(k.code)}\n\nAssim que o pagamento cair, o acesso renova sozinho. `:''}Qualquer dúvida, é só chamar!`
  dlgRes=null
@@ -1313,7 +1491,8 @@ async function excluirCodigo(code){
  const r=await sb.from('codes').delete().eq('code',code);if(r.error)return erro(r.error);if(sheet?.t==='tela'&&sheet.id===code)fecharSheet();toast('Código excluído');carregar()}
 
 function enviar(code){const k=D.codes.find(x=>x.code===code),c=D.clients.find(x=>x.id===k?.client_id)
- const txt=`Olá${c?', '+c.name:''}! Seu acesso ao *MunizFlix* está pronto.\n\nSeu código: *${code}*\n(vale para 1 aparelho)\n\nComo instalar:\n• TV: abra o app Downloader e digite ${LINKS.dl}\n• Celular Android: ${LINKS.cel}\n• Computador: ${LINKS.pc}\n• iPhone ou iPad: abra ${SITE} no Safari\n\nDepois é só abrir o MunizFlix e digitar o código.\n\nQuer escolher filmes e canais pelo celular? Abra ${CTRL} e use o mesmo código.`
+ const tt=c?.teste?`Seu *teste grátis* vai até ${dtHm(c.expires_at)}. Gostou? Assine pelo Pix no próprio app (em Assinatura), com este mesmo código: a liberação é na hora.\n\n`:''
+ const txt=`Olá${c&&!c.teste?', '+c.name:''}! Seu acesso ao *MunizFlix* está pronto.\n\n${tt}Seu código: *${code}*\n(vale para 1 aparelho)\n\nComo instalar:\n• TV: abra o app Downloader e digite ${LINKS.dl}\n• Celular Android: ${LINKS.cel}\n• Computador: ${LINKS.pc}\n• iPhone ou iPad: abra ${SITE} no Safari\n\nDepois é só abrir o MunizFlix e digitar o código.\n\nQuer escolher filmes e canais pelo celular? Abra ${CTRL} e use o mesmo código.`
  dlgRes=null
  dialogo(`<h3>Enviar o código ${code}</h3><p class="dm">Mensagem pronta com o código e os links de instalação. Pode mudar o texto antes de enviar.</p>
   <label class="f"><textarea class="field" id="eT" rows="13">${esc(txt)}</textarea></label>
@@ -1329,7 +1508,7 @@ async function iniciar(){
  const{data:adm}=await sb.from('admins').select('user_id').eq('user_id',session.user.id).maybeSingle()
  if(!adm){$('naId').textContent=session.user.id;$('vNoAdmin').classList.remove('hide');return}
  $('btnBusca').innerHTML=ic('search',17)+'<span>Buscar cliente, código ou tela</span><kbd>Ctrl K</kbd>'
- $('btnUpd').innerHTML=ic('refresh',18);$('btnNovo').innerHTML=ic('plus',18)+'<span>Novo cliente</span>'
+ $('btnUpd').innerHTML=ic('refresh',18);$('btnNovo').innerHTML=ic('plus',18)+'<span>Novo cliente</span>';$('btnTeste').innerHTML=ic('clock',18)+'<span>Teste</span>'
  $('vApp').classList.remove('hide');$('page').classList.add('enter');await carregar()
  // não atualiza no meio de uma digitação nem com janela aberta (ver ocupado())
  clearInterval(timer);timer=setInterval(pulso,10000)}
