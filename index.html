@@ -985,7 +985,11 @@ const PONTES=['https://munizflix-ponte.munizflix.workers.dev','https://munizflix
 const resDe=l=>(l||[]).map(r=>({txt:[r.url,...(r.urls||[])].filter(Boolean).join('\n'),user:r.user||'',pass:r.pass||'',name:r.name||'',exp:r.exp||'',cost:r.cost??''}))
 function svDe(g){const si=g.server_info||{}
  return[{main:true,k:-1,txt:(g.servers||[]).join('\n'),user:g.username||'',pass:g.password||'',name:si.name||'',exp:si.exp||'',cost:si.cost??'',res:resDe(si.res)},
-  ...(g.extra||[]).map((x,k)=>({k,txt:[x.url,...(x.urls||[])].filter(Boolean).join('\n'),user:x.user||'',pass:x.pass||'',name:x.name||'',exp:x.exp||'',cost:x.cost??'',res:resDe(x.res)}))]}
+  ...(g.extra||[]).map((x,k)=>({k,txt:[x.url,...(x.urls||[])].filter(Boolean).join('\n'),user:x.user||'',pass:x.pass||'',name:x.name||'',exp:x.exp||'',cost:x.cost??'',res:resDe(x.res)})),
+  /* fora = reserva de OUTRO fornecedor (app_config.reserves, ex.: P2 LIVE): catálogo próprio, o app acha o título pelo nome e ano. Entra por último. */
+  ...(g.reserves||[]).map((x,k)=>({fora:true,k,keep:x,txt:[x.url,...(x.urls||[])].filter(Boolean).join('\n'),user:x.user||'',pass:x.pass||'',name:x.name||'',exp:x.exp||'',cost:x.cost??'',res:[]}))]}
+/** posição onde entra um servidor novo (antes das reservas de outro fornecedor) */
+const fimSrv=()=>{const k=SV.findIndex(x=>x.fora);return k<0?SV.length:k}
 const dLoc=s=>new Date(s+'T00:00:00')
 const isoD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')
 const dBR=s=>s?dLoc(s).toLocaleDateString('pt-BR'):'—'
@@ -1011,10 +1015,9 @@ function ajServidor(g){
      <div class="grid2" style="margin-top:8px"><label class="f">Por renovação<span class="money"><i>R$</i><input class="field" type="number" min="0" step="0.01" value="${esc(r.cost)}" placeholder="0,00" oninput="SV[${i}].res[${j}].cost=this.value"></span></label>
      <div style="align-self:end;text-align:right"><button class="btn bad sm" onclick="SV[${i}].res.splice(${j},1);render()">${ic('trash',15)}Tirar</button></div></div></div>`}).join('')}
    <button class="btn sm" style="margin-top:10px" onclick="(SV[${i}].res=SV[${i}].res||[]).push({txt:'',user:'',pass:'',name:'',exp:'',cost:''});render()">${ic('plus',15)}Adicionar login reserva</button>`}
- return `<section class="box">${bxh('signal','Servidores de IPTV','As telas recebem estes dados ao abrir o app. O conteúdo de todos os servidores é somado (sem repetir títulos). Renovou um servidor? Toque em <b>Renovei +30 dias</b> no cartão dele.')}
-  <div class="svs">${SV.map((x,i)=>{const[c,t]=svSelo(x.exp),novo=x.k<0&&!x.main
+ const card=(x,i)=>{const[c,t]=svSelo(x.exp),novo=x.k<0&&!x.main
    return `<div class="sv ${c}">
-   <div class="svh"><span class="svi">${ic('signal',20)}</span><div class="svt"><input class="pnm" value="${esc(x.name)}" placeholder="${x.main?'Nome (ex.: servidor principal)':'Nome (ex.: AURA TV+)'}" maxlength="40" oninput="SV[${i}].name=this.value" aria-label="Nome do servidor ${i+1}"><small>Servidor ${i+1} · ${x.main?'principal':'soma ao catálogo'}</small></div><span class="tag ${c}">${t}</span></div>
+   <div class="svh"><span class="svi">${ic(x.fora?'users':'signal',20)}</span><div class="svt"><input class="pnm" value="${esc(x.name)}" placeholder="${x.main?'Nome (ex.: servidor principal)':x.fora?'Nome (ex.: P2 LIVE)':'Nome (ex.: AURA TV+)'}" maxlength="40" oninput="SV[${i}].name=this.value" aria-label="Nome do ${x.fora?'servidor reserva':'servidor '+(i+1)}"><small>${x.fora?'Reserva · catálogo próprio · entra por último':'Servidor '+(i+1)+' · '+(x.main?'principal':'soma ao catálogo')}</small></div><span class="tag ${c}">${t}</span></div>
    <div class="svf"><label class="f">Vencimento<input class="field" type="date" value="${esc(x.exp)}" onchange="SV[${i}].exp=this.value;render()"></label>
     <label class="f">Por renovação<span class="money"><i>R$</i><input class="field" type="number" min="0" step="0.01" value="${esc(x.cost)}" placeholder="0,00" oninput="SV[${i}].cost=this.value"></span></label></div>
    <div class="svb"><button class="btn ok sm" onclick="renovei(${i})">${ic('refresh',15)}Renovei +30 dias</button><button class="btn sm" onclick="conferirSrv(${i})" id="svc${i}">${ic('search',15)}Conferir no servidor</button></div>
@@ -1024,12 +1027,22 @@ function ajServidor(g){
     <p class="h" style="margin-top:6px">Com mais de um endereço, o app tenta o próximo sozinho quando o primeiro não responde.</p>
     <div class="grid2" style="margin-top:10px"><label class="f">Usuário<input class="field" value="${esc(x.user)}" oninput="SV[${i}].user=this.value" autocomplete="off"></label>
      <label class="f">Senha<span class="pw"><input class="field" id="svp${i}" type="password" value="${esc(x.pass)}" oninput="SV[${i}].pass=this.value" autocomplete="new-password">${olho('svp'+i)}</span></label></div>
-    ${x.main?'':`<button class="btn bad sm" style="margin-top:12px" onclick="tirarSrv(${i})">${ic('trash',15)}Tirar este servidor</button>`}</details>
-   <details class="svd"><summary>${ic('users',15)}Logins reserva${(x.res||[]).length?' · '+(x.res||[]).length:''}</summary>${resHtml(x,i)}</details></div>`}).join('')}
-   <button class="sv add" onclick="SV.push({k:-1,txt:'',user:'',pass:'',name:'',exp:'',cost:'',res:[]});render()">${ic('plus',22)}<span>Adicionar servidor</span></button></div>
-  <div class="bxf"><span class="h">${total?`Custo: <b>${brl(total)}</b> a cada renovação (${pl(SV.length,'servidor','servidores')})`:''}${g.updated_at?(total?' · ':'')+'Última alteração: '+dth(g.updated_at):''}</span><button class="btn pri" onclick="salvarServidor()">Salvar servidores</button></div>
+    ${x.main?'':`<button class="btn bad sm" style="margin-top:12px" onclick="tirarSrv(${i})">${ic('trash',15)}Tirar ${x.fora?'esta reserva':'este servidor'}</button>`}</details>
+   ${x.fora?'':`<details class="svd"><summary>${ic('users',15)}Logins reserva${(x.res||[]).length?' · '+(x.res||[]).length:''}</summary>${resHtml(x,i)}</details>`}</div>`}
+ const nAss=SV.length+SV.reduce((a,x)=>a+(x.res||[]).length,0)
+ return `<section class="box">${bxh('signal','Servidores de IPTV','As telas recebem estes dados ao abrir o app. O conteúdo de todos os servidores é somado (sem repetir títulos). Renovou um servidor? Toque em <b>Renovei +30 dias</b> no cartão dele.')}
+  <div class="svs">${SV.map((x,i)=>x.fora?'':card(x,i)).join('')}
+   <button class="sv add" onclick="SV.splice(fimSrv(),0,{k:-1,txt:'',user:'',pass:'',name:'',exp:'',cost:'',res:[]});render()">${ic('plus',22)}<span>Adicionar servidor</span></button></div>
+  <h3 style="margin:22px 0 4px;font-size:15px">Reserva de outro fornecedor</h3>
+  <p class="h" style="margin-bottom:12px">Usada <b>por último</b>: quando todos os servidores e logins reserva acima recusarem o filme (ele já está tocando em outras telas), o app procura o mesmo título nesta reserva, pelo nome e ano, e troca sozinho. Ela não aparece no catálogo do app.
+   <br>Lista de títulos da reserva: ${g.reserves_at?'atualizada em <b>'+dth(g.reserves_at)+'</b>':'<b>ainda não montada</b>'} · atualiza sozinha todo dia às 5h. <button class="btn sm" id="rvIdx" style="margin-left:6px" onclick="atualizarIndice()">${ic('refresh',15)}Atualizar agora</button></p>
+  <div class="svs">${SV.map((x,i)=>x.fora?card(x,i):'').join('')}
+   <button class="sv add" onclick="SV.push({fora:true,k:-1,keep:{},txt:'',user:'',pass:'',name:'',exp:'',cost:'',res:[]});render()">${ic('plus',22)}<span>Adicionar reserva</span></button></div>
+  <div class="bxf"><span class="h">${total?`Custo: <b>${brl(total)}</b> a cada renovação (${pl(nAss,'assinatura','assinaturas')})`:''}${g.updated_at?(total?' · ':'')+'Última alteração: '+dth(g.updated_at):''}</span><button class="btn pri" onclick="salvarServidor()">Salvar servidores</button></div>
   <p class="note">Para saber se cada servidor está respondendo, abra o app e veja em Perfil → Servidores (bolinha verde, amarela ou vermelha).</p></section>`}
 async function tirarSrv(i){const x=SV[i]
+ if(x.fora){if(!await confirmar({t:'Tirar a reserva '+(x.name||'')+'?',m:'O app deixa de usar esta reserva depois que você tocar em Salvar servidores.',ok:'Tirar',perigo:true,icone:'trash'}))return
+  SV.splice(i,1);return render()}
  if(!await confirmar({t:'Tirar o servidor '+(i+1)+'?',m:`${x.name?x.name+': o':'O'} conteúdo dele sai do app de todos os clientes depois que você tocar em Salvar servidores.`,ok:'Tirar',perigo:true,icone:'trash'}))return
  SV.splice(i,1);render()}
 /** Renovou a assinatura na loja: +30 dias a partir do vencimento atual (ou de hoje, se já venceu). Salva só o vencimento. */
@@ -1042,6 +1055,7 @@ async function renovei(i){const x=SV[i]
  salvarVenc(i,isoD(nv),'Renovado até '+nv.toLocaleDateString('pt-BR'))}
 async function salvarVenc(i,exp,msg){const x=SV[i],g=D.cfg,up={updated_at:new Date().toISOString()}
  if(x.main)up.server_info={...(g.server_info||{}),exp}
+ else if(x.fora){const rv=(g.reserves||[]).map(e=>({...e}));if(!rv[x.k])return toast('Salve os servidores primeiro',true);rv[x.k].exp=exp;up.reserves=rv}
  else{const ex=(g.extra||[]).map(e=>({...e}));if(!ex[x.k])return toast('Salve os servidores primeiro',true);ex[x.k].exp=exp;up.extra=ex}
  const r=await sb.from('app_config').update(up).eq('id',1)
  if(r.error)return erro(r.error)
@@ -1102,7 +1116,8 @@ async function novoPlano(){const r=await sb.from('plans').insert({name:'Novo pla
 async function salvarContato(){const r=await sb.from('app_config').update({contact:$('cfContato').value.trim(),updated_at:new Date().toISOString()}).eq('id',1);if(r.error)return erro(r.error);toast('Contato salvo');carregar()}
 async function salvarServidor(){
  const ls=[]
- for(let i=0;i<SV.length;i++){const x=SV[i],n='servidor '+(i+1)+(x.name?' ('+x.name+')':'')
+ const rv=[]
+ for(let i=0;i<SV.length;i++){const x=SV[i],n=(x.fora?'servidor reserva':'servidor '+(i+1))+(x.name?' ('+x.name+')':'')
   const urls=x.txt.split('\n').map(s=>s.trim().replace(/\/+$/,'')).filter(Boolean)
   if(!x.main&&!urls.length&&!x.user&&!x.pass)continue // cartão novo deixado em branco
   if(!urls.length||!urls.every(s=>/^https?:\/\/\S+$/.test(s)))return toast('Endereço inválido no '+n+' (use http://...)',true)
@@ -1115,14 +1130,25 @@ async function salvarServidor(){
    if(!r.user.trim()||!r.pass)return toast('Informe usuário e senha do '+nr,true)
    const u=ru.length?ru:urls,o={url:u[0],user:r.user.trim(),pass:r.pass};if(u.length>1)o.urls=u.slice(1)
    if(r.name.trim())o.name=r.name.trim();if(r.exp)o.exp=r.exp;if(r.cost!==''&&r.cost!=null)o.cost=Math.max(0,Number(r.cost)||0);res.push(o)}
+  if(x.fora){const o={...(x.keep||{}),url:urls[0],user:x.user.trim(),pass:x.pass};delete o.urls;delete o.name;delete o.exp;delete o.cost
+   if(urls.length>1)o.urls=urls.slice(1);if(x.name.trim())o.name=x.name.trim();if(x.exp)o.exp=x.exp;if(c!==undefined)o.cost=c;rv.push(o);continue}
   ls.push({main:!!x.main,urls,user:x.user.trim(),pass:x.pass,name:x.name.trim()||undefined,exp:x.exp||undefined,cost:c,res})}
  const[m,...ex]=ls
  const extra=ex.map(x=>{const o={url:x.urls[0],user:x.user,pass:x.pass};if(x.urls.length>1)o.urls=x.urls.slice(1)
   if(x.name)o.name=x.name;if(x.exp)o.exp=x.exp;if(x.cost!==undefined)o.cost=x.cost;if(x.res.length)o.res=x.res;return o})
  const server_info={};if(m.name)server_info.name=m.name;if(m.exp)server_info.exp=m.exp;if(m.cost!==undefined)server_info.cost=m.cost;if(m.res.length)server_info.res=m.res
- if(!await confirmar({t:'Salvar '+pl(ls.length,'servidor','servidores')+'?',m:'Todos os aparelhos passam a usar estes dados na próxima vez que abrirem o app. Se algo estiver errado, ninguém consegue assistir.',ok:'Salvar servidores',icone:'signal'}))return
- const r=await sb.from('app_config').update({servers:m.urls,username:m.user,password:m.pass,extra,server_info,updated_at:new Date().toISOString()}).eq('id',1)
- if(r.error)return erro(r.error);SV=null;toast('Servidores salvos');carregar()}
+ if(!await confirmar({t:'Salvar '+pl(ls.length,'servidor','servidores')+(rv.length?' e '+pl(rv.length,'reserva','reservas'):'')+'?',m:'Todos os aparelhos passam a usar estes dados na próxima vez que abrirem o app. Se algo estiver errado, ninguém consegue assistir.',ok:'Salvar servidores',icone:'signal'}))return
+ // login/endereço da reserva de fora mudou: a lista de títulos dela precisa ser montada de novo
+ const chaveRv=l=>JSON.stringify((l||[]).map(e=>[e.url,e.urls||[],e.user,e.pass]))
+ const mudouRv=chaveRv(rv)!==chaveRv(D.cfg?.reserves)
+ const r=await sb.from('app_config').update({servers:m.urls,username:m.user,password:m.pass,extra,server_info,reserves:rv,updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error);SV=null;toast('Servidores salvos');if(mudouRv&&rv.length)atualizarIndice(true);carregar()}
+/** Monta de novo a lista de títulos da reserva de outro fornecedor (leva uns 2 minutos, em segundo plano no Supabase). */
+async function atualizarIndice(calado){const b=$('rvIdx');if(b)b.disabled=true
+ let ok=false;try{const r=await sb.functions.invoke('reserva-indice',{body:{force:true}});ok=!r.error&&r.data?.ok}catch{/* sem internet */}
+ if(b)b.disabled=false
+ if(!ok)return toast('Não deu para atualizar a lista da reserva agora. Tente de novo daqui a pouco.',true)
+ toast(calado?'Servidores salvos. A lista da reserva está sendo montada (uns 2 minutos).':'Atualizando a lista da reserva. Leva uns 2 minutos.')}
 
 /* ---------- Busca geral (Ctrl+K) ---------- */
 let palL=[],palS=0
