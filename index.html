@@ -313,6 +313,20 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .pc.add{align-items:center;justify-content:center;border-style:dashed;color:var(--mut);font-weight:700;min-height:150px;gap:6px}.pc.add:hover{color:#fff;border-color:var(--acc)}
 .lockpv{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px;border-radius:14px;background:radial-gradient(circle at 50% 0,#2a1a4f,#0b0914);border:1px solid var(--line2);margin-bottom:14px;text-align:center}
 .lockpv img{width:42px;height:42px;border-radius:12px}.lockpv b{font-size:16px}.lockpv span{color:var(--tx2);font-size:13px}
+.srvl{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--tx2);margin:-4px 0 0}.srvl b{color:var(--tx)}
+.est{margin-bottom:18px}.iguais{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.igl{border:1px solid var(--line2);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.02)}
+.igt{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:8px}.igt b{font-size:14.5px}
+.igs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.igc{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;padding:8px 10px;border-radius:10px;border:1px solid var(--line2);background:rgba(255,255,255,.03);color:var(--tx);cursor:pointer;font:inherit}
+.igc span{display:flex;flex-direction:column;font-size:13px;font-weight:700}.igc small{font-weight:400;color:var(--mut);font-size:11.5px}.igc b{font-size:12.5px;color:var(--pri,#c084fc);white-space:nowrap}
+.estq{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.estn{border:1px solid var(--line2);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:2px;background:rgba(255,255,255,.02)}
+.estn span{font-size:12.5px;color:var(--mut)}.estn b{font-size:28px;line-height:1.1}.estn small{font-size:11.5px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.estn.ok b{color:var(--ok)}.estn.warn b{color:var(--warn)}.estn.bad b{color:var(--bad)}
+.estmsg{margin:10px 0 0;font-size:13.5px;font-weight:600}.estmsg.ok{color:var(--ok)}.estmsg.warn{color:var(--warn)}.estmsg.bad{color:var(--bad)}
+.estl{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.chipv{font-size:12px;padding:4px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--tx2)}.chipv.fora{border-style:dashed}
+@media(max-width:560px){.estq{grid-template-columns:minmax(0,1fr)}.igs{grid-template-columns:minmax(0,1fr)}}
 .svs{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
 .sv{position:relative;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid var(--line2);display:flex;flex-direction:column;gap:12px;overflow:hidden}
 .sv::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--line2)}
@@ -522,8 +536,8 @@ $('lgGo').onclick=async()=>{
 async function sair(){if(!await confirmar({t:'Sair do painel?',m:'Você vai precisar do e-mail e da senha para entrar de novo.',ok:'Sair',icone:'out'}))return;await sb.auth.signOut();location.reload()}
 
 /* ---------- Dados ---------- */
-let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],pays:[],nts:[],st:{codes:{},days:{},top:[]}},loadedAt=0,falha=false,pulsos=0
-const COLS='code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,created_at,app_sig,app_plat,app_origin,copia_em'
+let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],pays:[],nts:[],st:{codes:{},days:{},top:[]},pico:null},loadedAt=0,falha=false,pulsos=0
+const COLS='code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,watching_src,created_at,app_sig,app_plat,app_origin,copia_em'
 const PAGES=[['inicio','Início','home'],['aovivo','Ao vivo','tv'],['clientes','Clientes','users'],['financeiro','Financeiro','wallet'],['avisos','Avisos','mega'],['protecao','Proteção','shield'],['ajustes','Ajustes','gear']]
 const ANTIGO={geral:'inicio',telas:'aovivo',pagamentos:'financeiro'}
 let tab=(()=>{let h=location.hash.slice(1);h=ANTIGO[h]||h;return PAGES.some(p=>p[0]===h)?h:'inicio'})()
@@ -533,17 +547,18 @@ async function carregar(o={}){
  try{
   // antes de ler: fecha o que ficou "assistindo" em TVs que sumiram
   await sb.rpc('admin_refresh').then(()=>{},()=>{})
-  const [p,c,k,g,rm,st,py,nn]=await Promise.all([
+  const [p,c,k,g,rm,st,pc,py,nn]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
    sb.from('codes').select(COLS).order('created_at'),
    sb.from('app_config').select('*').eq('id',1).single(),
    sb.from('remotes').select('id,code,name,last_seen,approved_at').eq('status','ok').order('approved_at'),
    sb.rpc('admin_watch_stats',{p_days:30}),
+   sb.rpc('admin_pico_titulo',{p_days:30}),
    sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at').order('created_at',{ascending:false}).limit(400),
    sb.from('notices').select('id,client_id,title,kind,created_at').order('id',{ascending:false}).limit(300)])
   for(const r of [p,c,k,g])if(r.error)throw r.error
-  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,nts:nn.error?[]:nn.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data}
+  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,nts:nn.error?[]:nn.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data,pico:pc.error||!pc.data?null:pc.data}
   loadedAt=Date.now();falha=false;render();if(o.manual)toast('Atualizado')
  }catch(e){falha=true;liveHtml();if(!o.quieto)erro(e)}}
 /** Batida leve a cada 10 s: só o estado das telas (quem está online / assistindo). */
@@ -715,8 +730,37 @@ function cardTela(k){const e=estado(k),cl=clienteDe(k),s=stOf(k.code),a=agoraDe(
   <header><span class="pill ${e}"><i></i>${EST[e]}</span>${k.active?'':'<span class="tag bad">Desligado por você</span>'}<span class="sp"></span>${k.device_tag?`<span class="sig" title="Último sinal recebido deste aparelho">${ic('signal',13)}sinal ${ago(k.last_seen)}</span>`:''}</header>
   <div><h3>${esc(k.label||'Tela sem nome')}</h3></div><p class="who">${esc(cl?.name||'?')} · <span class="code">${k.code}</span></p>
   <div class="nowb ${e}">${e==='play'?ic(KIC[k.watching_kind]||'play',19):''}<div><b>${esc(a.t)}</b><small>${esc(a.s)}</small></div></div>
+  ${e==='play'&&k.watching_src?`<p class="srvl" title="Servidor que esta tela está usando agora">${ic('signal',13)}Servidor: <b>${esc(k.watching_src)}</b></p>`:''}
   <footer><span class="plat">${platHtml(k)}</span>${k.device_tag?`<span class="hoje">Hoje <b>${tm(s.today)}</b></span>`:''}
    ${k.device_tag&&k.active?`<a class="btn sm" href="controle/?tv=${k.code}" onclick="event.stopPropagation()" title="Escolher o que passa nesta tela">${ic('phone',15)}Controlar</a>`:''}</footer></article>`}
+/* Estoque = quantas telas conseguem ver o MESMO título ao mesmo tempo. O servidor deixa 1 tela por título em cada login:
+ * cada servidor e cada login reserva valem 1 vaga; a reserva de outro fornecedor vale as conexões dela (conns). */
+function vagas(){const g=D.cfg||{},l=[]
+ const add=(nome,n,tipo)=>l.push({nome,n,tipo})
+ add(g.server_info?.name||'Servidor 1',1,'srv');(g.server_info?.res||[]).forEach((r,j)=>add(r.name||'Servidor 1 reserva '+(j+1),1,'res'))
+ ;(g.extra||[]).forEach((x,i)=>{add(x.name||'Servidor '+(i+2),1,'srv');(x.res||[]).forEach((r,j)=>add(r.name||(x.name||'Servidor '+(i+2))+' reserva '+(j+1),1,'res'))})
+ ;(g.reserves||[]).forEach((r,j)=>add(r.name||'Reserva '+(j+1),Math.max(1,Number(r.conns)||1),'fora'))
+ return{l,total:l.reduce((a,x)=>a+x.n,0)}}
+function blocoEstoque(){
+ const tocando=D.codes.filter(k=>estado(k)==='play'&&k.watching),grp={}
+ tocando.forEach(k=>(grp[k.watching]=grp[k.watching]||[]).push(k))
+ const iguais=Object.entries(grp).filter(([,l])=>l.length>1).sort((a,b)=>b[1].length-a[1].length)
+ const v=vagas(),pc=D.pico,pico=pc?.pico||0,maior=iguais.length?iguais[0][1].length:0,usa=Math.max(pico,maior),folga=v.total-usa
+ const [cls,msg]=folga>=3?['ok','Folga boa. Ainda cabem mais '+pl(folga,'tela','telas')+' no mesmo filme além do pico.']
+  :folga>=1?['warn','Folga curta: só mais '+pl(folga,'tela','telas')+' além do pico. Bom momento para comprar mais um login P2.']
+  :['bad','Sem folga: o pico já usou todas as vagas. Compre mais um login P2 (ou outro login reserva).']
+ return `<section class="box est">${bxh('layers','Mesmo título em várias telas','Quando o mesmo filme está em mais de uma tela, cada uma usa um servidor diferente (o app troca sozinho).')}
+  ${iguais.length?`<div class="iguais">${iguais.map(([t,l])=>`<div class="igl"><div class="igt"><b>${esc(t)}</b><span class="tag warn">${l.length} telas</span></div>
+   <div class="igs">${l.map(k=>`<button class="igc" onclick="abrir('tela','${k.code}')"><span>${esc(k.label||k.code)}<small>${esc(clienteDe(k)?.name||'?')}</small></span><b>${esc(k.watching_src||'servidor ?')}</b></button>`).join('')}</div></div>`).join('')}</div>`
+   :`<p class="h">Agora nenhum título está em mais de uma tela.</p>`}
+  <div class="estq">
+   <div class="estn"><span>Vagas para o mesmo filme</span><b>${v.total}</b><small>telas ao mesmo tempo</small></div>
+   <div class="estn"><span>Pico em ${pc?.dias||30} dias</span><b>${pico}</b><small>${pc?.top?.[0]?esc(pc.top[0].titulo)+' · '+dth(pc.top[0].quando):'sem repetição ainda'}</small></div>
+   <div class="estn ${cls}"><span>Folga</span><b>${folga}</b><small>vagas sobrando no pico</small></div></div>
+  <p class="estmsg ${cls}">${msg}</p>
+  <div class="estl">${v.l.map(x=>`<span class="chipv ${x.tipo}">${esc(x.nome)}${x.n>1?' ×'+x.n:''}</span>`).join('')}</div>
+  ${pc?.top?.length>1?`<details class="svd" style="margin-top:10px"><summary>${ic('chart',15)}Títulos que mais lotaram (${pc.dias} dias)</summary><div class="list">${pc.top.map(x=>`<div class="lrow"><span class="k">${x.pico}</span><div><b>${esc(x.titulo)}</b><small>${dth(x.quando)}</small></div></div>`).join('')}</div></details>`:''}
+  <p class="note">Conta 1 vaga por login (o servidor deixa 1 tela por título em cada login) e as conexões da reserva de outro fornecedor. ONE TV e AURA só ajudam quando também têm o filme.</p></section>`}
 function rAoVivo(){
  const q=buscaTv.toLowerCase(),por={play:[],on:[],off:[],novo:[]};D.codes.forEach(k=>por[estado(k)].push(k))
  const acha=k=>!q||(k.label||'').toLowerCase().includes(q)||k.code.toLowerCase().includes(q)||(clienteDe(k)?.name||'').toLowerCase().includes(q)||(k.device_model||'').toLowerCase().includes(q)||(k.watching||'').toLowerCase().includes(q)
@@ -724,7 +768,7 @@ function rAoVivo(){
  const F=[['todas','Todas',D.codes.length],['play','Assistindo',por.play.length],['on','Online no menu',por.on.length],['off','Offline',por.off.length],['novo','Não ativadas',por.novo.length]]
  const G={play:'Assistindo agora',on:'Ligadas, no menu do app',off:'Desligadas ou sem internet',novo:'Códigos ainda não usados'}
  const grupos=(fTela==='todas'?['play','on','off','novo']:[fTela]).map(e=>[e,por[e].filter(acha).sort(ord)]).filter(g=>g[1].length)
- $('page').innerHTML=head('Ao vivo','Cada tela dos seus clientes e o que está passando nela. Atualiza sozinho.')+`
+ $('page').innerHTML=head('Ao vivo','Cada tela dos seus clientes e o que está passando nela. Atualiza sozinho.')+blocoEstoque()+`
  <div class="fil">${F.map(([v,t,n])=>`<button class="f-${v}${fTela===v?' on':''}" onclick="fTela='${v}';render()">${v==='todas'?'':`<span class="dot ${v}"></span>`}${t}<b>${n}</b></button>`).join('')}</div>
  <div class="bar"><div class="inp">${ic('search',17)}<input class="field" id="buscaTv" placeholder="Buscar por tela, cliente, código, aparelho ou o que está passando" value="${esc(buscaTv)}"></div></div>
  ${grupos.length?grupos.map(([e,l])=>`<div class="grp"><span class="dot ${e}"></span>${G[e]}<span>${l.length}</span></div><div class="tvs">${l.map(cardTela).join('')}</div>`).join('')
