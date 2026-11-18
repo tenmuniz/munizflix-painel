@@ -981,9 +981,11 @@ function ajApp(g){
  * SV é a cópia que está sendo editada na tela (k = posição em extra no banco; -1 = ainda não salvo). */
 let SV=null,svAt=null
 const PONTES=['https://munizflix-ponte.munizflix.workers.dev','https://munizflix.vercel.app/api/ponte']
+/* res = logins reserva do MESMO fornecedor do servidor (mesmo catálogo): o app usa quando o mesmo título já toca em outra tela */
+const resDe=l=>(l||[]).map(r=>({txt:[r.url,...(r.urls||[])].filter(Boolean).join('\n'),user:r.user||'',pass:r.pass||'',name:r.name||'',exp:r.exp||'',cost:r.cost??''}))
 function svDe(g){const si=g.server_info||{}
- return[{main:true,k:-1,txt:(g.servers||[]).join('\n'),user:g.username||'',pass:g.password||'',name:si.name||'',exp:si.exp||'',cost:si.cost??''},
-  ...(g.extra||[]).map((x,k)=>({k,txt:[x.url,...(x.urls||[])].filter(Boolean).join('\n'),user:x.user||'',pass:x.pass||'',name:x.name||'',exp:x.exp||'',cost:x.cost??''}))]}
+ return[{main:true,k:-1,txt:(g.servers||[]).join('\n'),user:g.username||'',pass:g.password||'',name:si.name||'',exp:si.exp||'',cost:si.cost??'',res:resDe(si.res)},
+  ...(g.extra||[]).map((x,k)=>({k,txt:[x.url,...(x.urls||[])].filter(Boolean).join('\n'),user:x.user||'',pass:x.pass||'',name:x.name||'',exp:x.exp||'',cost:x.cost??'',res:resDe(x.res)}))]}
 const dLoc=s=>new Date(s+'T00:00:00')
 const isoD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')
 const dBR=s=>s?dLoc(s).toLocaleDateString('pt-BR'):'—'
@@ -997,7 +999,18 @@ function svSelo(exp){const d=diasSrv(exp)
 function ajServidor(g){
  if(!SV||svAt!==g.updated_at){SV=svDe(g);svAt=g.updated_at}
  const olho=id=>`<button class="eye" type="button" onclick="const i=$('${id}');i.type=i.type==='password'?'text':'password'" aria-label="Mostrar senha">${ic('eye',17)}</button>`
- const total=SV.reduce((s,x)=>s+(Number(x.cost)||0),0)
+ const total=SV.reduce((s,x)=>s+(Number(x.cost)||0)+(x.res||[]).reduce((a,r)=>a+(Number(r.cost)||0),0),0)
+ const resHtml=(x,i)=>{const l=x.res||[]
+  return `<p class="h">Outro login do <b>mesmo fornecedor</b> deste servidor. Quando o mesmo filme já está tocando em outra tela, o app usa o login reserva sozinho. Cada login reserva = mais telas assistindo o mesmo título.</p>
+   ${l.map((r,j)=>{const[c,t]=svSelo(r.exp);return `<div class="svr" style="border:1px solid var(--line2);border-radius:12px;padding:10px;margin-top:10px">
+     <div class="grid2"><label class="f">Nome<input class="field" value="${esc(r.name)}" placeholder="Ex.: ${esc(x.name||'Servidor')} 2" maxlength="40" oninput="SV[${i}].res[${j}].name=this.value"></label>
+     <label class="f">Vencimento · <span class="tag ${c}">${t}</span><input class="field" type="date" value="${esc(r.exp)}" onchange="SV[${i}].res[${j}].exp=this.value;render()"></label>
+     <label class="f">Usuário<input class="field" value="${esc(r.user)}" oninput="SV[${i}].res[${j}].user=this.value" autocomplete="off"></label>
+     <label class="f">Senha<span class="pw"><input class="field" id="svr${i}_${j}" type="password" value="${esc(r.pass)}" oninput="SV[${i}].res[${j}].pass=this.value" autocomplete="new-password">${olho('svr'+i+'_'+j)}</span></label></div>
+     <label class="f" style="margin-top:8px">Endereço(s), um por linha (vazio = os mesmos do servidor)<textarea class="field" rows="2" placeholder="http://..." oninput="SV[${i}].res[${j}].txt=this.value">${esc(r.txt)}</textarea></label>
+     <div class="grid2" style="margin-top:8px"><label class="f">Por renovação<span class="money"><i>R$</i><input class="field" type="number" min="0" step="0.01" value="${esc(r.cost)}" placeholder="0,00" oninput="SV[${i}].res[${j}].cost=this.value"></span></label>
+     <div style="align-self:end;text-align:right"><button class="btn bad sm" onclick="SV[${i}].res.splice(${j},1);render()">${ic('trash',15)}Tirar</button></div></div></div>`}).join('')}
+   <button class="btn sm" style="margin-top:10px" onclick="(SV[${i}].res=SV[${i}].res||[]).push({txt:'',user:'',pass:'',name:'',exp:'',cost:''});render()">${ic('plus',15)}Adicionar login reserva</button>`}
  return `<section class="box">${bxh('signal','Servidores de IPTV','As telas recebem estes dados ao abrir o app. O conteúdo de todos os servidores é somado (sem repetir títulos). Renovou um servidor? Toque em <b>Renovei +30 dias</b> no cartão dele.')}
   <div class="svs">${SV.map((x,i)=>{const[c,t]=svSelo(x.exp),novo=x.k<0&&!x.main
    return `<div class="sv ${c}">
@@ -1011,8 +1024,9 @@ function ajServidor(g){
     <p class="h" style="margin-top:6px">Com mais de um endereço, o app tenta o próximo sozinho quando o primeiro não responde.</p>
     <div class="grid2" style="margin-top:10px"><label class="f">Usuário<input class="field" value="${esc(x.user)}" oninput="SV[${i}].user=this.value" autocomplete="off"></label>
      <label class="f">Senha<span class="pw"><input class="field" id="svp${i}" type="password" value="${esc(x.pass)}" oninput="SV[${i}].pass=this.value" autocomplete="new-password">${olho('svp'+i)}</span></label></div>
-    ${x.main?'':`<button class="btn bad sm" style="margin-top:12px" onclick="tirarSrv(${i})">${ic('trash',15)}Tirar este servidor</button>`}</details></div>`}).join('')}
-   <button class="sv add" onclick="SV.push({k:-1,txt:'',user:'',pass:'',name:'',exp:'',cost:''});render()">${ic('plus',22)}<span>Adicionar servidor</span></button></div>
+    ${x.main?'':`<button class="btn bad sm" style="margin-top:12px" onclick="tirarSrv(${i})">${ic('trash',15)}Tirar este servidor</button>`}</details>
+   <details class="svd"><summary>${ic('users',15)}Logins reserva${(x.res||[]).length?' · '+(x.res||[]).length:''}</summary>${resHtml(x,i)}</details></div>`}).join('')}
+   <button class="sv add" onclick="SV.push({k:-1,txt:'',user:'',pass:'',name:'',exp:'',cost:'',res:[]});render()">${ic('plus',22)}<span>Adicionar servidor</span></button></div>
   <div class="bxf"><span class="h">${total?`Custo: <b>${brl(total)}</b> a cada renovação (${pl(SV.length,'servidor','servidores')})`:''}${g.updated_at?(total?' · ':'')+'Última alteração: '+dth(g.updated_at):''}</span><button class="btn pri" onclick="salvarServidor()">Salvar servidores</button></div>
   <p class="note">Para saber se cada servidor está respondendo, abra o app e veja em Perfil → Servidores (bolinha verde, amarela ou vermelha).</p></section>`}
 async function tirarSrv(i){const x=SV[i]
@@ -1094,11 +1108,18 @@ async function salvarServidor(){
   if(!urls.length||!urls.every(s=>/^https?:\/\/\S+$/.test(s)))return toast('Endereço inválido no '+n+' (use http://...)',true)
   if(!x.user.trim()||!x.pass)return toast('Informe usuário e senha do '+n,true)
   const c=x.cost===''||x.cost==null?undefined:Math.max(0,Number(x.cost)||0)
-  ls.push({main:!!x.main,urls,user:x.user.trim(),pass:x.pass,name:x.name.trim()||undefined,exp:x.exp||undefined,cost:c})}
+  const res=[]
+  for(const [j,r] of (x.res||[]).entries()){const ru=r.txt.split('\n').map(s=>s.trim().replace(/\/+$/,'')).filter(Boolean),nr='login reserva '+(j+1)+' do '+n
+   if(!ru.length&&!r.user&&!r.pass)continue // reserva nova deixada em branco
+   if(!ru.every(s=>/^https?:\/\/\S+$/.test(s)))return toast('Endereço inválido no '+nr+' (use http://...)',true)
+   if(!r.user.trim()||!r.pass)return toast('Informe usuário e senha do '+nr,true)
+   const u=ru.length?ru:urls,o={url:u[0],user:r.user.trim(),pass:r.pass};if(u.length>1)o.urls=u.slice(1)
+   if(r.name.trim())o.name=r.name.trim();if(r.exp)o.exp=r.exp;if(r.cost!==''&&r.cost!=null)o.cost=Math.max(0,Number(r.cost)||0);res.push(o)}
+  ls.push({main:!!x.main,urls,user:x.user.trim(),pass:x.pass,name:x.name.trim()||undefined,exp:x.exp||undefined,cost:c,res})}
  const[m,...ex]=ls
  const extra=ex.map(x=>{const o={url:x.urls[0],user:x.user,pass:x.pass};if(x.urls.length>1)o.urls=x.urls.slice(1)
-  if(x.name)o.name=x.name;if(x.exp)o.exp=x.exp;if(x.cost!==undefined)o.cost=x.cost;return o})
- const server_info={};if(m.name)server_info.name=m.name;if(m.exp)server_info.exp=m.exp;if(m.cost!==undefined)server_info.cost=m.cost
+  if(x.name)o.name=x.name;if(x.exp)o.exp=x.exp;if(x.cost!==undefined)o.cost=x.cost;if(x.res.length)o.res=x.res;return o})
+ const server_info={};if(m.name)server_info.name=m.name;if(m.exp)server_info.exp=m.exp;if(m.cost!==undefined)server_info.cost=m.cost;if(m.res.length)server_info.res=m.res
  if(!await confirmar({t:'Salvar '+pl(ls.length,'servidor','servidores')+'?',m:'Todos os aparelhos passam a usar estes dados na próxima vez que abrirem o app. Se algo estiver errado, ninguém consegue assistir.',ok:'Salvar servidores',icone:'signal'}))return
  const r=await sb.from('app_config').update({servers:m.urls,username:m.user,password:m.pass,extra,server_info,updated_at:new Date().toISOString()}).eq('id',1)
  if(r.error)return erro(r.error);SV=null;toast('Servidores salvos');carregar()}
