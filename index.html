@@ -587,7 +587,7 @@ async function carregar(o={}){
  try{
   // antes de ler: fecha o que ficou "assistindo" em TVs que sumiram
   await sb.rpc('admin_refresh').then(()=>{},()=>{})
-  const [p,c,k,g,rm,st,pc,py,nn]=await Promise.all([
+  const [p,c,k,g,rm,st,pc,py,nn,at]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
    sb.from('codes').select(COLS).order('created_at'),
@@ -596,9 +596,10 @@ async function carregar(o={}){
    sb.rpc('admin_watch_stats',{p_days:30}),
    sb.rpc('admin_pico_titulo',{p_days:30}),
    sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at').order('created_at',{ascending:false}).limit(400),
-   sb.from('notices').select('id,client_id,title,body,kind,created_at').order('id',{ascending:false}).limit(600)])
+   sb.from('notices').select('id,client_id,title,body,kind,created_at').order('id',{ascending:false}).limit(600),
+   sb.rpc('admin_codigos_suspeitos',{p_horas:24})])
   for(const r of [p,c,k,g])if(r.error)throw r.error
-  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,nts:nn.error?[]:nn.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data,pico:pc.error||!pc.data?null:pc.data}
+  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,nts:nn.error?[]:nn.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data,pico:pc.error||!pc.data?null:pc.data,atk:at.error||!Array.isArray(at.data)?[]:at.data}
   loadedAt=Date.now();falha=false;render();if(o.manual)toast('Atualizado')
  }catch(e){falha=true;liveHtml();if(!o.quieto)erro(e)}}
 /** Batida leve a cada 10 s: só o estado das telas (quem está online / assistindo). */
@@ -720,9 +721,11 @@ function spark(map){const ds=ultimosDias(14),v=ds.map(d=>map?.[diaKey(d)]||0),mx
 
 /* ---------- Início ---------- */
 function pendencias(){const l=[],nomes=(a,n=3)=>a.slice(0,n).map(c=>c.name).join(', ')+(a.length>n?' e mais '+(a.length-n):'')
- const venc=D.clients.filter(c=>sit(c)==='venc'),breve=D.clients.filter(c=>sit(c)==='breve'),cop=alertasCopia()
+ const venc=D.clients.filter(c=>sit(c)==='venc'),breve=D.clients.filter(c=>sit(c)==='breve'),cop=alertasCopia(),atq=D.atk||[]
  const novos=D.codes.filter(k=>!k.device_tag&&k.active&&Date.now()-new Date(k.created_at)>864e5)
  if(cop.length)l.push(['bad','shield',pl(cop.length,'aparelho com app copiado','aparelhos com app copiado'),'Alguém usou uma cópia do MunizFlix com um código seu.',"ir('protecao')"])
+ // tentativas erradas de ativação: o banco já limita por código e por internet; aqui é só o aviso
+ if(atq.length)l.push(['bad','shield',pl(atq.length,'código com erros de ativação','códigos com erros de ativação'),'Alguém está tentando adivinhar códigos. Toque para ver de onde vêm.','verAtaques()'])
  if(venc.length)l.push(['bad','alert',pl(venc.length,'cliente vencido','clientes vencidos'),nomes(venc),"ir('financeiro')"])
  if(breve.length)l.push(['warn','cal',pl(breve.length,'cliente vence','clientes vencem')+' em até 7 dias',nomes(breve),"ir('financeiro')"])
  // servidores de IPTV vencidos ou vencendo em até 5 dias (nome e vencimento cadastrados em Ajustes → Servidores)
@@ -733,6 +736,13 @@ function pendencias(){const l=[],nomes=(a,n=3)=>a.slice(0,n).map(c=>c.name).join
    srv.length===1?'Renovou? Toque aqui e use Renovei +30 dias.':srv.map(x=>x.nm+(x.d<0?' (vencido)':x.d===0?' (hoje)':' ('+x.d+'d)')).join(', '),"ir('ajustes',{aj:'servidor'})"])}
  if(novos.length)l.push(['info','key',pl(novos.length,'código ainda não usado','códigos ainda não usados'),'Criado há mais de um dia e ninguém ativou.',"ir('aovivo',{fTela:'novo'})"])
  return l}
+/** Tentativas erradas de ativação: quais códigos, de quantas internets e quando. */
+function verAtaques(){const a=D.atk||[]
+ dialogo(`<div class="dic bad">${ic('shield',24)}</div><h3>Tentativas de adivinhar código</h3>
+  <p class="dm">O banco já bloqueia quem erra muito: 8 erros por hora no mesmo código, 20 por hora na mesma internet e 10 por hora no mesmo aparelho. Se for um cliente errando a digitação, o acesso dele continua normal.</p>
+  ${a.length?`<div class="list">${a.map(x=>`<div class="row"><div class="k">${ic('key',17)}</div><div class="t"><b>${esc(x.code)}${x.tem?'':' · código não existe'}</b><small>${x.client?esc(x.client):''}${x.tag?' · '+esc(x.tag):''} · ${pl(x.fails,'erro','erros')} · ${pl(x.ips||1,'internet','internets')} · último em ${dth(x.last)}</small></div></div>`).join('')}</div>`
+   :'<div class="empty">Nenhuma tentativa errada nas últimas 24 horas.</div>'}
+  <div class="drow"><button class="btn" onclick="fechar()">Fechar</button></div>`)}
 function rInicio(){
  const ativos=D.clients.filter(c=>c.active&&days(c.expires_at)>=0),on=D.codes.filter(online),vd=D.codes.filter(vendo)
  const receita=ativos.filter(pagante).reduce((s,c)=>s+Number(c.price||0),0),mes=pixMes()
