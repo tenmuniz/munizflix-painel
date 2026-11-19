@@ -216,6 +216,8 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .codebox{flex:none;margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 18px;border-radius:14px;background:linear-gradient(135deg,#a855f7,#ec4899);box-shadow:0 0 24px rgba(168,85,247,.55),0 8px 28px -6px rgba(236,72,153,.65);min-width:110px}
 .codelbl{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 .codeval{font-family:ui-monospace,Consolas,monospace;font-weight:900;font-size:28px;letter-spacing:.1em;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.5);line-height:1}
+/* código com 6 a 8 números: diminui para caber no cartão */
+.codeval.lg{font-size:20px;letter-spacing:.05em}
 .qa{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
 .qa .btn{height:46px}
 .st3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -896,7 +898,7 @@ function sheetCliente(id){const c=D.clients.find(x=>x.id===id);if(!c)return''
    ${c.notes?`<p class="h">${ic('edit',13)} ${esc(c.notes)}</p>`:''}
    <section><h4>Telas (${ks.length}${c.peixe?'':' de '+lim})<span class="sp"></span>${sem?`<span style="text-transform:none;letter-spacing:0">${tm(sem)} em 7 dias</span>`:''}</h4>
     <div class="list">${ks.map(k=>{const e=estado(k),a=agoraDe(k)
-      return `<div class="row click codrow" onclick="abrir('tela','${k.code}')"><span class="dot ${e}"></span><div class="t"><b>${esc(k.label||'Tela sem nome')}</b><small>${e==='play'?'Assistindo: '+esc(k.watching):esc(a.t)}${k.active?'':' · desligada por você'}</small></div><div class="codebox"><span class="codelbl">CÓDIGO</span><span class="codeval">${k.code}</span></div>${ic('chev',16)}</div>`}).join('')}
+      return `<div class="row click codrow" onclick="abrir('tela','${k.code}')"><span class="dot ${e}"></span><div class="t"><b>${esc(k.label||'Tela sem nome')}</b><small>${e==='play'?'Assistindo: '+esc(k.watching):esc(a.t)}${k.active?'':' · desligada por você'}</small></div><div class="codebox"><span class="codelbl">CÓDIGO</span><span class="codeval${k.code.length>5?' lg':''}">${k.code}</span></div>${ic('chev',16)}</div>`}).join('')}
      ${ks.length<lim?`<button class="arow" onclick="novoCodigo('${id}')">${ic('plus',20)}<div><b>Adicionar tela</b><small>Gera um código novo para mais um aparelho (${c.peixe?'Peixe: sem limite':ks.length+' de '+lim+' usados'})</small></div>${ic('chev',16)}</button>`
       :`<p class="h">O plano ${esc(p?.name||'')} permite ${pl(lim,'tela','telas')}. Para mais, troque o plano em Editar (ou ligue o Peixe).</p>`}</div></section>
    <section><h4>Pagamentos por Pix</h4>
@@ -1092,12 +1094,12 @@ function rProtecao(){
 
 /* ---------- Ajustes (uma seção por vez) ---------- */
 let aj='planos'
-const AJ=[['planos','Planos e preços','card'],['servidor','Servidores','signal'],['bloqueio','Tela de bloqueio','lock'],['links','Links','link'],['conta','Conta','user']]
+const AJ=[['planos','Planos e preços','card'],['servidor','Servidores','signal'],['bloqueio','Tela de bloqueio','lock'],['codigos','Códigos','key'],['links','Links','link'],['conta','Conta','user']]
 function rAjustes(){
  const g=D.cfg||{servers:[],username:'',password:'',extra:[],contact:''}
  $('page').innerHTML=head('Ajustes','Planos, pagamento, servidores de IPTV, links de instalação e sua conta.')+`
  <div class="ajn">${AJ.map(([id,t,i])=>`<button class="${aj===id?'on':''}" onclick="aj='${id}';render()" title="${t}">${ic(i,17)}<span>${t}</span></button>`).join('')}</div>
- ${({planos:ajPlanos,app:ajPlanos,servidor:ajServidor,bloqueio:ajBloqueio,links:ajLinks,conta:ajConta})[aj](g)}`
+ ${({planos:ajPlanos,app:ajPlanos,servidor:ajServidor,bloqueio:ajBloqueio,codigos:ajCodigos,links:ajLinks,conta:ajConta})[aj](g)}`
  if(aj==='planos'||aj==='app')ppPrev()}
 const bxh=(i,t,s)=>`<div class="bxh"><span class="bxi">${ic(i,20)}</span><div><h3>${t}</h3><p class="h">${s}</p></div></div>`
 /* Planos e preços: tudo que o cliente vê em "Minha assinatura" (app Android, site/iPad e Windows).
@@ -1305,6 +1307,31 @@ function ajLinks(){
  return `<section class="box" style="max-width:760px">${bxh('link','Links para instalar','Sempre baixam a versão mais nova. Toque em copiar e mande para o cliente.')}
   <div class="list">${L.map(([i,t,s,v,m])=>`<div class="lrow"><span class="k">${ic(i,18)}</span><div><b>${t}</b><small>${s}</small></div><button class="btn sm" onclick="copiarTxt('${v}','${m||'Link copiado'}')">${ic('copy',15)}Copiar</button></div>`).join('')}</div>
   <p class="note">Quando você usa “Enviar código” numa tela, a mensagem do WhatsApp já vai com esses links.</p></section>`}
+/* Tamanho do código de ativação: 4 dígitos (10 mil combinações) ou 6 (1 milhão).
+   Vale só para códigos NOVOS; os antigos continuam funcionando. */
+function ajCodigos(g){
+ const d=Number(g.codigo_digitos||4),ex='M'+'0'.repeat(d)
+ return `<section class="box" style="max-width:620px">${bxh('key','Códigos de ativação','É o código que o cliente digita no app para liberar o aparelho. Ele vale em 1 aparelho só.')}
+  <div class="seg" role="group" aria-label="Tamanho do código">
+   <button class="${d===4?'on':''}" onclick="setDigitos(4)">4 números</button>
+   <button class="${d===6?'on':''}" onclick="setDigitos(6)">6 números (recomendado)</button></div>
+  <div class="list" style="margin-top:14px">
+   <div class="row"><div class="k">${ic('key',17)}</div><div class="t"><b>Como fica o código novo: ${ex}</b>
+    <small>Com 4 números existem 10.000 códigos possíveis; com 6, um milhão. Quanto mais números, mais difícil alguém adivinhar o código de um cliente.</small></div></div>
+   <div class="row"><div class="k">${ic('check',17)}</div><div class="t"><b>Os códigos que já existem não mudam</b>
+    <small>Vale só para os próximos. Ninguém precisa fazer nada.</small></div></div>
+  </div>
+  <p class="note">Os limites de tentativa (8 erros por hora no mesmo código, 20 por internet) valem para os dois tamanhos e são aplicados pelo banco.</p>
+  ${d===4?`<p class="note" style="color:#fca5a5">Ainda em 4 números. Só mude para 6 depois que <b>todos</b> os clientes estiverem na versão <b>3.0.191</b> ou mais nova: o app antigo só aceita 4 números e um cliente desatualizado não conseguiria ativar.</p>`
+   :`<p class="note" style="color:#86efac">Gerando códigos de 6 números. App novo (3.0.191+) e controle novo aceitam; app antigo não — confira se todos atualizaram.</p>`}
+  </section>`}
+async function setDigitos(d){
+ if(d!==4&&d!==6)return
+ if(!await confirmar({t:`Novos códigos com ${d} números?`,
+  m:d===6?'Confirme que todos os clientes já atualizaram o app (3.0.191 ou mais novo). Quem estiver em versão antiga não consegue ativar um código de 6 números.':'Volta a gerar códigos de 4 números, que funcionam em qualquer versão do app.',
+  ok:'Usar '+d+' números',perigo:d===6,icone:'key'}))return
+ const r=await sb.from('app_config').update({codigo_digitos:d,updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error);toast('Os próximos códigos terão '+d+' números');carregar()}
 function ajConta(){
  return `<section class="box" style="max-width:620px">${bxh('user','Sua conta','Você está no painel do administrador.')}
   <div class="list">${arow('refresh','Atualizar tudo agora','Busca de novo todos os dados do painel.',"carregar({manual:true})")}
