@@ -728,6 +728,9 @@ function pendencias(){const l=[],nomes=(a,n=3)=>a.slice(0,n).map(c=>c.name).join
  if(cop.length)l.push(['bad','shield',pl(cop.length,'aparelho com app copiado','aparelhos com app copiado'),'Alguém usou uma cópia do MunizFlix com um código seu.',"ir('protecao')"])
  // tentativas erradas de ativação: o banco já limita por código e por internet; aqui é só o aviso
  if(atq.length)l.push(['bad','shield',pl(atq.length,'código com erros de ativação','códigos com erros de ativação'),'Alguém está tentando adivinhar códigos. Toque para ver de onde vêm.','verAtaques()'])
+ // trava automática da proteção contra cópia: desligou sozinha (muitos aparelhos recusados de uma vez)
+ const aa=D.cfg&&D.cfg.sig_auto_off_at?new Date(D.cfg.sig_auto_off_at).getTime():0
+ if(aa&&!D.cfg.sig_enforce&&Date.now()-aa<7*864e5)l.push(['bad','shield','A proteção contra cópia se desligou sozinha','Aconteceu em '+dth(D.cfg.sig_auto_off_at)+': muitos aparelhos foram recusados de uma vez. Confira antes de ligar de novo.',"ir('protecao')"])
  if(venc.length)l.push(['bad','alert',pl(venc.length,'cliente vencido','clientes vencidos'),nomes(venc),"ir('financeiro')"])
  if(breve.length)l.push(['warn','cal',pl(breve.length,'cliente vence','clientes vencem')+' em até 7 dias',nomes(breve),"ir('financeiro')"])
  // servidores de IPTV vencidos ou vencendo em até 5 dias (nome e vencimento cadastrados em Ajustes → Servidores)
@@ -1058,11 +1061,16 @@ function rProtecao(){
  const velhos=de('antigo'),total=ativos.length,novos=total-velhos.length,pct=total?Math.round(novos*100/total):100
  const param=velhos.length+de('falso').length,seguem=total-param
  const alertas=alertasCopia()
+ const autoOff=g.sig_auto_off_at?new Date(g.sig_auto_off_at).getTime():0
  const linha=(k,extra='')=>`<div class="row click" onclick="abrir('tela','${k.code}')"><span class="dot ${estado(k)}"></span><div class="t"><b>${esc(clienteDe(k)?.name||'?')}</b><small>${esc(k.label||'Tela')} · ${k.code}${k.device_model?' · '+esc(k.device_model):''}${k.last_seen?' · visto '+ago(k.last_seen):''}</small>${extra}</div>`
  $('page').innerHTML=head('Proteção','Impede que cópias do MunizFlix usem a sua lista de canais.')+`
  <div class="pr-hero ${on?'on':''}"><div class="pr-big">${ic('shield',30)}</div><div><h2>${on?'Seu app está protegido':'Proteção desligada'}</h2>
    <p>${on?'Cópias do MunizFlix são recusadas sozinhas e não recebem a sua lista.':'Você não precisa marcar nada: o sistema reconhece sozinho onde cada cliente está usando.'}</p></div>
    ${on?`<button class="btn bad" onclick="salvarProtecao(false)">Desligar</button>`:''}</div>
+
+ ${autoOff&&!on&&Date.now()-autoOff<7*864e5?`<section class="box pr-alerta"><h3>${ic('alert',19)}A proteção se desligou sozinha</h3>
+  <p class="h">Em ${dth(g.sig_auto_off_at)}, 15 aparelhos diferentes foram recusados em 30 minutos, então o sistema desligou a proteção para ninguém ficar sem assistir. Quase sempre isso quer dizer que a conferência parou de reconhecer os apps oficiais (site, Windows ou a assinatura do APK) — não que 15 clientes viraram cópia.</p>
+  <p class="h" style="margin-top:8px">Olhe os grupos <b>App copiado</b> e <b>Precisa atualizar o app</b> abaixo. Se aparecer gente de bem no meio, não ligue de novo: me chame para conferir.</p></section>`:''}
 
  ${alertas.length?`<section class="box pr-alerta"><h3>${ic('alert',19)}Alguém usou um app copiado</h3>
   <p class="h" style="margin-bottom:12px">Provavelmente baixou uma cópia do MunizFlix por aí e colocou um código seu. Veja para quem você deu o código. Se não reconhece, desligue o código.</p>
@@ -1512,7 +1520,11 @@ async function salvarProtecao(on){
  if(on&&!param.length&&!await confirmar({t:'Ligar a proteção?',m:'Ninguém vai ficar sem assistir. Cópias do MunizFlix passam a ser recusadas.',ok:'Ligar proteção',icone:'shield'}))return
  if(!on&&!await confirmar({t:'Desligar a proteção?',m:'Cópias do MunizFlix voltam a conseguir usar a sua lista.',ok:'Desligar',perigo:true,icone:'shield'}))return
  const r=await sb.from('app_config').update({sig_enforce:on,updated_at:new Date().toISOString()}).eq('id',1)
- if(r.error)return erro(r.error);toast(on?'Proteção ligada':'Proteção desligada');carregar()}
+ if(r.error)return erro(r.error)
+ // ligar/desligar na mão limpa o registro da trava automática (só existe depois da migração
+ // 20261119160000; se a coluna ainda não existir, o erro é ignorado de propósito)
+ await sb.from('app_config').update({sig_auto_off_at:null}).eq('id',1).then(x=>x,()=>{})
+ toast(on?'Proteção ligada':'Proteção desligada');carregar()}
 async function ligarCodigo(code,on){
  if(!on&&!await confirmar({t:`Desligar a tela ${code}?`,m:'Esse aparelho para de funcionar. As outras telas do cliente continuam.',ok:'Desligar',perigo:true,icone:'power'}))return
  const r=await sb.from('codes').update({active:on}).eq('code',code);if(r.error)return erro(r.error);toast(on?'Tela ligada':'Tela desligada');carregar()}
