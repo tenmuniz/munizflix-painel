@@ -119,6 +119,9 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .row .t small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .row .v{font-weight:800;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .acts{display:flex;align-items:center;gap:8px;flex:none}
+/* botão de excluir uma entrada do histórico (aparece fraco, fica vermelho no dedo em cima) */
+.delx{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:var(--mut);border:1px solid transparent;transition:color .15s,background .15s,border-color .15s}
+.delx:hover,.delx:focus-visible{color:var(--bad);background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.3)}
 .rank{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12px;font-weight:800;background:rgba(168,85,247,.16);color:#d8b4fe}
 .meter{height:4px;border-radius:99px;background:rgba(255,255,255,.06);margin-top:6px;overflow:hidden}.meter i{display:block;height:100%;background:var(--grad);border-radius:99px}
 .av{flex:none;width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-weight:800;font-size:14px;color:#fff;background:linear-gradient(135deg,hsl(var(--h) 65% 46%),hsl(calc(var(--h) + 40) 70% 38%))}
@@ -948,11 +951,28 @@ function receitaMeses(n){const out=[],h=new Date()
   const l=D.pays.filter(x=>{if(x.status!=='paid')return false;const t=new Date(x.paid_at||x.created_at);return t>=a&&t<b})
   out.push({a,v:l.reduce((s,x)=>s+Number(x.amount||0),0)})}
  return out}
+/** Exclui uma entrada do histórico de Pix (pagamento de teste, cobrança errada).
+ * Apaga só o registro: o dinheiro não volta por aqui (reembolso é no painel da Cakto) e o vencimento
+ * do cliente não muda — apagar histórico não desfaz o acesso que ele já ganhou. */
+async function apagarPix(id){
+ const x=D.pays.find(y=>y.id===id);if(!x)return
+ const c=D.clients.find(y=>y.id===x.client_id),pago=x.status==='paid'
+ const m=`${c?.name||'Cliente apagado'} · ${brl(x.amount)} · ${dth(x.paid_at||x.created_at)}. `
+  +(pago?'Era um Pix PAGO: sai do histórico e das estatísticas. O dinheiro não volta por aqui — para devolver, o reembolso é no painel da Cakto.':'Esse Pix não foi pago: sai do histórico e das estatísticas.')
+  +' O acesso que o cliente já ganhou continua como está.'
+ if(!await confirmar({t:'Excluir este pagamento?',m,ok:'Excluir',perigo:true,icone:'trash'}))return
+ const r=await sb.rpc('admin_apagar_pagamentos',{p_ids:[id]})
+ if(r.error)return erro(r.error)
+ if(!r.data)return toast('O banco não apagou esta entrada. Avise o suporte.',true)
+ toast('Pagamento excluído');carregar()
+}
 function linhaPix(x,ficha){const[cl,t]=PST[x.status]||['',x.status],c=D.clients.find(y=>y.id===x.client_id)
+ // só o id vai no onclick: nome de cliente com apóstrofo não quebra o botão
+ const del=`<button class="delx" title="Excluir do histórico" aria-label="Excluir este pagamento do histórico" onclick="event.stopPropagation();apagarPix('${x.id}')">${ic('trash',16)}</button>`
  if(ficha===true)return `<div class="row"><div class="k ${x.status==='paid'?'ok':x.status==='pending'?'warn':''}">${ic(x.status==='paid'?'check':x.status==='pending'?'clock':'x',17)}</div>
-  <div class="t"><b>${dth(x.paid_at||x.created_at)}</b><small>${x.new_expires_at?'renovou até '+dt(x.new_expires_at):'Pix gerado no app'}</small></div><span class="v">${brl(x.amount)}</span><span class="tag ${cl}">${t}</span></div>`
+  <div class="t"><b>${dth(x.paid_at||x.created_at)}</b><small>${x.new_expires_at?'renovou até '+dt(x.new_expires_at):'Pix gerado no app'}</small></div><span class="v">${brl(x.amount)}</span><span class="tag ${cl}">${t}</span>${del}</div>`
  return `<div class="row${c?' click':''}"${c?` onclick="abrir('cli','${c.id}')"`:''}><div class="k ${x.status==='paid'?'ok':x.status==='pending'?'warn':''}">${ic(x.status==='paid'?'check':x.status==='pending'?'clock':'x',17)}</div>
-  <div class="t"><b>${esc(c?.name||'Cliente apagado')}</b><small>${dth(x.paid_at||x.created_at)}${x.new_expires_at?' · renovou até '+dt(x.new_expires_at):''}</small></div><span class="v">${brl(x.amount)}</span><span class="tag ${cl}">${t}</span></div>`}
+  <div class="t"><b>${esc(c?.name||'Cliente apagado')}</b><small>${dth(x.paid_at||x.created_at)}${x.new_expires_at?' · renovou até '+dt(x.new_expires_at):''}</small></div><span class="v">${brl(x.amount)}</span><span class="tag ${cl}">${t}</span>${del}</div>`}
 let pFiltro='todos'
 function rFinanceiro(){
  const mes=pixMes(),pend=D.pays.filter(x=>x.status==='pending').length
