@@ -615,6 +615,10 @@ async function pulso(){
   D.codes=k.data;loadedAt=Date.now();falha=false;render()
  }catch(e){falha=true;liveHtml()}}
 const plano=id=>D.plans.find(p=>p.id===id)
+/* Preço que vale para o cliente: sem preço próprio (0), vale o preço do plano.
+ * É isso que deixa o dono mudar o preço em Ajustes → Planos e todos os aparelhos passarem a cobrar o novo,
+ * sem editar cliente por cliente e sem publicar atualização do app. */
+const precoDe=c=>Number(c?.price)>0?Number(c.price):(plano(c?.plan_id)?.price||0)
 const codigosDe=id=>D.codes.filter(c=>c.client_id===id)
 const clienteDe=k=>D.clients.find(x=>x.id===k.client_id)
 const stOf=code=>D.st.codes?.[code]||{today:0,week:0,month:0,sessions:0,days:{},recent:[]}
@@ -750,7 +754,7 @@ function verAtaques(){const a=D.atk||[]
   <div class="drow"><button class="btn" onclick="fechar()">Fechar</button></div>`)}
 function rInicio(){
  const ativos=D.clients.filter(c=>c.active&&days(c.expires_at)>=0),on=D.codes.filter(online),vd=D.codes.filter(vendo)
- const receita=ativos.filter(pagante).reduce((s,c)=>s+Number(c.price||0),0),mes=pixMes()
+ const receita=ativos.filter(pagante).reduce((s,c)=>s+precoDe(c),0),mes=pixMes()
  const sc=Object.values(D.st.codes||{}),hoje=sc.reduce((s,x)=>s+(x.today||0),0),sem=sc.reduce((s,x)=>s+(x.week||0),0),m30=sc.reduce((s,x)=>s+(x.month||0),0)
  const mais=(D.st.top||[]).slice(0,6),mxTop=Math.max(1,...mais.map(t=>t.m))
  const rank=Object.entries(D.st.codes||{}).map(([code,x])=>({k:D.codes.find(c=>c.code===code),x})).filter(r=>r.k&&r.x.week>0).sort((a,b)=>b.x.week-a.x.week).slice(0,6)
@@ -785,7 +789,7 @@ function linhaTela(c){const e=estado(c),a=agoraDe(c),cl=clienteDe(c)
  return `<div class="row click" onclick="abrir('tela','${c.code}')"><div class="k ${e==='play'?'play':''}">${ic(e==='play'?(KIC[c.watching_kind]||'play'):e==='on'?'moon':'power',18)}</div>
   <div class="t"><b>${esc(e==='play'?c.watching:a.t)}</b><small>${esc(c.label||c.code)} · ${esc(cl?.name||'?')}${e==='play'&&desde(c)?' · há '+tm((Date.now()-new Date(desde(c)))/60000):''}</small></div><span class="pill ${e}"><i></i>${EST[e]}</span></div>`}
 function linhaVenc(c){const[s,t]=sitTag(c)
- return `<div class="row click rw" onclick="abrir('cli','${c.id}')">${avatar(c)}<div class="t"><b>${esc(c.name)}</b><small>${dt(c.expires_at)} · ${brl(c.price)}</small></div><span class="tag ${s}">${t}</span><span class="acts"><button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">Renovar</button></span></div>`}
+ return `<div class="row click rw" onclick="abrir('cli','${c.id}')">${avatar(c)}<div class="t"><b>${esc(c.name)}</b><small>${dt(c.expires_at)} · ${brl(precoDe(c))}</small></div><span class="tag ${s}">${t}</span><span class="acts"><button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">Renovar</button></span></div>`}
 
 /* ---------- Ao vivo: todas as telas, separadas por estado ---------- */
 let fTela='todas',buscaTv=''
@@ -850,7 +854,7 @@ function rClientes(){
  const sem=c=>codigosDe(c.id).reduce((a,k)=>a+stOf(k.code).week,0)
  lst=lst.sort(cOrdem==='nome'?(a,b)=>a.name.localeCompare(b.name):cOrdem==='uso'?(a,b)=>sem(b)-sem(a):(a,b)=>new Date(a.expires_at)-new Date(b.expires_at))
  const F=[['todos','Todos'],['ok','Em dia'],['breve','Vencem em 7 dias'],['venc','Vencidos'],['off','Desligados'],...(cont.teste?[['teste','Testes']]:[]),...(cont.peixe?[['peixe','🐟 Peixe']]:[])]
- const receita=D.clients.filter(c=>sit(c)==='ok'||sit(c)==='breve').reduce((s,c)=>s+Number(c.price||0),0)
+ const receita=D.clients.filter(c=>sit(c)==='ok'||sit(c)==='breve').reduce((s,c)=>s+precoDe(c),0)
  $('page').innerHTML=head('Clientes',`${pl(D.clients.length,'cliente','clientes')} · ${brl(receita)} por mês`)+`
  <div class="fil">${F.map(([v,t])=>`<button class="f-${v}${cFiltro===v?' on':''}" onclick="cFiltro='${v}';render()">${t}<b>${cont[v]}</b></button>`).join('')}</div>
  <div class="bar"><div class="inp">${ic('search',17)}<input class="field" id="busca" placeholder="Buscar por nome, telefone, código ou tela" value="${esc(busca)}"></div>
@@ -864,7 +868,7 @@ function linhaCliente(c){
  return `<div class="crow${c.active?'':' off'}" onclick="abrir('cli','${c.id}')" tabindex="0" onkeydown="if(event.key==='Enter')this.click()">
   <div class="cnm">${avatar(c)}<div><b>${esc(c.name)}</b><small>${c.phone?esc(c.phone):'sem telefone'}${c.notes?' · '+esc(c.notes):''}</small></div></div>
   <div class="c-st"><span class="tag ${s}">${t}</span></div>
-  <div class="c2 c-pl"><b>${esc(p?.name||'Sem plano')}</b><small>${c.peixe?'isento':brl(c.price)+'/mês'}</small></div>
+  <div class="c2 c-pl"><b>${esc(p?.name||'Sem plano')}</b><small>${c.peixe?'isento':brl(precoDe(c))+'/mês'}</small></div>
   <div class="c2 c-ve">${c.peixe?'<b>Sempre</b><small>isento, nunca vence</small>':c.teste?`<b>${dtHm(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':'var(--warn)'}">${vencTxt(c)}</small>`:`<b>${dt(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':d<=7?'var(--warn)':''}">${vencTxt(c)}</small>`}</div>
   <div class="ctv c-tv">${ks.map(k=>`<span class="dot ${estado(k)}" title="${esc(k.label||k.code)}: ${EST[estado(k)]}"></span>`).join('')}<small>${ks.filter(k=>k.device_tag).length}/${c.peixe?'∞':lim}</small></div>
   <div class="cac">${c.peixe?'':`${c.teste?`<button class="btn sm" onclick="event.stopPropagation();maisTeste('${c.id}')">${ic('clock',15)}Mais tempo</button>`:''}<button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">${c.teste?'Virar cliente':'Renovar'}</button>`}${ic('chev',17)}</div></div>`}
@@ -885,7 +889,7 @@ function sheetCliente(id){const c=D.clients.find(x=>x.id===id);if(!c)return''
  const p=plano(c.plan_id),ks=codigosDe(id),lim=limTelas(c),[s,t]=sitTag(c),d=days(c.expires_at),st=sit(c)
  const pays=D.pays.filter(x=>x.client_id===id).slice(0,5),sem=ks.reduce((a,k)=>a+stOf(k.code).week,0)
  return `<header class="shh">${avatar(c,true)}<div class="sht"><span class="tag ${s}">${t}</span><h2>${esc(c.name)}</h2>
-   <p>${c.phone?esc(c.phone):'sem telefone'} · ${esc(p?.name||'Sem plano')} · ${c.peixe?'isento':brl(c.price)+'/mês'}</p></div>${xBtn}</header>
+   <p>${c.phone?esc(c.phone):'sem telefone'} · ${esc(p?.name||'Sem plano')} · ${c.peixe?'isento':brl(precoDe(c))+'/mês'}</p></div>${xBtn}</header>
   <div class="shb">
    ${c.teste?`<div class="venc test ${d<0?'bad':''}"><div><small>${c.active?'Cliente em teste':'Cliente desligado'}</small><b>${new Date(c.expires_at)<Date.now()?'Teste acabou':'Teste até '+dtHm(c.expires_at)}</b><em>${vencTxt(c)} · se pagar o Pix com o código, vira cliente</em></div>
     <div class="vbtns"><button class="btn" onclick="maisTeste('${id}')">${ic('clock',17)}Mais tempo</button><button class="btn pri" onclick="renovar('${id}')">${ic('check',17)}Virar cliente</button></div></div>`
@@ -953,8 +957,8 @@ let pFiltro='todos'
 function rFinanceiro(){
  const mes=pixMes(),pend=D.pays.filter(x=>x.status==='pending').length
  const tot=D.pays.filter(x=>x.status==='paid').reduce((s,x)=>s+Number(x.amount||0),0)
- const ativos=D.clients.filter(c=>c.active&&pagante(c)&&days(c.expires_at)>=0),previsto=ativos.reduce((s,c)=>s+Number(c.price||0),0)
- const cobrarL=D.clients.filter(c=>c.active&&pagante(c)&&days(c.expires_at)<=7).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)),aReceber=cobrarL.reduce((s,c)=>s+Number(c.price||0),0)
+ const ativos=D.clients.filter(c=>c.active&&pagante(c)&&days(c.expires_at)>=0),previsto=ativos.reduce((s,c)=>s+precoDe(c),0)
+ const cobrarL=D.clients.filter(c=>c.active&&pagante(c)&&days(c.expires_at)<=7).sort((a,b)=>new Date(a.expires_at)-new Date(b.expires_at)),aReceber=cobrarL.reduce((s,c)=>s+precoDe(c),0)
  let l=D.pays;if(pFiltro==='pagos')l=l.filter(x=>x.status==='paid');else if(pFiltro==='outros')l=l.filter(x=>x.status!=='paid')
  const ms=receitaMeses(6),mx=Math.max(1,...ms.map(m=>m.v))
  $('page').innerHTML=head('Financeiro','O cliente paga por Pix no app e o acesso renova sozinho quando o pagamento cai.')+`
@@ -966,7 +970,7 @@ function rFinanceiro(){
  <div class="cols c16">
   <div class="panel"><div class="ph">${ic('cal',18)}Cobranças<span class="n">vencidos e quem vence em 7 dias</span></div>
    ${cobrarL.length?'<div class="list">'+cobrarL.map(c=>{const[s,t]=sitTag(c)
-     return `<div class="row click rw" onclick="abrir('cli','${c.id}')">${avatar(c)}<div class="t"><b>${esc(c.name)}</b><small>${dt(c.expires_at)} · ${brl(c.price)}</small></div><span class="tag ${s}">${t}</span><span class="acts">
+     return `<div class="row click rw" onclick="abrir('cli','${c.id}')">${avatar(c)}<div class="t"><b>${esc(c.name)}</b><small>${dt(c.expires_at)} · ${brl(precoDe(c))}</small></div><span class="tag ${s}">${t}</span><span class="acts">
       <button class="btn sm" onclick="event.stopPropagation();cobrar('${c.id}')" title="Mandar a cobrança com o link do Pix">${ic('chat',15)}Cobrar</button>
       <button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">Renovar</button></span></div>`}).join('')+'</div>'
     :`<div class="empty">Ninguém para cobrar nos próximos 7 dias.</div>`}
@@ -1402,19 +1406,19 @@ function palRender(q){q=q.trim().toLowerCase();palL=[];palS=0;let h=''
 const isoDia=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')}
 let fPx=false
 function formCliente(id){
- const c=id?D.clients.find(x=>x.id===id):{name:'',phone:'',notes:'',plan_id:D.plans[0]?.id,price:D.plans[0]?.price||0,expires_at:new Date(Date.now()+30*864e5)}
+ const c=id?D.clients.find(x=>x.id===id):{name:'',phone:'',notes:'',plan_id:D.plans[0]?.id,price:0,expires_at:new Date(Date.now()+30*864e5)}
  dlgRes=null;fPx=!!c.peixe
  dialogo(`<h3>${id?'Editar cliente':'Novo cliente'}</h3>
   <label class="f">Nome (pessoa ou casa)<input class="field" id="fN" ${id?'':'autofocus'} value="${esc(c.name)}" placeholder="Ex.: Casa dos pais" maxlength="80"></label>
   <label class="f">WhatsApp<input class="field" id="fT" value="${esc(c.phone||'')}" placeholder="Ex.: 91999990000" inputmode="tel"></label>
   <div class="grid2"><label class="f">Plano<select class="field" id="fP">${D.plans.map(p=>`<option value="${p.id}"${p.id===c.plan_id?' selected':''}>${esc(p.name)} (${pl(p.screens,'tela','telas')})</option>`).join('')}</select></label>
-   <label class="f">Mensalidade (R$)<input class="field" id="fV" type="number" min="0" step="0.01" value="${c.price}"></label></div>
+   <label class="f">Mensalidade (R$)<input class="field" id="fV" type="number" min="0" step="0.01" value="${Number(c.price)>0?c.price:''}" placeholder="${plano(c.plan_id)?.price||''}"><small style="display:block;margin-top:4px;font-size:11px;color:#8e87a8">Em branco = preço do plano (acompanha os reajustes)</small></label></div>
   <div class="fishrow" style="margin-top:12px"><span class="fishic">🐟</span><div><b>Peixe (isento de pagamento)</b><small>Para família e amigos: não paga, não vence, telas sem limite.</small></div>${swc(!!c.peixe,"fPx=!fPx;this.classList.toggle('on',fPx);this.setAttribute('aria-checked',fPx);this.querySelector('span').textContent=fPx?'Ligado':'Desligado';$('fEw').style.display=fPx?'none':''",'Cliente Peixe')}</div>
   <label class="f" id="fEw"${c.peixe?' style="display:none"':''}>Vencimento<input class="field" id="fE" type="date" value="${isoDia(c.expires_at)}"></label>
   ${id?'':`<div class="chips" style="margin-top:8px">${[[1,'Teste de 1 dia'],[3,'Teste de 3 dias'],[7,'7 dias'],[30,'30 dias']].map(([n,t])=>`<button type="button" class="chipb" onclick="$('fE').value=isoDia(Date.now()+${n}*864e5)">${t}</button>`).join('')}</div>`}
   <label class="f">Observação<input class="field" id="fO" value="${esc(c.notes||'')}" maxlength="120"></label>
   <div class="drow"><button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" id="fS">${id?'Salvar':'Criar cliente'}</button></div>`)
- $('fP').onchange=()=>{const p=plano(Number($('fP').value));if(p)$('fV').value=p.price}
+ $('fP').onchange=()=>{const p=plano(Number($('fP').value));if(p)$('fV').placeholder=p.price}
  $('fS').onclick=async()=>{
   const name=$('fN').value.trim();if(!name)return toast('Informe o nome',true)
   const v=$('fE').value;if(!v&&!fPx)return toast('Informe o vencimento',true)
@@ -1441,7 +1445,7 @@ function tsDraw(){const p0=D.plans[0],nome=$('tN')?.value??'',tel=$('tT')?.value
   <div class="drow"><button class="btn" onclick="fechar()">Cancelar</button><button class="btn pri" id="tS" onclick="criarTeste()">${ic('clock',17)}Criar teste e enviar código</button></div>`)}
 async function criarTeste(){const p=plano(Number($('tP').value))||D.plans[0];if(!p)return toast('Crie um plano antes (Ajustes)',true)
  const nome=$('tN').value.trim()||'Teste '+new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})
- const row={name:nome,phone:$('tT').value.replace(/\D/g,'')||null,notes:null,plan_id:p.id,price:Number(p.price)||0,teste:true,active:true,expires_at:new Date(Date.now()+tst.h*3600e3).toISOString()}
+ const row={name:nome,phone:$('tT').value.replace(/\D/g,'')||null,notes:null,plan_id:p.id,price:0,teste:true,active:true,expires_at:new Date(Date.now()+tst.h*3600e3).toISOString()}
  $('tS').disabled=true
  if(tst.pad){const r=await sb.from('app_config').update({teste_horas:tst.h}).eq('id',1);if(r.error){$('tS').disabled=false;return erro(r.error)}}
  const r=await sb.from('clients').insert(row).select().single();if(r.error){$('tS').disabled=false;return erro(r.error)}
