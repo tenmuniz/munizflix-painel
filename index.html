@@ -1561,7 +1561,7 @@ async function setPeixe(id,on){const c=D.clients.find(x=>x.id===id);if(!c)return
 function avisoPara(id){const c=D.clients.find(x=>x.id===id);if(!c)return
  av.alvo='client';av.cli=id;av.kind='info';if(av.mod==='venc'||av.mod==='venceu')av.mod='';fecharSheet();ir('avisos')}
 async function excluirCliente(id){const c=D.clients.find(x=>x.id===id)
- if(!await confirmar({t:`Excluir “${c.name}”?`,m:'Todos os códigos dele são apagados e os aparelhos param de funcionar. Não dá para desfazer.',ok:'Excluir de vez',perigo:true,icone:'trash'}))return
+ if(!await confirmar({t:`Excluir “${c.name}”?`,m:'Todos os códigos dele são apagados e os aparelhos param de funcionar. Se o app estiver aberto em algum aparelho, ele trava sozinho em até 1 minuto (não precisa fechar). Não dá para desfazer.',ok:'Excluir de vez',perigo:true,icone:'trash'}))return
  const r=await sb.from('clients').delete().eq('id',id).select('id');if(r.error)return erro(r.error)
  if(!r.data?.length)return toast('Não consegui excluir. Entre de novo no painel e tente outra vez.',true)
  fecharSheet();toast('Cliente “'+c.name+'” excluído');carregar()}
