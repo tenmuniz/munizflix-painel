@@ -968,9 +968,9 @@ function linhaCliente(c){
   <div class="cnm">${avatar(c)}<div><b>${esc(c.name)}</b><small>${c.phone?esc(c.phone):'sem telefone'}${c.notes?' · '+esc(c.notes):''}</small></div></div>
   <div class="c-st"><span class="tag ${s}">${t}</span></div>
   <div class="c2 c-pl"><b>${esc(p?.name||'Sem plano')}</b><small>${c.peixe?'isento':brl(precoDe(c))+'/mês'}</small></div>
-  <div class="c2 c-ve">${c.peixe?'<b>Sempre</b><small>isento, nunca vence</small>':c.teste?`<b>${dtHm(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':'var(--warn)'}">${vencTxt(c)}</small>`:d>SEM_PRAZO?`<b>sem prazo</b><small>sem prazo · até ${dt(c.expires_at)}</small>`:`<b>${dt(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':d<=7?'var(--warn)':''}">${vencTxt(c)}</small>`}</div>
+  <div class="c2 c-ve">${c.peixe?'<b>Sempre</b><small>isento, nunca vence</small>':c.teste?`<b>${dtHm(c.expires_at)}</b><small style="color:${new Date(c.expires_at)<Date.now()?'var(--bad)':'var(--warn)'}">${vencTxt(c)}</small>`:d>SEM_PRAZO?`<b>sem prazo</b><small>sem prazo · até ${dt(c.expires_at)}</small>`:`<b>${dt(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':d<=7?'var(--warn)':''}">${vencTxt(c)}</small>`}</div>
   <div class="ctv c-tv">${ks.map(k=>`<span class="dot ${estado(k)}" title="${esc(k.label||k.code)}: ${EST[estado(k)]}"></span>`).join('')}<small>${ks.filter(k=>k.device_tag).length}/${c.peixe?'∞':lim}</small></div>
-  <div class="cac">${c.peixe?'':`${c.teste?`<button class="btn sm" onclick="event.stopPropagation();maisTeste('${c.id}')">${ic('clock',15)}Mais tempo</button>`:''}<button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">${c.teste?'Virar cliente':'Renovar'}</button>${c.teste&&d<0?`<button class="btn sm bad" title="Excluir este teste" aria-label="Excluir este teste" onclick="event.stopPropagation();excluirCliente('${c.id}')">${ic('trash',15)}</button>`:''}`}${ic('chev',17)}</div></div>`}
+  <div class="cac">${c.peixe?'':`${c.teste?`<button class="btn sm" onclick="event.stopPropagation();maisTeste('${c.id}')">${ic('clock',15)}Mais tempo</button>`:''}<button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">${c.teste?'Virar cliente':'Renovar'}</button>${c.teste&&new Date(c.expires_at)<Date.now()?`<button class="btn sm bad" title="Excluir este teste" aria-label="Excluir este teste" onclick="event.stopPropagation();excluirCliente('${c.id}')">${ic('trash',15)}</button>`:''}`}${ic('chev',17)}</div></div>`}
 
 /* ---------- Janela lateral: cliente e tela ---------- */
 let sheet=null
@@ -990,7 +990,7 @@ function sheetCliente(id){const c=D.clients.find(x=>x.id===id);if(!c)return''
  return `<header class="shh">${avatar(c,true)}<div class="sht"><span class="tag ${s}">${t}</span><h2>${esc(c.name)}</h2>
    <p>${c.phone?esc(c.phone):'sem telefone'} · ${esc(p?.name||'Sem plano')} · ${c.peixe?'isento':brl(precoDe(c))+'/mês'}</p></div>${xBtn}</header>
   <div class="shb">
-   ${c.teste?`<div class="venc test ${d<0?'bad':''}"><div><small>${c.active?'Cliente em teste':'Cliente desligado'}</small><b>${new Date(c.expires_at)<Date.now()?'Teste acabou':'Teste até '+dtHm(c.expires_at)}</b><em>${vencTxt(c)} · se pagar o Pix com o código, vira cliente</em></div>
+   ${c.teste?`<div class="venc test ${new Date(c.expires_at)<Date.now()?'bad':''}"><div><small>${c.active?'Cliente em teste':'Cliente desligado'}</small><b>${new Date(c.expires_at)<Date.now()?'Teste acabou':'Teste até '+dtHm(c.expires_at)}</b><em>${vencTxt(c)} · se pagar o Pix com o código, vira cliente</em></div>
     <div class="vbtns"><button class="btn" onclick="maisTeste('${id}')">${ic('clock',17)}Mais tempo</button><button class="btn pri" onclick="renovar('${id}')">${ic('check',17)}Virar cliente</button></div></div>`
    :c.peixe?`<div class="venc fish"><div><small>${c.active?'Cliente Peixe':'Cliente desligado'}</small><b>🐟 Isento de pagamento</b><em>nunca vence · telas sem limite · não recebe cobrança</em></div></div>`
    :`<div class="venc ${st==='venc'||st==='off'?'bad':st==='breve'?'warn':''}"><div><small>${c.active?'Vencimento':'Cliente desligado'}</small><b>${dt(c.expires_at)}</b><em>${vencTxt(c)}</em></div>
