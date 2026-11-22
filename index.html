@@ -431,6 +431,46 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 @keyframes slideup{from{transform:translateY(60px);opacity:.4}to{transform:none;opacity:1}}
 @media (max-width:560px){.grid2,.opts{grid-template-columns:1fr}.kpi b{font-size:24px}.tvs{grid-template-columns:1fr}.kpi{padding:13px}.ajn{width:100%;overflow-x:auto;flex-wrap:nowrap}.ajn button{white-space:nowrap}.ajn button span{display:none}.ajn button.on span{display:inline}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== Teste grátis (2026-11-21) =====
+   Faixa no Início, contador do dia e a lista de pedidos. Reaproveita .box, .bxf, .seg, .stp, .tag e .btn. */
+.tstrip{display:flex;align-items:center;gap:12px;margin:14px 0 4px;padding:14px 16px;border-radius:var(--r);
+ background:linear-gradient(120deg,rgba(124,58,237,.22),rgba(192,38,211,.10));border:1px solid rgba(168,85,247,.35);cursor:pointer}
+.tstrip.off{background:var(--card);border-color:var(--line)}
+.tstrip .k{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.07);color:#e9d5ff;flex:none}
+.tstrip b{display:block;font-size:14.5px}
+.tstrip small{color:var(--tx2);font-size:12.5px}
+.tstrip .tgb{flex:1;max-width:200px;height:8px;border-radius:5px;background:rgba(255,255,255,.10);overflow:hidden}
+.tstrip .tgb i{display:block;height:100%;border-radius:5px;background:var(--grad)}
+.tstrip .go{margin-left:auto;color:var(--mut)}
+.tstrip:hover .go,.tstrip:focus-visible .go{color:#fff}
+.tgk{display:flex;flex-direction:column;gap:12px;margin:4px 0 8px}
+.tgn{display:flex;align-items:baseline;gap:10px}
+.tgn b{font-size:38px;font-weight:900;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tgn span{color:var(--tx2);font-size:14px;font-weight:600}
+.tgn em{font-style:normal;color:#fff;font-weight:800}
+.tgbar{height:10px;border-radius:6px;background:rgba(255,255,255,.09);overflow:hidden}
+.tgbar i{display:block;height:100%;border-radius:6px;background:var(--grad);transition:width .3s}
+.tgbar i.full{background:linear-gradient(120deg,#f59e0b,#ef4444)}
+.tgm{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12.5px;color:var(--tx2)}
+.tgm span{display:inline-flex;align-items:center;gap:5px}
+.tgm b{color:#fff}
+.tgm .ic{color:var(--mut)}
+.tlist{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.trow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line2);flex-wrap:wrap}
+.trow.ok{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.05)}
+.trow.bad{border-color:rgba(251,113,133,.22);background:rgba(251,113,133,.04)}
+.trow .tt{flex:1;min-width:150px}
+.trow .tt b{display:block;font-size:13.5px;line-height:1.25}
+.trow .tt small{color:var(--tx2);font-size:12px}
+.trow .tw{color:var(--mut);font-size:11.5px;white-space:nowrap}
+.trow a.btn{text-decoration:none}
+.trow .tag.ok{color:var(--ok);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.12)}
+.trow .tag.bad{color:var(--bad);border-color:rgba(251,113,133,.4);background:rgba(251,113,133,.12)}
+.trow .tag.warn{color:var(--warn);border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.12)}
+.bxf b.on{color:var(--ok)}
+.bxf b.off{color:var(--mut)}
+@media (max-width:520px){.trow .tw{display:none}.tstrip .tgb{display:none}}
 </style>
 </head>
 <body>
@@ -586,9 +626,9 @@ $('lgGo').onclick=async()=>{
 async function sair(){if(!await confirmar({t:'Sair do painel?',m:'Você vai precisar do e-mail e da senha para entrar de novo.',ok:'Sair',icone:'out'}))return;await sb.auth.signOut();location.reload()}
 
 /* ---------- Dados ---------- */
-let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],pays:[],nts:[],st:{codes:{},days:{},top:[]},pico:null},loadedAt=0,falha=false,pulsos=0
+let D={plans:[],clients:[],codes:[],cfg:null,remotes:[],pays:[],nts:[],st:{codes:{},days:{},top:[]},pico:null,teste:[]},loadedAt=0,falha=false,pulsos=0
 const COLS='code,client_id,label,active,device_tag,device_model,app_version,activated_at,last_seen,watching,watching_kind,watching_since,watching_src,created_at,app_sig,app_plat,app_origin,copia_em'
-const PAGES=[['inicio','Início','home'],['aovivo','Ao vivo','tv'],['clientes','Clientes','users'],['financeiro','Financeiro','wallet'],['avisos','Avisos','mega'],['protecao','Proteção','shield'],['ajustes','Ajustes','gear']]
+const PAGES=[['inicio','Início','home'],['aovivo','Ao vivo','tv'],['clientes','Clientes','users'],['financeiro','Financeiro','wallet'],['teste','Teste grátis','key'],['avisos','Avisos','mega'],['protecao','Proteção','shield'],['ajustes','Ajustes','gear']]
 const ANTIGO={geral:'inicio',telas:'aovivo',pagamentos:'financeiro'}
 let tab=(()=>{let h=location.hash.slice(1);h=ANTIGO[h]||h;return PAGES.some(p=>p[0]===h)?h:'inicio'})()
 
@@ -597,7 +637,7 @@ async function carregar(o={}){
  try{
   // antes de ler: fecha o que ficou "assistindo" em TVs que sumiram
   await sb.rpc('admin_refresh').then(()=>{},()=>{})
-  const [p,c,k,g,rm,st,pc,py,nn,at]=await Promise.all([
+  const [p,c,k,g,rm,st,pc,py,nn,at,tp]=await Promise.all([
    sb.from('plans').select('*').order('screens'),
    sb.from('clients').select('*').order('name'),
    sb.from('codes').select(COLS).order('created_at'),
@@ -607,9 +647,10 @@ async function carregar(o={}){
    sb.rpc('admin_pico_titulo',{p_days:30}),
    sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at,days,note').order('created_at',{ascending:false}).limit(400),
    sb.from('notices').select('id,client_id,title,body,kind,created_at').order('id',{ascending:false}).limit(600),
-   sb.rpc('admin_codigos_suspeitos',{p_horas:24})])
+   sb.rpc('admin_codigos_suspeitos',{p_horas:24}),
+   sb.from('teste_pedidos').select('id,at,status,device_id,device_tag,model,plat,nome,phone,client_id,code,liberado').order('at',{ascending:false}).limit(400)])
   for(const r of [p,c,k,g])if(r.error)throw r.error
-  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,nts:nn.error?[]:nn.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data,pico:pc.error||!pc.data?null:pc.data,atk:at.error||!Array.isArray(at.data)?[]:at.data}
+  D={plans:p.data,clients:c.data,codes:k.data,cfg:g.data,remotes:rm.error?[]:rm.data,pays:py.error?[]:py.data,nts:nn.error?[]:nn.data,st:st.error||!st.data?{codes:{},days:{},top:[]}:st.data,pico:pc.error||!pc.data?null:pc.data,atk:at.error||!Array.isArray(at.data)?[]:at.data,teste:tp.error||!Array.isArray(tp.data)?[]:tp.data}
   loadedAt=Date.now();falha=false;render();if(o.manual)toast('Atualizado')
  }catch(e){falha=true;liveHtml();if(!o.quieto)erro(e)}}
 /** Batida leve a cada 10 s: só o estado das telas (quem está online / assistindo). */
@@ -694,20 +735,20 @@ function contagens(){const nv=D.codes.filter(vendo).length,on=D.codes.filter(onl
 function liveHtml(){const h=falha?`<i></i>Sem conexão<small>tentando de novo</small>`:`<i></i>Ao vivo<small>${loadedAt?hm(loadedAt):''}</small>`
  for(const id of ['liveS','liveT']){$(id).className='live'+(falha?' err':'');$(id).innerHTML=h;$(id).title='Atualiza sozinho a cada 10 segundos'}}
 function navHtml(){const c=contagens()
- $('nav').innerHTML=PAGES.map(([id,nm,i],n)=>(n===4?'<hr>':'')+`<button data-t="${id}" class="${id===tab?'on':''}"${id===tab?' aria-current="page"':''}>${ic(i,19)}<span>${nm}</span>${c[id]||''}</button>`).join('')
+ $('nav').innerHTML=PAGES.map(([id,nm,i],n)=>(n===5?'<hr>':'')+`<button data-t="${id}" class="${id===tab?'on':''}"${id===tab?' aria-current="page"':''}>${ic(i,19)}<span>${nm}</span>${c[id]||''}</button>`).join('')
  const mais=['avisos','protecao','ajustes'].includes(tab)
  $('tabbar').innerHTML=PAGES.slice(0,4).map(([id,nm,i])=>`<button data-t="${id}" class="${id===tab?'on':''}">${ic(i,21)}<span>${nm}</span>${id==='aovivo'&&c.nv?`<i class="bdg">${c.nv}</i>`:''}</button>`).join('')
   +`<button data-t="mais" class="${mais?'on':''}">${ic('menu',21)}<span>Mais</span>${c.cop?`<i class="bdg bad">${c.cop}</i>`:''}</button>`
  liveHtml()}
 $('nav').onclick=$('tabbar').onclick=e=>{const b=e.target.closest('button');if(!b)return;b.dataset.t==='mais'?menuMais():ir(b.dataset.t)}
 function menuMais(){const c=contagens()
- dialogo(`<h3>Mais</h3><div class="list" style="margin-top:12px">${[['avisos','mega','Avisos','Mandar recado ou cobrança para as TVs'],['protecao','shield','Proteção','Bloquear cópias do app'+(c.cop?' · '+pl(c.cop,'alerta','alertas'):'')],['ajustes','gear','Ajustes','Planos, servidor, links e conta']]
+ dialogo(`<h3>Mais</h3><div class="list" style="margin-top:12px">${[['avisos','mega','Avisos','Mandar recado ou cobrança para as TVs'],['teste','key','Teste grátis','Quem baixou e não tem código pode testar sozinho'],['protecao','shield','Proteção','Bloquear cópias do app'+(c.cop?' · '+pl(c.cop,'alerta','alertas'):'')],['ajustes','gear','Ajustes','Planos, servidor, links e conta']]
   .map(([id,i,t,s])=>`<button class="arow" onclick="fechar();ir('${id}')">${ic(i,20)}<div><b>${t}</b><small>${s}</small></div>${ic('chev',16)}</button>`).join('')}
   <button class="arow bad" onclick="fechar();sair()">${ic('out',20)}<div><b>Sair do painel</b></div>${ic('chev',16)}</button></div>`)}
 function ir(t,o){if(o?.fTela)fTela=o.fTela;if(o?.cFiltro)cFiltro=o.cFiltro;if(o?.aj)aj=o.aj
  tab=t;history.replaceState(null,'','#'+t);window.scrollTo(0,0);fecharSheet();render()
  const w=$('page');w.classList.remove('enter');void w.offsetWidth;w.classList.add('enter');setTimeout(()=>w.classList.remove('enter'),700)}
-function render(){navHtml();({inicio:rInicio,aovivo:rAoVivo,clientes:rClientes,financeiro:rFinanceiro,avisos:rAvisos,protecao:rProtecao,ajustes:rAjustes})[tab]();rSheet()}
+function render(){navHtml();({inicio:rInicio,aovivo:rAoVivo,clientes:rClientes,financeiro:rFinanceiro,teste:rTeste,avisos:rAvisos,protecao:rProtecao,ajustes:rAjustes})[tab]();rSheet()}
 const head=(t,s,extra='')=>`<div class="pagehd"><div><h1>${t}</h1>${s?`<p>${s}</p>`:''}</div><div class="sp"></div>${extra}</div>`
 
 /* ---------- Gráfico: horas assistidas por dia ---------- */
@@ -778,6 +819,12 @@ function rInicio(){
   <div class="kpi click" tabindex="0" onclick="ir('clientes')"><div class="kh"><span>${ic('users',15)}</span>Clientes ativos</div><b>${ativos.length}</b><em>${D.clients.length-ativos.length?pl(D.clients.length-ativos.length,'parado','parados')+' (vencido ou desligado)':'todos em dia'}</em></div>
   <div class="kpi click" tabindex="0" onclick="ir('financeiro')"><div class="kh"><span>${ic('wallet',15)}</span>Receita por mês</div><b>${brl(receita)}</b><em>${mes.n?brl(mes.v)+' já recebidos por Pix este mês':'soma das mensalidades ativas'}</em></div>
   <div class="kpi"><div class="kh"><span>${ic('clock',15)}</span>Assistido hoje</div><b>${tm(hoje)}</b><em>${hrs(sem)} h nos últimos 7 dias</em></div></div>
+ ${(()=>{const h=testeDeHoje().filter(x=>x.status==='ok').length,lg=(D.cfg||{}).teste_auto!==false,lm=Number((D.cfg||{}).teste_dia??20)
+  return `<div class="tstrip${lg?'':' off'}" tabindex="0" role="button" onclick="ir('teste')" onkeydown="if(event.key==='Enter')this.click()">
+   <span class="k">${ic('key',20)}</span>
+   <div><b>Teste grátis ${lg?'ligado':'desligado'}</b><small>${h} de ${lm} testes hoje${lm>0&&h>=lm?' · teto do dia atingido':''}</small></div>
+   <div class="tgb"><i style="width:${lm>0?Math.min(100,Math.round(h*100/lm)):0}%"></i></div>
+   <span class="go">${ic('chev',17)}</span></div>`})()}
  <div class="cols">
   <div class="panel"><div class="ph">${ic('tv',18)}Ao vivo agora<span class="sp"></span><button class="lnk" onclick="ir('aovivo',{fTela:'todas'})">ver todas ${ic('chev',14)}</button></div>
    ${aoVivo.length?'<div class="list">'+aoVivo.map(linhaTela).join('')+'</div>':'<div class="empty">Nenhuma tela ligada agora.</div>'}</div>
@@ -1133,6 +1180,109 @@ function rProtecao(){
 /* ---------- Ajustes (uma seção por vez) ---------- */
 let aj='planos'
 const AJ=[['planos','Planos e preços','card'],['servidor','Servidores','signal'],['bloqueio','Tela de bloqueio','lock'],['codigos','Códigos','key'],['links','Links','link'],['conta','Conta','user']]
+/* ===== Teste grátis automático (pedido do dono, 2026-11-21) =====
+ * O cliente baixa o app sem código e pede o teste sozinho, na tela de ativação.
+ * Aqui o dono liga/desliga, define o teto do dia e vê cada pedido: quem pediu, de que aparelho,
+ * se saiu ou foi barrado e por quê — com botão para liberar de novo quem não conseguiu usar. */
+const TESTE_ST={ok:['ok','Teste criado'],ja_usou:['warn','Já usou'],limite:['bad','Teto do dia'],
+ telefone:['warn','WhatsApp inválido'],desligado:['','Desligado'],wait:['','Muitas tentativas'],
+ copia:['bad','App copiado'],invalid:['','Aparelho estranho']}
+const testeSt=s=>TESTE_ST[s]||['',s]
+const noDia=(iso,d)=>{const x=new Date(iso);return x.getFullYear()===d.getFullYear()&&x.getMonth()===d.getMonth()&&x.getDate()===d.getDate()}
+const testeDeHoje=()=>{const h=new Date();return (D.teste||[]).filter(x=>noDia(x.at,h))}
+const testeDeOntem=()=>{const o=new Date();o.setDate(o.getDate()-1);return (D.teste||[]).filter(x=>noDia(x.at,o)&&x.status==='ok').length}
+const zapDe=(phone,txt)=>{const n=(phone||'').replace(/\D/g,'');return n.length>=10?'https://wa.me/'+(n.length<=11?'55':'')+n+'?text='+encodeURIComponent(txt):''}
+/** O banco já tem a migração do teste? (sem ela, salvar aqui não faria nada) */
+const semTesteNoBanco=()=>(D.cfg||{}).teste_auto===undefined
+const avisaSemBanco=()=>toast('Falta aplicar a migração 20261121230000_teste_automatico no Supabase (SQL Editor). Depois disso esta página funciona.')
+async function testeAuto(on){
+ if(semTesteNoBanco())return avisaSemBanco()
+ const r=await sb.from('app_config').update({teste_auto:on,updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error)
+ toast(on?'Teste grátis ligado: o botão já aparece no app':'Teste grátis desligado: o app mostra só o WhatsApp');carregar()}
+async function testeTeto(n){
+ if(semTesteNoBanco())return avisaSemBanco()
+ n=Math.max(0,Math.min(500,Math.round(Number(n)||0)))
+ const r=await sb.from('app_config').update({teste_dia:n,updated_at:new Date().toISOString()}).eq('id',1)
+ if(r.error)return erro(r.error)
+ toast(n?'Teto de '+n+' testes por dia':'Testes automáticos parados (teto 0)');carregar()}
+async function testeLib(dev,nome){
+ if(semTesteNoBanco())return avisaSemBanco()
+ if(!await confirmar({t:'Liberar este aparelho para pedir teste de novo?',
+  m:'O código que este aparelho tem hoje'+(nome?' (de '+nome+')':'')+' é apagado e ele pode pedir o teste automático outra vez. É para quem ganhou o teste e não conseguiu usar. Não faça isso em aparelho de cliente que paga — para esses, use Renovar.',
+  ok:'Liberar aparelho',icone:'refresh'}))return
+ const r=await sb.rpc('admin_libera_teste',{p_device:dev})
+ if(r.error)return erro(r.error)
+ toast('Aparelho liberado: pode pedir o teste de novo');carregar()}
+
+function rTeste(){
+ const cfg=D.cfg||{},ligado=cfg.teste_auto!==false,lim=Number(cfg.teste_dia??20),hrs=Number(cfg.teste_horas||24)
+ const hoje=testeDeHoje(),ok=hoje.filter(x=>x.status==='ok'),bar=hoje.filter(x=>x.status!=='ok')
+ const pct=lim>0?Math.min(100,Math.round(ok.length*100/lim)):0,cheio=lim>0&&ok.length>=lim
+ const antes=(D.teste||[]).filter(x=>!noDia(x.at,new Date())).slice(0,40)
+ const linha=p=>{const [c,t]=testeSt(p.status)
+  const cod=D.codes.find(k=>k.device_id===p.device_id),cli=cod?clienteDe(cod):null
+  const zap=zapDe(p.phone,'Olá'+(p.nome?' '+esc(p.nome.split(' ')[0]):'')+'! Aqui é do MunizFlix.')
+  /* liberar só vale para aparelho de teste (ou aparelho sem código): apagar o código de quem paga
+     derrubaria o cliente. O servidor também recusa (admin_libera_teste). */
+  const livre=!cod||!!cli?.teste
+  return `<div class="trow${p.status==='ok'?' ok':''}${p.status==='limite'||p.status==='copia'?' bad':''}">
+   <span class="tag ${c}">${t}</span>
+   <div class="tt"><b>${esc(p.nome||'Sem nome')}</b><small>${esc(p.model||'Aparelho')}${p.phone?' · '+esc(p.phone):''}${p.liberado?' · liberado por você':''}</small></div>
+   <span class="tw">${ago(p.at)}</span>
+   ${p.code?`<button class="btn sm" onclick="copiarTxt('${esc(p.code)}','Código ${esc(p.code)} copiado')" title="Copiar o código">${ic('copy',14)}${esc(p.code)}</button>`:''}
+   ${zap?`<a class="btn sm ok" href="${zap}" target="_blank" rel="noreferrer">${ic('chat',14)}WhatsApp</a>`:''}
+   ${p.device_id&&livre?`<button class="btn sm${p.status==='ja_usou'?' solid ok':''}" onclick="testeLib('${esc(p.device_id)}','${esc(p.nome||'')}')" title="Apagar o código deste aparelho para ele poder pedir o teste outra vez">${ic('refresh',14)}Liberar</button>`:''}
+  </div>`}
+ const vazio='<p class="h">Nenhum pedido ainda.</p>'
+ /* O banco ainda não recebeu a migração do teste (20261121230000): sem este aviso, o dono ligaria e
+  * desligaria o teste e nada aconteceria — e o app mostraria o botão que não funciona. */
+ const semBanco=cfg.teste_auto===undefined
+ $('page').innerHTML=head('Teste grátis','Quem baixa o app sem código pede o teste sozinho. Aqui você liga, desliga, define o teto do dia e vê cada pedido.')+(semBanco?
+ `<section class="box" style="max-width:860px;border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.06)">
+  ${bxh('alert','Esta parte ainda não está no banco','Falta aplicar a migração 20261121230000_teste_automatico no Supabase (SQL Editor). Até lá o app mostra o botão do teste e, ao clicar, avisa que não conseguiu.')}
+  <div class="bxf"><div><b class="off">Teste automático indisponível</b><p class="h">Depois de aplicar a migração, esta página passa a funcionar sozinha ao atualizar.</p></div></div>
+ </section>
+ <p class="note">Nada abaixo está ligado: os botões vão recusar até a migração ser aplicada. Veja <b>docs/PENDING_TASKS.md</b>.</p>`:'')+`
+ <section class="box" style="max-width:860px">
+  ${bxh('key','Teste automático no app','Ligado, aparece o botão “Começar meu teste grátis” na tela de ativação. Desligado, a pessoa só vê o WhatsApp.')}
+  <div class="bxf">
+   <div><b class="${ligado?'on':'off'}">${ligado?'Ligado':'Desligado'}</b><p class="h">${ligado?'Quem abrir o app sem código já pode pedir o teste.':'Ninguém consegue teste automático agora.'}</p></div>
+   ${swc(ligado,`testeAuto(${!ligado})`,'Teste automático')}
+  </div></section>
+
+ <section class="box" style="max-width:860px">
+  ${bxh('chart','Testes de hoje','O teto existe para proteger as conexões do servidor de IPTV: cada teste assistindo ocupa uma.')}
+  <div class="tgk">
+   <div class="tgn"><b>${ok.length}</b><span>de <em>${lim}</em> hoje</span></div>
+   <div class="tgbar"><i class="${cheio?'full':''}" style="width:${pct}%"></i></div>
+   <div class="tgm">
+    <span>${ic('check',14)}<b>${ok.length}</b> criados</span>
+    <span>${ic('x',14)}<b>${bar.length}</b> barrados</span>
+    <span>${ic('cal',14)}<b>${testeDeOntem()}</b> ontem</span>
+    <span>${ic('clock',14)}<b>${hrs}h</b> cada um</span></div>
+  </div>
+  <div class="bxf">
+   <div><b>Teto por dia</b><p class="h">Chegando no teto, o app avisa a pessoa para falar no WhatsApp.</p></div>
+   <span class="stp">
+    <button type="button" aria-label="menos" onclick="testeTeto(${Math.max(0,lim-5)})"${lim<=0?' disabled':''}>−</button><b>${lim}</b>
+    <button type="button" aria-label="mais" onclick="testeTeto(${Math.min(500,lim+5)})"${lim>=500?' disabled':''}>+</button></span>
+  </div>
+  <div class="seg" style="margin-top:12px">${[0,10,20,30,50].map(v=>`<button class="${lim===v?'on':''}" onclick="testeTeto(${v})">${v?'até '+v:'parar'}</button>`).join('')}</div>
+  <p class="note">Hoje o app libera ${hrs} hora${hrs===1?'':'s'} por teste (muda em “Novo teste”, no botão de criar teste manual). Quem já tem código neste aparelho <b>não</b> ganha outro teste: desinstalar e instalar de novo não adianta. Para dar outra chance a alguém, use <b>Liberar</b> no pedido da pessoa.</p>
+ </section>
+
+ <section class="box" style="max-width:860px">
+  ${bxh('cal','Pedidos de hoje',`${hoje.length} pedido${hoje.length===1?'':'s'} desde a meia-noite.`)}
+  <div class="tlist">${hoje.length?hoje.map(linha).join(''):vazio}</div>
+ </section>
+
+ <section class="box" style="max-width:860px">
+  ${bxh('cal','Antes de hoje','Os últimos pedidos dos dias anteriores.')}
+  <div class="tlist">${antes.length?antes.map(linha).join(''):vazio}</div>
+ </section>`
+}
+
 function rAjustes(){
  const g=D.cfg||{servers:[],username:'',password:'',extra:[],contact:''}
  $('page').innerHTML=head('Ajustes','Planos, pagamento, servidores de IPTV, links de instalação e sua conta.')+`
