@@ -958,7 +958,7 @@ function rClientes(){
  <div class="fil">${F.map(([v,t])=>`<button class="f-${v}${cFiltro===v?' on':''}" onclick="cFiltro='${v}';render()">${t}<b>${cont[v]}</b></button>`).join('')}</div>
  <div class="bar"><div class="inp">${ic('search',17)}<input class="field" id="busca" placeholder="Buscar por nome, telefone, código ou tela" value="${esc(busca)}"></div>
   <div class="seg" title="Ordenar por">${[['venc','Vencimento'],['nome','Nome'],['uso','Mais assistem']].map(([v,t])=>`<button class="${cOrdem===v?'on':''}" onclick="cOrdem='${v}';render()">${t}</button>`).join('')}</div></div>
- ${cFiltro==='teste'?`<div class="bxf" style="margin:0 0 12px"><span class="h">Teste se desliga sozinho no fim do tempo. Se a pessoa pagar o Pix no app com o código do teste, ela vira cliente normal (mesmo código).</span>${velhosTeste().length?`<button class="btn sm bad" onclick="apagarTestes()">${ic('trash',15)}Apagar ${pl(velhosTeste().length,'teste acabado','testes acabados')} há mais de 7 dias</button>`:''}</div>`:''}
+ ${cFiltro==='teste'?`<div class="bxf" style="margin:0 0 12px"><span class="h">O teste se desliga sozinho no fim do tempo, mas <b>continua valendo para ele assinar</b>: no app aparece “Seu teste acabou” com o Pix, e o mesmo código vira assinatura na hora — <b>mesmo dias depois</b>. “Virar cliente” faz isso pelo painel. Excluir apaga o código e o aparelho <b>não</b> ganha outro teste grátis (a trava fica no histórico dele).</span>${velhosTeste().length?`<button class="btn sm bad" onclick="apagarTestes()">${ic('trash',15)}Excluir ${pl(velhosTeste().length,'teste acabado','testes acabados')} há mais de 7 dias</button>`:''}</div>`:''}
  ${lst.length?`<div class="ctab"><div class="chd"><span>Cliente</span><span>Situação</span><span>Plano</span><span>Vencimento</span><span>Telas</span><span></span></div>${lst.map(linhaCliente).join('')}</div>`
   :`<div class="empty">${D.clients.length?'Nenhum cliente neste filtro.':'Você ainda não tem clientes. Toque em “Novo cliente”, lá em cima, para começar.'}</div>`}`
  const b=$('busca');b.oninput=()=>{busca=b.value;const p=b.selectionStart;rClientes();const n=$('busca');n.focus();n.setSelectionRange(p,p)}}
@@ -970,7 +970,7 @@ function linhaCliente(c){
   <div class="c2 c-pl"><b>${esc(p?.name||'Sem plano')}</b><small>${c.peixe?'isento':brl(precoDe(c))+'/mês'}</small></div>
   <div class="c2 c-ve">${c.peixe?'<b>Sempre</b><small>isento, nunca vence</small>':c.teste?`<b>${dtHm(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':'var(--warn)'}">${vencTxt(c)}</small>`:d>SEM_PRAZO?`<b>sem prazo</b><small>sem prazo · até ${dt(c.expires_at)}</small>`:`<b>${dt(c.expires_at)}</b><small style="color:${d<0?'var(--bad)':d<=7?'var(--warn)':''}">${vencTxt(c)}</small>`}</div>
   <div class="ctv c-tv">${ks.map(k=>`<span class="dot ${estado(k)}" title="${esc(k.label||k.code)}: ${EST[estado(k)]}"></span>`).join('')}<small>${ks.filter(k=>k.device_tag).length}/${c.peixe?'∞':lim}</small></div>
-  <div class="cac">${c.peixe?'':`${c.teste?`<button class="btn sm" onclick="event.stopPropagation();maisTeste('${c.id}')">${ic('clock',15)}Mais tempo</button>`:''}<button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">${c.teste?'Virar cliente':'Renovar'}</button>`}${ic('chev',17)}</div></div>`}
+  <div class="cac">${c.peixe?'':`${c.teste?`<button class="btn sm" onclick="event.stopPropagation();maisTeste('${c.id}')">${ic('clock',15)}Mais tempo</button>`:''}<button class="btn sm ok" onclick="event.stopPropagation();renovar('${c.id}')">${c.teste?'Virar cliente':'Renovar'}</button>${c.teste&&d<0?`<button class="btn sm bad" title="Excluir este teste" aria-label="Excluir este teste" onclick="event.stopPropagation();excluirCliente('${c.id}')">${ic('trash',15)}</button>`:''}`}${ic('chev',17)}</div></div>`}
 
 /* ---------- Janela lateral: cliente e tela ---------- */
 let sheet=null
@@ -1011,7 +1011,7 @@ function sheetCliente(id){const c=D.clients.find(x=>x.id===id);if(!c)return''
     ${pays.length?'<div class="list">'+pays.map(x=>linhaPix(x,true)).join('')+'</div>':`<p class="h">${c.peixe?'Cliente Peixe não paga.':'Nenhum Pix deste cliente ainda. Use “Cobrar” para mandar o link de pagamento.'}</p>`}</section>
    <section><h4>Gerenciar</h4><div class="list">
     ${arow('power',c.active?'Desligar cliente':'Ligar cliente de novo',c.active?'Todas as telas dele param de funcionar até você ligar de novo.':'As telas voltam a funcionar (se não estiver vencido).',`ligar('${id}',${!c.active})`,c.active)}
-    ${arow('trash','Excluir cliente','Apaga o cliente e os códigos dele. Não dá para desfazer.',`excluirCliente('${id}')`,true)}</div></section>
+    ${arow('trash',c.teste?'Excluir teste':'Excluir cliente',c.teste?'Apaga o código do teste. Ele perde a chance de assinar sozinho pelo app e o aparelho não ganha outro teste grátis.':'Apaga o cliente e os códigos dele. Não dá para desfazer.',`excluirCliente('${id}')`,true)}</div></section>
   </div>`}
 
 function sheetTela(code){const k=D.codes.find(x=>x.code===code);if(!k)return''
@@ -1776,7 +1776,7 @@ async function mtOk(){const c=D.clients.find(x=>x.id===mt.id),n=mtFim(c,mt.h);fe
  const r=await sb.from('clients').update({expires_at:n.toISOString(),active:true}).eq('id',mt.id);if(r.error)return erro(r.error);toast(c.name+': teste até '+dtHm(n));carregar()}
 const velhosTeste=()=>D.clients.filter(c=>c.teste&&new Date(c.expires_at)<Date.now()-7*864e5)
 async function apagarTestes(){const l=velhosTeste();if(!l.length)return
- if(!await confirmar({t:'Apagar '+pl(l.length,'teste','testes')+'?',m:'Testes que acabaram há mais de 7 dias e não pagaram: '+l.slice(0,6).map(c=>c.name).join(', ')+(l.length>6?' e mais '+(l.length-6):'')+'. Os códigos deles são apagados.',ok:'Apagar',perigo:true,icone:'trash'}))return
+ if(!await confirmar({t:'Excluir '+pl(l.length,'teste','testes')+'?',m:'Testes que acabaram há mais de 7 dias e não pagaram: '+l.slice(0,6).map(c=>c.name).join(', ')+(l.length>6?' e mais '+(l.length-6):'')+'. Os códigos são apagados — depois disso a pessoa não consegue mais assinar sozinha pelo app (só com um código novo que você criar). O aparelho também não ganha outro teste grátis.',ok:'Excluir',perigo:true,icone:'trash'}))return
  const r=await sb.from('clients').delete().in('id',l.map(c=>c.id)).select('id');if(r.error)return erro(r.error);toast(pl(r.data?.length||0,'teste apagado','testes apagados'));carregar()}
 async function setPeixe(id,on){const c=D.clients.find(x=>x.id===id);if(!c)return
  if(!await confirmar(on?{t:`Deixar “${c.name}” como Peixe?`,m:'Fica isento de pagamento: não vence, não recebe cobrança nem aviso de pagamento, e pode ter quantas telas quiser.',ok:'Ligar Peixe',icone:'check'}
@@ -1787,10 +1787,14 @@ async function setPeixe(id,on){const c=D.clients.find(x=>x.id===id);if(!c)return
 function avisoPara(id){const c=D.clients.find(x=>x.id===id);if(!c)return
  av.alvo='client';av.cli=id;av.kind='info';if(av.mod==='venc'||av.mod==='venceu')av.mod='';fecharSheet();ir('avisos')}
 async function excluirCliente(id){const c=D.clients.find(x=>x.id===id)
- if(!await confirmar({t:`Excluir “${c.name}”?`,m:'Todos os códigos dele são apagados e os aparelhos param de funcionar. Se o app estiver aberto em algum aparelho, ele trava sozinho em até 1 minuto (não precisa fechar). Não dá para desfazer.',ok:'Excluir de vez',perigo:true,icone:'trash'}))return
+ // teste que acabou: avisar que some a chance de ele assinar sozinho e que o aparelho não ganha outro teste
+ const m=c.teste
+  ?'O código deste teste é apagado e o aparelho para de funcionar em até 1 minuto. Depois disso ele não consegue mais assinar sozinho pelo app (o Pix aparece na tela “Seu teste acabou”, que depende do código). O aparelho também NÃO ganha outro teste grátis — a trava fica no histórico dele. Se ele voltar querendo assinar, crie um código novo em “Novo cliente”. Não dá para desfazer.'
+  :'Todos os códigos dele são apagados e os aparelhos param de funcionar. Se o app estiver aberto em algum aparelho, ele trava sozinho em até 1 minuto (não precisa fechar). Não dá para desfazer.'
+ if(!await confirmar({t:`Excluir “${c.name}”?`,m,ok:'Excluir de vez',perigo:true,icone:'trash'}))return
  const r=await sb.from('clients').delete().eq('id',id).select('id');if(r.error)return erro(r.error)
  if(!r.data?.length)return toast('Não consegui excluir. Entre de novo no painel e tente outra vez.',true)
- fecharSheet();toast('Cliente “'+c.name+'” excluído');carregar()}
+ fecharSheet();toast((c.teste?'Teste “':'Cliente “')+c.name+'” excluído');carregar()}
 
 async function novoCodigo(cid){
  const label=await perguntar({t:'Nova tela',m:'Dê um nome para saber qual aparelho é. Pode deixar em branco.',label:'Nome do aparelho',ph:'Ex.: TV da sala',ok:'Gerar código'})
