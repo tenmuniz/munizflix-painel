@@ -96,7 +96,7 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .srch{min-width:0}.srch span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .srch:hover{border-color:rgba(168,85,247,.45);color:var(--tx2)}
 .srch kbd{margin-left:auto;flex:none;white-space:nowrap;font:inherit;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;background:rgba(255,255,255,.07);color:var(--mut)}
-.wrap{padding:26px 28px 60px;max-width:1320px}
+.wrap{padding:26px 30px 60px;max-width:1800px}
 .wrap.enter>*{animation:up .38s cubic-bezier(.2,.7,.2,1) both}.wrap.enter>*:nth-child(2){animation-delay:.04s}.wrap.enter>*:nth-child(3){animation-delay:.08s}.wrap.enter>*:nth-child(4){animation-delay:.12s}.wrap.enter>*:nth-child(n+5){animation-delay:.16s}
 @keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .tabbar{display:none}
@@ -457,12 +457,20 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .tgm b{color:#fff}
 .tgm .ic{color:var(--mut)}
 .tlist{display:flex;flex-direction:column;gap:8px;margin-top:4px}
-.trow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line2);flex-wrap:wrap}
+/* linha do pedido: duas linhas alinhadas. Assim cabe tudo sem quebrar em tela estreita */
+.trow{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line2)}
+.trow .tl1{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.trow .tnome{font-size:13.5px;font-weight:800;flex:1;min-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trow .tw{margin-left:auto;color:var(--mut);font-size:11.5px;white-space:nowrap}
+.trow .tl2{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;flex-wrap:wrap}
+.trow .tl2 small{color:var(--tx2);font-size:11.5px;min-width:0}
+
+.trow .tacts{display:flex;align-items:center;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+@media (max-width:1240px){.trow{grid-template-columns:auto minmax(120px,1fr) auto}.trow .tacts{grid-column:1/-1;justify-content:flex-start}}
+@media (max-width:640px){.trow{grid-template-columns:auto 1fr}.trow .tmeta{grid-column:1/-1;justify-content:flex-start}}
 .trow.ok{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.05)}
 .trow.bad{border-color:rgba(251,113,133,.22);background:rgba(251,113,133,.04)}
-.trow .tt{flex:1;min-width:150px}
-.trow .tt b{display:block;font-size:13.5px;line-height:1.25}
-.trow .tt small{color:var(--tx2);font-size:12px}
+
 .trow .tw{color:var(--mut);font-size:11.5px;white-space:nowrap}
 .trow a.btn{text-decoration:none}
 .trow .tag.ok{color:var(--ok);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.12)}
@@ -471,6 +479,41 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--tx2)}label.f>
 .bxf b.on{color:var(--ok)}
 .bxf b.off{color:var(--mut)}
 @media (max-width:520px){.trow .tw{display:none}.tstrip .tgb{display:none}}
+/* ===== Teste grátis em duas colunas (2026-11-22) =====
+ * Antes a página era uma coluna de 860 px com um vazio enorme à direita e as listas lá embaixo.
+ * Agora: controles à esquerda, pedidos à direita, usando a largura toda da tela. */
+.tgrid{display:grid;grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr);gap:14px;align-items:start}
+.tgrid .box{margin-bottom:0}
+.tcol{display:flex;flex-direction:column;gap:14px;min-width:0}
+/* o relógio de cada pedido: quanto tempo ainda falta NAQUELE teste */
+.tresta{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;white-space:nowrap;
+ color:#a5f3fc;border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.10);padding:3px 9px;border-radius:999px}
+.tresta .ic{color:#67e8f9}
+.tresta.off{color:var(--mut);border-color:var(--line2);background:rgba(255,255,255,.04)}
+.tresta.off .ic{color:var(--mut)}
+.tativo{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12.5px;color:var(--tx2)}
+.tativo b{color:#fff}
+.tativo.off{color:var(--mut)}
+@media (max-width:1080px){.tgrid{grid-template-columns:1fr}}
+/* separador dentro da caixa (substitui caixa dentro de caixa) */
+.tsep{border-top:1px solid var(--line);margin-top:16px;padding-top:16px}
+.tcap{font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--mut);text-transform:uppercase;margin-bottom:6px}
+.tcaprow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.tcaprow .h{flex:1;min-width:180px}
+.tsw{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.tsw b{display:block;font-size:19px;font-weight:900;margin:2px 0 4px}
+.tsw b.on{color:var(--ok)}.tsw b.off{color:var(--mut)}
+/* métricas do dia: número grande em cima, rótulo discreto embaixo */
+.tk{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.tk div{background:rgba(255,255,255,.03);border:1px solid var(--line2);border-radius:14px;padding:10px 12px}
+.tk b{display:block;font-size:22px;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.tk small{font-size:10.5px;color:var(--mut);letter-spacing:.1em;text-transform:uppercase;font-weight:800}
+/* vazio com propósito, em vez de uma linha solta */
+.tvazio{display:flex;gap:13px;align-items:flex-start;padding:16px;border-radius:14px;
+ border:1px dashed var(--line2);background:rgba(255,255,255,.02);color:var(--mut)}
+.tvazio .ic{color:var(--mut);flex:none;margin-top:2px}
+.tvazio b{display:block;color:var(--tx2);font-size:13.5px;margin-bottom:3px}
+.tvazio p{font-size:12.5px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -1219,68 +1262,101 @@ function rTeste(){
  const cfg=D.cfg||{},ligado=cfg.teste_auto!==false,lim=Number(cfg.teste_dia??20),hrs=Number(cfg.teste_horas||24)
  const hoje=testeDeHoje(),ok=hoje.filter(x=>x.status==='ok'),bar=hoje.filter(x=>x.status!=='ok')
  const pct=lim>0?Math.min(100,Math.round(ok.length*100/lim)):0,cheio=lim>0&&ok.length>=lim
- const antes=(D.teste||[]).filter(x=>!noDia(x.at,new Date())).slice(0,40)
+ const antes=(D.teste||[]).filter(x=>!noDia(x.at,new Date())).slice(0,60)
+ /* Cliente de um pedido: pelo cliente gravado no pedido ou pelo código que o aparelho tem hoje. */
+ const cliDe=p=>{const cod=D.codes.find(k=>k.device_id===p.device_id)
+  return (p.client_id&&D.clients.find(c=>c.id===p.client_id))||(cod?clienteDe(cod):null)}
+ /* Tempo que AINDA falta no teste (o dono pediu o número real, não a duração configurada). */
+ const restaDe=p=>{const c=cliDe(p);return c&&c.expires_at?c.expires_at:null}
+ const restaCurta=e=>{const m=Math.round((new Date(e)-Date.now())/60000)
+  if(m<0)return{txt:'acabou há '+(Math.abs(m)<60?Math.abs(m)+' min':Math.round(Math.abs(m)/60)+' h'),fim:true}
+  return{txt:'faltam '+(m<60?m+' min':(Math.floor(m/60)+'h'+(m%60?String(m%60).padStart(2,'0'):''))),fim:false}}
+ const ativos=ok.filter(p=>{const e=restaDe(p);return e&&new Date(e)>Date.now()})
+  .sort((a,b)=>new Date(restaDe(a))-new Date(restaDe(b)))
+ const proximo=ativos[0]
  const linha=p=>{const [c,t]=testeSt(p.status)
-  const cod=D.codes.find(k=>k.device_id===p.device_id),cli=cod?clienteDe(cod):null
+  const cod=D.codes.find(k=>k.device_id===p.device_id),cli=cliDe(p)
+  const fim=cli&&cli.expires_at
   const zap=zapDe(p.phone,'Olá'+(p.nome?' '+esc(p.nome.split(' ')[0]):'')+'! Aqui é do MunizFlix.')
-  /* liberar só vale para aparelho de teste (ou aparelho sem código): apagar o código de quem paga
+  /* liberar só vale para aparelho de teste (ou sem código): apagar o código de quem paga
      derrubaria o cliente. O servidor também recusa (admin_libera_teste). */
   const livre=!cod||!!cli?.teste
+  const r=fim&&p.status==='ok'?restaCurta(fim):null
   return `<div class="trow${p.status==='ok'?' ok':''}${p.status==='limite'||p.status==='copia'?' bad':''}">
-   <span class="tag ${c}">${t}</span>
-   <div class="tt"><b>${esc(p.nome||'Sem nome')}</b><small>${esc(p.model||'Aparelho')}${p.phone?' · '+esc(p.phone):''}${p.liberado?' · liberado por você':''}</small></div>
-   <span class="tw">${ago(p.at)}</span>
-   ${p.code?`<button class="btn sm" onclick="copiarTxt('${esc(p.code)}','Código ${esc(p.code)} copiado')" title="Copiar o código">${ic('copy',14)}${esc(p.code)}</button>`:''}
-   ${zap?`<a class="btn sm ok" href="${zap}" target="_blank" rel="noreferrer">${ic('chat',14)}WhatsApp</a>`:''}
-   ${p.device_id&&livre?`<button class="btn sm${p.status==='ja_usou'?' solid ok':''}" onclick="testeLib('${esc(p.device_id)}','${esc(p.nome||'')}')" title="Apagar o código deste aparelho para ele poder pedir o teste outra vez">${ic('refresh',14)}Liberar</button>`:''}
+   <div class="tl1">
+    <span class="tag ${c}">${t}</span>
+    <b class="tnome">${esc(p.nome||'Sem nome')}</b>
+    ${r?`<span class="tresta${r.fim?' off':''}" title="${fim?'O teste deste aparelho acaba em '+dtHm(fim):''}">${ic('clock',13)}${r.txt}</span>`:''}
+    <span class="tw">${ago(p.at)}</span>
+   </div>
+   <div class="tl2">
+    <small>${esc(p.model||'Aparelho')}${p.phone?' · '+esc(p.phone):''}${p.liberado?' · liberado por você':''}${cod?' · código '+esc(cod.code):''}</small>
+    <div class="tacts">
+     ${p.code?`<button class="btn sm" onclick="copiarTxt('${esc(p.code)}','Código ${esc(p.code)} copiado')" title="Copiar o código">${ic('copy',14)}${esc(p.code)}</button>`:''}
+     ${zap?`<a class="btn sm ok" href="${zap}" target="_blank" rel="noreferrer">${ic('chat',14)}WhatsApp</a>`:''}
+     ${p.device_id&&livre?`<button class="btn sm${p.status==='ja_usou'?' solid ok':''}" onclick="testeLib('${esc(p.device_id)}','${esc(p.nome||'')}')" title="Apagar o código deste aparelho para ele poder pedir o teste outra vez">${ic('refresh',14)}Liberar</button>`:''}
+    </div>
+   </div>
   </div>`}
- const vazio='<p class="h">Nenhum pedido ainda.</p>'
+ const vazio='<div class="tvazio">'+ic('clock',22)+'<div><b>Nenhum pedido hoje</b><p>Assim que alguém instalar o app sem código e tocar em “Começar meu teste grátis”, o pedido aparece aqui.</p></div></div>'
  /* O banco ainda não recebeu a migração do teste (20261121230000): sem este aviso, o dono ligaria e
   * desligaria o teste e nada aconteceria — e o app mostraria o botão que não funciona. */
  const semBanco=cfg.teste_auto===undefined
- $('page').innerHTML=head('Teste grátis','Quem baixa o app sem código pede o teste sozinho. Aqui você liga, desliga, define o teto do dia e vê cada pedido.')+(semBanco?
- `<section class="box" style="max-width:860px;border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.06)">
+ $('page').innerHTML=head('Teste grátis','Quem baixa o app sem código pede o teste sozinho, sem você responder no WhatsApp.')+(semBanco?
+ `<section class="box" style="border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.06)">
   ${bxh('alert','Esta parte ainda não está no banco','Falta aplicar a migração 20261121230000_teste_automatico no Supabase (SQL Editor). Até lá o app mostra o botão do teste e, ao clicar, avisa que não conseguiu.')}
   <div class="bxf"><div><b class="off">Teste automático indisponível</b><p class="h">Depois de aplicar a migração, esta página passa a funcionar sozinha ao atualizar.</p></div></div>
  </section>
  <p class="note">Nada abaixo está ligado: os botões vão recusar até a migração ser aplicada. Veja <b>docs/PENDING_TASKS.md</b>.</p>`:'')+`
- <section class="box" style="max-width:860px">
-  ${bxh('key','Teste automático no app','Ligado, aparece o botão “Começar meu teste grátis” na tela de ativação. Desligado, a pessoa só vê o WhatsApp.')}
-  <div class="bxf">
-   <div><b class="${ligado?'on':'off'}">${ligado?'Ligado':'Desligado'}</b><p class="h">${ligado?'Quem abrir o app sem código já pode pedir o teste.':'Ninguém consegue teste automático agora.'}</p></div>
-   ${swc(ligado,`testeAuto(${!ligado})`,'Teste automático')}
-  </div></section>
+ <div class="tgrid">
+  <div class="tcol">
+   <section class="box">
+    ${bxh('key','Teste automático no app','O botão que aparece na tela de ativação para quem ainda não tem código.')}
+    <div class="tsep tsw">
+     <div><span class="tcap">Agora</span><b class="${ligado?'on':'off'}">${ligado?'Ligado':'Desligado'}</b>
+      <p class="h">${ligado?'Qualquer pessoa que abrir o app sem código pode pedir o teste.':'Ninguém consegue teste automático — a tela mostra só o WhatsApp.'}</p></div>
+     ${swc(ligado,`testeAuto(${!ligado})`,'Teste automático')}
+    </div></section>
 
- <section class="box" style="max-width:860px">
-  ${bxh('chart','Testes de hoje','O teto existe para proteger as conexões do servidor de IPTV: cada teste assistindo ocupa uma.')}
-  <div class="tgk">
-   <div class="tgn"><b>${ok.length}</b><span>de <em>${lim}</em> hoje</span></div>
-   <div class="tgbar"><i class="${cheio?'full':''}" style="width:${pct}%"></i></div>
-   <div class="tgm">
-    <span>${ic('check',14)}<b>${ok.length}</b> criados</span>
-    <span>${ic('x',14)}<b>${bar.length}</b> barrados</span>
-    <span>${ic('cal',14)}<b>${testeDeOntem()}</b> ontem</span>
-    <span>${ic('clock',14)}<b>${hrs}h</b> cada um</span></div>
+   <section class="box">
+    ${bxh('chart','Testes de hoje','O teto protege as conexões do servidor: cada teste assistindo ocupa uma.')}
+    <div class="tgn"><b>${ok.length}</b><span>de <em>${lim}</em> testes hoje</span></div>
+    <div class="tgbar"><i class="${cheio?'full':''}" style="width:${pct}%"></i></div>
+    <div class="tk">
+     <div><b>${ok.length}</b><small>Criados</small></div>
+     <div><b>${bar.length}</b><small>Barrados</small></div>
+     <div><b>${testeDeOntem()}</b><small>Ontem</small></div>
+    </div>
+    <div class="tativo${ativos.length?'':' off'}">${ic(ativos.length?'live':'clock',14)}
+     ${ativos.length?`<span><b>${pl(ativos.length,'teste no ar','testes no ar')}</b>${proximo?' · o próximo a acabar é o de <b>'+esc(proximo.nome||'sem nome')+'</b> ('+restaCurta(restaDe(proximo)).txt+')':''}</span>`
+      :`<span>Nenhum teste no ar agora.</span>`}</div>
+
+    <div class="tsep">
+     <div class="tcap">Teto por dia</div>
+     <div class="tcaprow">
+      <span class="stp">
+       <button type="button" aria-label="menos" onclick="testeTeto(${Math.max(0,lim-5)})"${lim<=0?' disabled':''}>−</button><b>${lim}</b>
+       <button type="button" aria-label="mais" onclick="testeTeto(${Math.min(500,lim+5)})"${lim>=500?' disabled':''}>+</button></span>
+      <span class="h">${cheio?'O teto de hoje já foi usado. O app manda a pessoa falar no WhatsApp.':'Chegando no teto, o app avisa a pessoa para falar no WhatsApp.'}</span>
+     </div>
+     <div class="seg" style="margin-top:12px">${[0,10,20,30,50].map(v=>`<button class="${lim===v?'on':''}" onclick="testeTeto(${v})">${v?'até '+v:'parar'}</button>`).join('')}</div>
+     <p class="note">Cada teste dura <b>${hrs} hora${hrs===1?'':'s'}</b> e o tempo de cada um aparece na lista ao lado. Quem já tem código no aparelho não ganha outro teste: desinstalar e instalar de novo não adianta — para dar outra chance, use <b>Liberar</b> no pedido da pessoa.</p>
+    </div>
+   </section>
   </div>
-  <div class="bxf">
-   <div><b>Teto por dia</b><p class="h">Chegando no teto, o app avisa a pessoa para falar no WhatsApp.</p></div>
-   <span class="stp">
-    <button type="button" aria-label="menos" onclick="testeTeto(${Math.max(0,lim-5)})"${lim<=0?' disabled':''}>−</button><b>${lim}</b>
-    <button type="button" aria-label="mais" onclick="testeTeto(${Math.min(500,lim+5)})"${lim>=500?' disabled':''}>+</button></span>
+
+  <div class="tcol grow">
+   <section class="box">
+    ${bxh('cal','Pedidos de hoje',`${hoje.length} desde a meia-noite · ${pl(ativos.length,'ainda no ar','ainda no ar')}.`)}
+    ${hoje.length?'<div class="tlist">'+hoje.map(linha).join('')+'</div>':vazio}
+   </section>
+
+   <section class="box">
+    ${bxh('cal','Antes de hoje','Os últimos pedidos dos dias anteriores.')}
+    ${antes.length?'<div class="tlist">'+antes.map(linha).join('')+'</div>':'<p class="h">Nada por aqui ainda.</p>'}
+   </section>
   </div>
-  <div class="seg" style="margin-top:12px">${[0,10,20,30,50].map(v=>`<button class="${lim===v?'on':''}" onclick="testeTeto(${v})">${v?'até '+v:'parar'}</button>`).join('')}</div>
-  <p class="note">Hoje o app libera ${hrs} hora${hrs===1?'':'s'} por teste (muda em “Novo teste”, no botão de criar teste manual). Quem já tem código neste aparelho <b>não</b> ganha outro teste: desinstalar e instalar de novo não adianta. Para dar outra chance a alguém, use <b>Liberar</b> no pedido da pessoa.</p>
- </section>
-
- <section class="box" style="max-width:860px">
-  ${bxh('cal','Pedidos de hoje',`${hoje.length} pedido${hoje.length===1?'':'s'} desde a meia-noite.`)}
-  <div class="tlist">${hoje.length?hoje.map(linha).join(''):vazio}</div>
- </section>
-
- <section class="box" style="max-width:860px">
-  ${bxh('cal','Antes de hoje','Os últimos pedidos dos dias anteriores.')}
-  <div class="tlist">${antes.length?antes.map(linha).join(''):vazio}</div>
- </section>`
+ </div>`
 }
 
 function rAjustes(){
