@@ -831,8 +831,12 @@ function pendencias(){const l=[],nomes=(a,n=3)=>a.slice(0,n).map(c=>c.name).join
  if(venc.length)l.push(['bad','alert',pl(venc.length,'cliente vencido','clientes vencidos'),nomes(venc),"ir('financeiro')"])
  if(breve.length)l.push(['warn','cal',pl(breve.length,'cliente vence','clientes vencem')+' em até 7 dias',nomes(breve),"ir('financeiro')"])
  // servidores de IPTV vencidos ou vencendo em até 5 dias (nome e vencimento cadastrados em Ajustes → Servidores)
- const g=D.cfg||{},srv=[{...(g.server_info||{}),n:1},...(g.extra||[]).map((x,k)=>({...x,n:k+2}))].filter(x=>x.exp)
-  .map(x=>({nm:x.name||'Servidor '+x.n,d:diasSrv(x.exp)})).filter(x=>x.d<=5)
+ // (2026-11-26) entram também os logins reserva de cada servidor e as reservas de outro fornecedor; os desligados não
+ const g=D.cfg||{},srvs=[{...(g.server_info||{}),n:1},...(g.extra||[]).map((x,k)=>({...x,n:k+2}))]
+ const srv=[...srvs.map(x=>({...x,nm:x.name||'Servidor '+x.n})),
+   ...srvs.flatMap(x=>(x.res||[]).map((r,j)=>({...r,nm:r.name||'Login reserva '+(j+1)+' do servidor '+x.n}))),
+   ...(g.reserves||[]).map((x,k)=>({...x,nm:x.name||'Reserva de fora '+(k+1)}))]
+  .filter(x=>x.exp&&!x.off).map(x=>({nm:x.nm,d:diasSrv(x.exp)})).filter(x=>x.d<=5)
  if(srv.length){const v=srv.some(x=>x.d<0)
   l.push([v?'bad':'warn','signal',srv.length===1?(srv[0].d<0?'Servidor vencido: ':'Servidor vence ')+srv[0].nm+(srv[0].d>0?' em '+pl(srv[0].d,'dia','dias'):srv[0].d===0?' hoje':''):pl(srv.length,'servidor','servidores')+' vencendo',
    srv.length===1?'Renovou? Toque aqui e use Renovei +30 dias.':srv.map(x=>x.nm+(x.d<0?' (vencido)':x.d===0?' (hoje)':' ('+x.d+'d)')).join(', '),"ir('ajustes',{aj:'servidor'})"])}
