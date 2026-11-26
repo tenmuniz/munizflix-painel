@@ -688,7 +688,7 @@ async function carregar(o={}){
    sb.from('remotes').select('id,code,name,last_seen,approved_at').eq('status','ok').order('approved_at'),
    sb.rpc('admin_watch_stats',{p_days:30}),
    sb.rpc('admin_pico_titulo',{p_days:30}),
-   sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at,days,note').order('created_at',{ascending:false}).limit(400),
+   sb.from('payments').select('id,client_id,code,amount,status,created_at,paid_at,new_expires_at,days,note,pix_expires_at').order('created_at',{ascending:false}).limit(400),
    sb.from('notices').select('id,client_id,title,body,kind,created_at').order('id',{ascending:false}).limit(600),
    sb.rpc('admin_codigos_suspeitos',{p_horas:24}),
    sb.from('teste_pedidos').select('id,at,status,device_id,device_tag,model,plat,nome,phone,client_id,code,liberado').order('at',{ascending:false}).limit(400)])
@@ -1053,6 +1053,10 @@ function receitaMeses(n){const out=[],h=new Date()
 async function apagarPix(id){
  const x=D.pays.find(y=>y.id===id);if(!x)return
  const c=D.clients.find(y=>y.id===x.client_id),pago=x.status==='paid'
+ // Pix pendente que ainda pode ser pago não sai (o banco também recusa): se o cliente pagasse depois, o crédito
+ // não cairia, porque o aviso da Cakto não acharia o pedido. Vistoria de 2026-11-26.
+ const vence=new Date(x.pix_expires_at||new Date(x.created_at).getTime()+3600e3)
+ if(x.status==='pending'&&vence>new Date())return toast('Esse Pix ainda pode ser pago até '+vence.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'. Espere ele vencer para excluir.',true)
  const m=`${c?.name||'Cliente apagado'} · ${brl(x.amount)} · ${dth(x.paid_at||x.created_at)}. `
   +(pago?'Era um Pix PAGO: sai do histórico e das estatísticas. O dinheiro não volta por aqui — para devolver, o reembolso é no painel da Cakto.':'Esse Pix não foi pago: sai do histórico e das estatísticas.')
   +' O acesso que o cliente já ganhou continua como está.'
